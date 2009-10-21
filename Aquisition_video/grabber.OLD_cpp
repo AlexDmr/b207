@@ -1,0 +1,1307 @@
+#include "messages.h"
+#include "grabber.h"
+
+STDMETHODIMP AGrabber::SampleCB(double SampleTime, IMediaSample *pSample)
+{
+ //printf("Sample time: %f\n", SampleTime);
+ return S_OK;
+}
+
+/***************************************************************************************/
+/***************************************************************************************/
+/***************************************************************************************/
+int AGrabber::SetCaptureParameters(ICaptureGraphBuilder2 * pBuilder, IBaseFilter * pFilter, int& framerate, int& width, int& height)
+{
+  int i,closest = -1, numtypes=0,size=0;
+  HRESULT hr;
+  AM_MEDIA_TYPE *pmt;
+  VIDEO_STREAM_CONFIG_CAPS vscc;
+  double d = 1e30;
+  LONGLONG period = (LONGLONG)(10000000 / framerate);
+  IAMStreamConfig *pVSC;      // for video cap
+  //IAMVideoCompression *pVC;
+
+  /*hr = pBuilder->FindInterface(NULL, pFilter,IID_IAMVideoCompression, (void **)&pVC);
+  if (hr!=NOERROR) return FALSE;*/
+  hr = pBuilder->FindInterface(NULL, NULL, pFilter,	IID_IAMStreamConfig, (void **)&pVSC);
+  if (hr!=NOERROR) return FALSE;
+  
+  // Enumerate the capabiliities and choose the closest one
+  hr = pVSC->GetNumberOfCapabilities(&numtypes,&size);
+  /*{
+    char errbuf[1000];
+    AMGetErrorText(hr,errbuf,1000);
+    debug("GetNumberOfCapabilities HRESULT: %s\n",errbuf);
+  }*/
+  //debug("%Desired: AvgTimePerFrame: %fns (%fHz)  Size: %dx%d\n",period/100.0,framerate,width,height);
+  //debug("---Camera Capabilities---\n");
+  for(i=0;i<numtypes;i++){
+    hr = pVSC->GetStreamCaps(i,&pmt,(BYTE*)&vscc);
+    VIDEOINFOHEADER *pvi = (VIDEOINFOHEADER *)pmt->pbFormat;
+    //debug("%d vih: AvgTimePerFrame: %fns (%fHz)  Size: %dx%d\n",i,pvi->AvgTimePerFrame/100.0, 10000000.0/pvi->AvgTimePerFrame, pvi->bmiHeader.biWidth, pvi->bmiHeader.biHeight);
+    //debug("%d pmt: MinOutputSize: %dx%d MaxOutputSize: %dx%d MinFrameInterval: %d MaxFrameInterval %d\n",i,vscc.MinOutputSize.cx,vscc.MinOutputSize.cy,vscc.MaxOutputSize.cx,vscc.MaxOutputSize.cy,vscc.MinFrameInterval,vscc.MaxFrameInterval);
+    //char * fourcc = (char*)&(pvi->bmiHeader.biCompression);
+    //debug("(%c%c%c%c)\n",fourcc[0],fourcc[1],fourcc[2],fourcc[3]);
+    
+    // height and width must match exactly 
+    if(pvi->bmiHeader.biWidth == width && pvi->bmiHeader.biHeight == height){
+      // just choose closes frame rate
+      if(fabs(period-pvi->AvgTimePerFrame)<d){
+        d = fabs(period-pvi->AvgTimePerFrame);
+        closest = i;
+      }
+    }
+    DeleteMediaType(pmt);
+  }
+  
+  // now actually set the format
+  if(closest!=-1){
+    if (pVSC) {
+      hr = pVSC->GetStreamCaps(closest,&pmt,(BYTE*)&vscc);
+      // DV capture does not use a VIDEOINFOHEADER
+      if (hr == NOERROR) {
+        if (pmt->formattype == FORMAT_VideoInfo) {
+          VIDEOINFOHEADER *pvi = (VIDEOINFOHEADER *)pmt->pbFormat;
+          //debug("---Setting Camera Properties---\n");
+          pvi->AvgTimePerFrame = period;
+          //debug("AvgTimePerFrame: %fns (%fHz)  Size: %dx%d\n",pvi->AvgTimePerFrame/100.0, 10000000.0/pvi->AvgTimePerFrame, pvi->bmiHeader.biWidth, pvi->bmiHeader.biHeight);
+          hr = pVSC->SetFormat(pmt);
+          /*if (hr != NOERROR){
+            debug("%x: Cannot set frame rate, and height and width", hr);
+          }*/
+          DeleteMediaType(pmt);
+          hr = pVSC->GetFormat(&pmt);
+          // Get the actual height and width now
+          if (hr == NOERROR) {
+            VIDEOINFOHEADER *pvi2 = (VIDEOINFOHEADER *)pmt->pbFormat;
+            height = pvi2->bmiHeader.biHeight;
+            width = pvi2->bmiHeader.biWidth;
+            framerate = (float)(10000000)/pvi2->AvgTimePerFrame;
+            //debug("---Actual Camera Properties---\n");
+            //debug("AvgTimePerFrame: %fns (%fHz)  Size: %dx%d\n",pvi2->AvgTimePerFrame/100.0, 10000000.0/pvi2->AvgTimePerFrame, pvi2->bmiHeader.biWidth, pvi2->bmiHeader.biHeight);
+            
+          }
+          DeleteMediaType(pmt);
+        }
+      }
+    }
+    return TRUE;
+  }
+  
+  return FALSE;
+}
+
+/***************************************************************************************/
+/***************************************************************************************/
+/***************************************************************************************/
+HRESULT AGrabber::CaptureVideo( int& Width
+                              , int& Height
+                              , int& FrameRate
+                              , int num_cam)
+{
+    HRESULT hr;
+    IBaseFilter *pSrcFilter=NULL;
+
+//	IBaseFilter     *pF = NULL;
+//	ISampleGrabber  *pGrab = NULL;  // Be sure to release these later.
+//	AM_MEDIA_TYPE   mt;
+
+    // Get DirectShow interfaces
+    hr = GetInterfaces();
+    if (FAILED(hr))
+    {
+        Msg(TEXT("Failed to get video interfaces!  hr=0x%x"), hr);
+        return hr;
+    }
+
+/************************DANGER******************************/
+	CoCreateInstance( CLSID_SampleGrabber, NULL, CLSCTX_INPROC_SERVER, 
+                      IID_IBaseFilter, (LPVOID *)&pF);
+    pF->QueryInterface(IID_ISampleGrabber, (void **)&pGrab);
+
+    g_pGraph->AddFilter(pF, L"Grabber alex");
+
+	ZeroMemory(&mt, sizeof(AM_MEDIA_TYPE));
+	mt.majortype = MEDIATYPE_Video;
+	mt.subtype = MEDIASUBTYPE_RGB32;
+	mt.formattype = FORMAT_VideoInfo; 
+	hr = pGrab->SetMediaType(&mt);
+
+	// Set up one-shot mode.
+	pGrab->SetBufferSamples(TRUE);
+	pGrab->SetOneShot(FALSE);
+/************************\DANGER******************************/
+
+    // Attach the filter graph to the capture graph
+//    hr = g_pCapture->SetFiltergraph(pF);
+    hr = g_pCapture->SetFiltergraph(g_pGraph);
+    if (FAILED(hr))
+    {
+        Msg(TEXT("Failed to set capture filter graph!  hr=0x%x"), hr);
+        return hr;
+    }
+
+    // Use the system device enumerator and class enumerator to find
+    // a video capture/preview device, such as a desktop USB video camera.
+    hr = FindCaptureDevice(&pSrcFilter, num_cam);
+    if (FAILED(hr))
+    {
+        // Don't display a message because FindCaptureDevice will handle it
+        return hr;
+    }
+    SetCaptureParameters( g_pCapture
+                        , pSrcFilter
+                        , FrameRate
+                        , Width, Height);
+                           
+    // Add Capture filter to our graph.
+    hr = g_pGraph->AddFilter(pSrcFilter, L"Video Capture");
+    if (FAILED(hr))
+    {
+        Msg(TEXT("Couldn't add capture filter to graph!  hr=0x%x"), hr);
+        pSrcFilter->Release();
+        return hr;
+    }
+
+    // Render the preview pin on the video capture filter
+    // Use this instead of g_pGraph->RenderFile
+//    hr = g_pCapture->RenderStream (&PIN_CATEGORY_PREVIEW, &MEDIATYPE_Video,
+//                                 pSrcFilter, NULL, NULL);
+    hr = g_pCapture->RenderStream (&PIN_CATEGORY_CAPTURE, &MEDIATYPE_Video,
+                                 pSrcFilter, NULL, pF);
+    //g_pGraph->Connect(
+
+    if (FAILED(hr))
+    {
+        Msg(TEXT("Couldn't render capture stream.  "
+                 "The device may already be in use.\r\n\r\nhr=0x%x"), hr);
+        pSrcFilter->Release();
+        return hr;
+    }
+
+    // Now that the filter has been added to the graph and we have
+    // rendered its stream, we can release this reference to the filter.
+    pSrcFilter->Release();
+
+    // Set video window style and position
+ /*   hr = SetupVideoWindow();
+    if (FAILED(hr))
+    {
+        Msg(TEXT("Couldn't initialize video window!  hr=0x%x"), hr);
+        return hr;
+    }*/
+
+    // Add our graph to the running object table, which will allow
+    // the GraphEdit application to "spy" on our graph
+#ifdef REGISTER_FILTERGRAPH
+    hr = AddGraphToRot(g_pGraph, &g_dwGraphRegister);
+    if (FAILED(hr))
+    {
+        Msg(TEXT("Failed to register filter graph with ROT!  hr=0x%x"), hr);
+        g_dwGraphRegister = 0;
+    }
+#endif
+
+    // Start previewing video data
+    //if(cb == NULL) Beep(777,777);
+    //pGrab->SetOneShot(FALSE);
+    //pGrab->SetBufferSamples(FALSE);
+    //pGrab->SetCallback(cb, 0); // du callback dans l'air...
+    hr = g_pMC->Run();
+    
+    if (FAILED(hr))
+    {
+        Msg(TEXT("Couldn't run the graph!  hr=0x%x"), hr);
+        return hr;
+    }
+
+    // Remember current state
+    g_psCurrent = Running;
+        
+    return S_OK;
+}
+
+
+/***************************************************************************************/
+/***************************************************************************************/
+/***************************************************************************************/
+HRESULT AGrabber::FindCaptureDevice(IBaseFilter ** ppSrcFilter, int num)
+{
+    HRESULT hr;
+    IBaseFilter * pSrc = NULL;
+    CComPtr <IMoniker> pMoniker =NULL;
+    ULONG cFetched;
+   
+    // Create the system device enumerator
+    CComPtr <ICreateDevEnum> pDevEnum =NULL;
+
+    hr = CoCreateInstance (CLSID_SystemDeviceEnum, NULL, CLSCTX_INPROC,
+        IID_ICreateDevEnum, (void ** ) &pDevEnum);
+    if (FAILED(hr))
+    {
+        Msg(TEXT("Couldn't create system enumerator!  hr=0x%x"), hr);
+        return hr;
+    }
+
+    // Create an enumerator for the video capture devices
+    CComPtr <IEnumMoniker> pClassEnum = NULL;
+
+    hr = pDevEnum->CreateClassEnumerator (CLSID_VideoInputDeviceCategory, &pClassEnum, 0);
+    if (FAILED(hr))
+    {
+        Msg(TEXT("Couldn't create class enumerator!  hr=0x%x"), hr);
+        return hr;
+    }
+
+    // If there are no enumerators for the requested type, then 
+    // CreateClassEnumerator will succeed, but pClassEnum will be NULL.
+    if (pClassEnum == NULL)
+     {
+      Msg(TEXT("Pas de capteur video!"));
+/*        MessageBox(ghApp,TEXT("No video capture device was detected.\r\n\r\n")
+                   TEXT("This sample requires a video capture device, such as a USB WebCam,\r\n")
+                   TEXT("to be installed and working properly.  The sample will now close."),
+                   TEXT("No Video Capture Hardware"), MB_OK | MB_ICONINFORMATION);*/
+        return E_FAIL;
+     }
+
+    // Use the first video capture device on the device list.
+    // Note that if the Next() call succeeds but there are no monikers,
+    // it will return S_FALSE (which is not a failure).  Therefore, we
+    // check that the return code is S_OK instead of using SUCCEEDED() macro.
+    for(int i=0;i<num-1;i++)
+      pClassEnum->Skip(1);
+
+     if (S_OK == (pClassEnum->Next (1, &pMoniker, &cFetched)))
+      {
+       // Bind Moniker to a filter object
+         hr = pMoniker->BindToObject(0,0,IID_IBaseFilter, (void**)&pSrc);
+         if (FAILED(hr))
+          {
+           Msg(TEXT("Couldn't bind moniker to filter object!  hr=0x%x"), hr);
+           return hr;
+          }
+      }
+      else
+       {
+        Msg(TEXT("Unable to access video capture device!"));   
+        return E_FAIL;
+       }
+
+    // Copy the found filter pointer to the output parameter.
+    // Do NOT Release() the reference, since it will still be used
+    // by the calling function.
+    *ppSrcFilter = pSrc;
+
+    return hr;
+}
+/***************************************************************************************/
+/***************************************************************************************/
+/***************************************************************************************/
+int AGrabber::Donner_infos_capteur( ICaptureGraphBuilder2 *pBuilder
+                                  , IBaseFilter * pFilter
+                                  , ALX_Capteurs_infos *liste_capteurs
+                                  , int num_capteur)
+{
+  int i,closest = -1, numtypes=0,size=0;
+  HRESULT hr;
+  AM_MEDIA_TYPE *pmt;
+  VIDEO_STREAM_CONFIG_CAPS vscc;
+  double d = 1e30;
+  IAMStreamConfig *pVSC;      // for video cap
+  //IAMVideoCompression *pVC;
+
+  /*hr = pBuilder->FindInterface(NULL, pFilter,IID_IAMVideoCompression, (void **)&pVC);
+  if (hr!=NOERROR) return FALSE;*/
+  hr = pBuilder->FindInterface(NULL, NULL, pFilter,	IID_IAMStreamConfig, (void **)&pVSC);
+  if (hr!=NOERROR) return FALSE;
+  
+  // Enumerate the capabiliities and choose the closest one
+  hr = pVSC->GetNumberOfCapabilities(&numtypes,&size);
+  /*{
+    char errbuf[1000];
+    AMGetErrorText(hr,errbuf,1000);
+    debug("GetNumberOfCapabilities HRESULT: %s\n",errbuf);
+  }*/
+  //debug("%Desired: AvgTimePerFrame: %fns (%fHz)  Size: %dx%d\n",period/100.0,framerate,width,height);
+  //debug("---Camera Capabilities---\n");
+  for(i=0;i<numtypes;i++)
+   {
+    hr = pVSC->GetStreamCaps(i,&pmt,(BYTE*)&vscc);
+    VIDEOINFOHEADER *pvi = (VIDEOINFOHEADER *)pmt->pbFormat;
+    //debug("%d vih: AvgTimePerFrame: %fns (%fHz)  Size: %dx%d\n",i,pvi->AvgTimePerFrame/100.0, 10000000.0/pvi->AvgTimePerFrame, pvi->bmiHeader.biWidth, pvi->bmiHeader.biHeight);
+    //debug("%d pmt: MinOutputSize: %dx%d MaxOutputSize: %dx%d MinFrameInterval: %d MaxFrameInterval %d\n",i,vscc.MinOutputSize.cx,vscc.MinOutputSize.cy,vscc.MaxOutputSize.cx,vscc.MaxOutputSize.cy,vscc.MinFrameInterval,vscc.MaxFrameInterval);
+    //char * fourcc = (char*)&(pvi->bmiHeader.biCompression);
+    //debug("(%c%c%c%c)\n",fourcc[0],fourcc[1],fourcc[2],fourcc[3]);
+    
+    liste_capteurs->liste[liste_capteurs->nb_capteurs].hauteur = pvi->bmiHeader.biHeight;
+    liste_capteurs->liste[liste_capteurs->nb_capteurs].largeur = pvi->bmiHeader.biWidth;
+    liste_capteurs->liste[liste_capteurs->nb_capteurs].taux_rafraichissement = pvi->AvgTimePerFrame;
+    liste_capteurs->liste[liste_capteurs->nb_capteurs].num_capteur = num_capteur;
+    liste_capteurs->nb_capteurs++; 
+    DeleteMediaType(pmt);
+   }
+  
+  return TRUE;
+}
+/***************************************************************************************/
+/***************************************************************************************/
+/***************************************************************************************/
+HRESULT AGrabber::Donner_infos_capteurs_presents(ALX_Capteurs_infos *liste_capteurs)
+{
+    HRESULT hr;
+    IBaseFilter * pSrc = NULL;
+    CComPtr <IMoniker> pMoniker =NULL;
+    ULONG cFetched;
+    //ICaptureGraphBuilder2 *pCapture;
+    //ICaptureGraphBuilder2 *pBuilder;
+
+    // Create the system device enumerator
+    CComPtr <ICreateDevEnum> pDevEnum =NULL;
+
+    hr = CoCreateInstance (CLSID_SystemDeviceEnum, NULL, CLSCTX_INPROC,
+        IID_ICreateDevEnum, (void ** ) &pDevEnum);
+    if (FAILED(hr))
+    {
+        Msg(TEXT("Couldn't create system enumerator!  hr=0x%x"), hr);
+        return hr;
+    }
+
+    // Create an enumerator for the video capture devices
+    CComPtr <IEnumMoniker> pClassEnum = NULL;
+
+    hr = pDevEnum->CreateClassEnumerator (CLSID_VideoInputDeviceCategory, &pClassEnum, 0);
+    if (FAILED(hr))
+    {
+        Msg(TEXT("Couldn't create class enumerator!  hr=0x%x"), hr);
+        return hr;
+    }
+
+    // If there are no enumerators for the requested type, then 
+    // CreateClassEnumerator will succeed, but pClassEnum will be NULL.
+    if (pClassEnum == NULL)
+     {
+      liste_capteurs->nb_capteurs = 0;
+/*        MessageBox(ghApp,TEXT("No video capture device was detected.\r\n\r\n")
+                   TEXT("This sample requires a video capture device, such as a USB WebCam,\r\n")
+                   TEXT("to be installed and working properly.  The sample will now close."),
+                   TEXT("No Video Capture Hardware"), MB_OK | MB_ICONINFORMATION);*/
+        return E_FAIL;
+     }
+
+    // Use the first video capture device on the device list.
+    // Note that if the Next() call succeeds but there are no monikers,
+    // it will return S_FALSE (which is not a failure).  Therefore, we
+    // check that the return code is S_OK instead of using SUCCEEDED() macro.
+     liste_capteurs->nb_capteurs = 0;
+     int num_capteur = 1;
+     while (S_OK == (pClassEnum->Next (1, &pMoniker, &cFetched)))
+      {
+       // Bind Moniker to a filter object
+       hr = pMoniker->BindToObject(0,0,IID_IBaseFilter, (void**)&pSrc);
+       if (FAILED(hr))
+        {
+         Msg(TEXT("Couldn't bind moniker to filter object!  hr=0x%x"), hr);
+         return hr;
+        }
+       /*Donner_infos_capteur( g_pCapture
+                           , pSrc
+                           , liste_capteurs
+                           , num_capteur);*/
+       num_capteur++;
+      }
+
+    return S_OK;
+}
+
+/***************************************************************************************/
+/***************************************************************************************/
+/***************************************************************************************/
+HRESULT AGrabber::GetInterfaces(void)
+{
+    HRESULT hr;
+
+    // Create the filter graph
+    hr = CoCreateInstance (CLSID_FilterGraph, NULL, CLSCTX_INPROC,
+        IID_IGraphBuilder, (void **) &g_pGraph);
+    if (FAILED(hr))
+        return hr;
+
+    // Create the capture graph builder
+    hr = CoCreateInstance (CLSID_CaptureGraphBuilder2 , NULL, CLSCTX_INPROC,
+        IID_ICaptureGraphBuilder2, (void **) &g_pCapture);
+    if (FAILED(hr))
+        return hr;
+    
+    // Obtain interfaces for media control and Video Window
+    hr = g_pGraph->QueryInterface(IID_IMediaControl,(LPVOID *) &g_pMC);
+    if (FAILED(hr))
+        return hr;
+
+    hr = g_pGraph->QueryInterface(IID_IVideoWindow, (LPVOID *) &g_pVW);
+    if (FAILED(hr))
+        return hr;
+
+    hr = g_pGraph->QueryInterface(IID_IMediaEvent, (LPVOID *) &g_pME);
+    if (FAILED(hr))
+        return hr;
+
+    // Set the window handle used to process graph events
+    //hr = g_pME->SetNotifyWindow((OAHWND)ghApp, WM_GRAPHNOTIFY, 0);
+
+    return hr;
+}
+
+/***************************************************************************************/
+/***************************************************************************************/
+/***************************************************************************************/
+void AGrabber::CloseInterfaces(void)
+{
+    // Stop previewing data
+    if (g_pMC)
+        g_pMC->StopWhenReady();
+
+    g_psCurrent = Stopped;
+
+    // Stop receiving events
+    if (g_pME)
+        g_pME->SetNotifyWindow(NULL, WM_GRAPHNOTIFY, 0);
+
+    // Relinquish ownership (IMPORTANT!) of the video window.
+    // Failing to call put_Owner can lead to assert failures within
+    // the video renderer, as it still assumes that it has a valid
+    // parent window.
+    if(g_pVW)
+    {
+        g_pVW->put_Visible(OAFALSE);
+        g_pVW->put_Owner(NULL);
+    }
+
+#ifdef REGISTER_FILTERGRAPH
+    // Remove filter graph from the running object table   
+    if (g_dwGraphRegister)
+        RemoveGraphFromRot(g_dwGraphRegister);
+#endif
+
+    // Release DirectShow interfaces
+    SAFE_RELEASE(g_pMC);
+    SAFE_RELEASE(g_pME);
+    SAFE_RELEASE(g_pVW);
+    SAFE_RELEASE(g_pGraph);
+    SAFE_RELEASE(g_pCapture);
+}
+
+/***************************************************************************************/
+/***************************************************************************************/
+/***************************************************************************************/
+HRESULT AGrabber::ChangePreviewState(int nShow)
+{
+    HRESULT hr;
+    
+    // If the media control interface isn't ready, don't call it
+    if (!g_pMC)
+        return S_OK;
+    
+    if (nShow)
+    {
+        if (g_psCurrent != Running)
+        {
+            // Start previewing video data
+            hr = g_pMC->Run();
+            g_psCurrent = Running;
+        }
+    }
+    else
+    {
+        // Stop previewing video data
+        hr = g_pMC->StopWhenReady();
+        g_psCurrent = Stopped;
+    }
+
+    return hr;
+}
+
+/***************************************************************************************/
+/***************************************************************************************/
+/***************************************************************************************/
+#ifdef REGISTER_FILTERGRAPH
+
+HRESULT AddGraphToRot(IUnknown *pUnkGraph, DWORD *pdwRegister) 
+{
+    IMoniker * pMoniker;
+    IRunningObjectTable *pROT;
+    WCHAR wsz[128];
+    HRESULT hr;
+
+    if (FAILED(GetRunningObjectTable(0, &pROT))) {
+        return E_FAIL;
+    }
+
+    wsprintfW(wsz, L"FilterGraph %08x pid %08x", (DWORD_PTR)pUnkGraph, 
+              GetCurrentProcessId());
+
+    hr = CreateItemMoniker(L"!", wsz, &pMoniker);
+    if (SUCCEEDED(hr)) {
+        hr = pROT->Register(0, pUnkGraph, pMoniker, pdwRegister);
+        pMoniker->Release();
+    }
+    pROT->Release();
+    return hr;
+}
+
+
+void RemoveGraphFromRot(DWORD pdwRegister)
+{
+    IRunningObjectTable *pROT;
+
+    if (SUCCEEDED(GetRunningObjectTable(0, &pROT))) {
+        pROT->Revoke(pdwRegister);
+        pROT->Release();
+    }
+}
+
+#endif
+/***************************************************************************************/
+/***************************************************************************************/
+/***************************************************************************************/
+HRESULT AGrabber::HandleGraphEvent(void)
+{
+    LONG evCode, evParam1, evParam2;
+    HRESULT hr=S_OK;
+
+    while(SUCCEEDED(g_pME->GetEvent(&evCode, &evParam1, &evParam2, 0)))
+    {
+        //
+        // Free event parameters to prevent memory leaks associated with
+        // event parameter data.  While this application is not interested
+        // in the received events, applications should always process them.
+        //
+        hr = g_pME->FreeEventParams(evCode, evParam1, evParam2);
+        
+        // Insert event processing code here, if desired
+    }
+
+    return hr;
+}
+/***************************************************************************************/
+/***************************************************************************************/
+/***************************************************************************************/
+
+void AGrabber::Construire_table_crspd( int *table_correspondance_couleur
+                                     , int nb_bits
+                            , float RpropB, float RpropV, float RecartVB, int RseuilMin, int RseuilMax
+                            , float VpropB, float VpropR, float VecartRB, int VseuilMin, int VseuilMax
+                            , float BpropR, float BpropV, float BecartVR, int BseuilMin, int BseuilMax
+                            , float Jecartmax, float BpropJ, int JseuilMin, int JseuilMax
+                            , float Mecartmax, float MpropV, int MseuilMin, int MseuilMax)
+{
+ // Create a DIB from the bitmap header, and get a pointer to the buffer.
+ int *buffer = NULL;
+ //unsigned long *buf_lock;
+ long pBufferSize = GrabberSize;
+ HRESULT hr;
+
+// Copy the image into the buffer.
+/* buffer = (int *)Lock();
+ //hr = pGrab->GetCurrentBuffer(&pBufferSize, (long *)buffer);
+ if(buffer != NULL) hr = S_OK;
+
+ switch(hr)
+  {
+   case S_OK:
+     NULL;//Msg(TEXT("GetCurrentBuffer réussit\r\n"));
+   break;
+   case E_INVALIDARG:
+     Msg(TEXT("GetCurrentBuffer E_INVALIDARG Samples are not being buffered. \r\n"));
+     return;
+   break;
+   case E_POINTER:
+     Msg(TEXT("GetCurrentBuffer E_POINTER NULL pointer argument. \r\n"));
+     return;
+   break;
+   case VFW_E_NOT_CONNECTED:
+     Msg(TEXT("GetCurrentBuffer VFW_E_NOT_CONNECTED Filter is not connected. \r\n"));
+     return;
+   break;
+   case VFW_E_WRONG_STATE:
+     Msg(TEXT("GetCurrentBuffer VFW_E_WRONG_STATE The filter is in the wrong state \r\n"));
+     return;
+   break;
+   default:
+     Msg(TEXT("GetCurrentBuffer dans le vent, erreur même pas définit\r\n"));
+     return;
+  }
+ long Width  = GetGrabberWidth();;
+ long Height = GetGrabberHeight();;
+*/
+/*Application des filtres de couleurs*/
+ int i, j/*, valR, valV, valB*/, *pixelS, *pixelC;
+ unsigned char RS, VS, BS, *RC, *VC, *BC;
+ int *buf2;
+
+/*********Transfo*************/
+ int pos = 0, deb, fin, bx, rx, rxp;
+ bool deja_lie;
+ //int *buf_zone, npix;
+
+ buf2 = (int *)buffer;/*(int *)malloc(Width*Height*sizeof(int));
+ memcpy(buf2, buffer, Width*Height*sizeof(int));*/
+
+ //ens_z->Initialiser_dimensions(Width, Height);
+ //buf_zone = ens_z->buffer;
+
+
+ int r, v, b, couleur;
+ for(r=0;r<32;r++)
+ for(v=0;v<32;v++)
+ for(b=0;b<32;b++)
+   {
+    couleur = (r<<3) + (v<<11) + (b<<19);
+    pixelS = &couleur;
+    
+    pixelC = pixelS;//&( ((int *)buf2)[i+j*Width] );
+    RC = &( ((unsigned char *)pixelC)[2] );
+    VC = &( ((unsigned char *)pixelC)[1] );
+    BC = &( ((unsigned char *)pixelC)[0] );
+
+    RS = *RC;//( ((unsigned char *)pixelS)[2] );
+    VS = *VC;//( ((unsigned char *)pixelS)[1] );
+    BS = *BC;//( ((unsigned char *)pixelS)[0] );
+
+
+
+/*    valR = (int)RS - ((int)VS)/2 - ((int)BS)/2;
+    valV = (int)VS - ((int)BS)/2 - ((int)RS)/2;
+    valB = (int)BS - ((int)VS)/2 - ((int)RS)/2;*/
+
+   // Rouge
+    if( (BS<RpropB*(RS))
+      &&(VS<RpropV*(RS))       //(valB>0)
+      &&(abs((VS)-(BS)) < RecartVB*(RS))
+      &&(RS >= RseuilMin)
+      &&(RS <= RseuilMax) ) //(valR>90)
+     {
+      *RC = 255;//valR;
+      *BC = 0;
+      *VC = 0;
+     }
+     else {
+   // Vert
+    if( (BS < VpropB*(VS))//(valB>0)
+      &&(RS < VpropR*(VS))
+      &&(abs((RS)-(BS)) < VecartRB*(VS))
+      &&(VS >= VseuilMin)
+      &&(VS <= VseuilMax) ) //(valV>50)
+     {
+      *VC = 255;
+      *BC = 0;
+      *RC = 0;
+     }
+     else {
+   // Bleu
+    if( (RS<BpropR*(BS)) //(valB>0)
+      &&(VS<BpropV*(BS))
+      &&(abs((VS)-(RS)) < BecartVR*(BS))
+      &&(BS >= BseuilMin)
+      &&(BS <= BseuilMax) )
+     {
+      *BC = 255;
+      *VC = 0;
+      *RC = 0;
+     }
+     else {
+   // Jaune
+   if( ( abs((RS)-(VS)) < Jecartmax*(max(RS, VS)) )
+     &&(BS < BpropJ*(max(RS, VS))
+     &&(max(RS, VS) >= JseuilMin)
+     &&(max(RS, VS) <= JseuilMax)) )
+     //&&(((*RS)+(*VS)) > 8*(*BS)) )
+    {
+     //Beep(500, 10);
+     //*RC = min(2*(*RS), 255);
+     //*VC = min(2*(*VS), 255);
+     *RC = 255; //max(*RC, *VS);
+     *VC = 255; //max(*RC, *VS);
+     *BC = 0;
+    } else //Mauve?
+     {if( ( abs((RS)-(BS)) < Mecartmax*(max(RS, BS)) )
+         &&(VS < MpropV*(max(RS, BS)))
+         &&(max(RS, BS) >= MseuilMin)
+         &&(max(RS, BS) <= MseuilMax))
+       {
+        *RC = 255;
+        *VC = 0;
+        *BC = 255;
+       }
+       else
+       {
+        *pixelC = 0;
+        /**BC = 0;
+        *RC = 0;
+        *VC = 0;*/
+       } }}}}
+  table_correspondance_couleur[pos] = couleur;
+  pos++;
+ }
+}
+
+/****************************ALEX*************************************/
+void AGrabber::Prendre_photo( int **res, ENS_Zones *ens_z, int filtre
+                            , float RpropB, float RpropV, float RecartVB, int RseuilMin, int RseuilMax
+                            , float VpropB, float VpropR, float VecartRB, int VseuilMin, int VseuilMax
+                            , float BpropR, float BpropV, float BecartVR, int BseuilMin, int BseuilMax
+                            , float Jecartmax, float BpropJ, int JseuilMin, int JseuilMax
+                            , float Mecartmax, float MpropV, int MseuilMin, int MseuilMax
+                            , int mode_photo
+                            , int *table_correspondance_couleur, int nb_bits
+                            )
+{
+ // Create a DIB from the bitmap header, and get a pointer to the buffer.
+ int *buffer = NULL;
+ //unsigned long *buf_lock;
+ long pBufferSize = GrabberSize;
+ HRESULT hr;
+
+// Copy the image into the buffer.
+ buffer = (int *)Lock();
+ //hr = pGrab->GetCurrentBuffer(&pBufferSize, (long *)buffer);
+ if(buffer != NULL) hr = S_OK;
+ //free(buffer);
+ //memcpy(buffer, buf_lock, GrabberSize);
+
+ switch(hr)
+  {
+   case S_OK:
+     NULL;//Msg(TEXT("GetCurrentBuffer réussit\r\n"));
+   break;
+   case E_INVALIDARG:
+     Msg(TEXT("GetCurrentBuffer E_INVALIDARG Samples are not being buffered. \r\n"));
+     return;
+   break;
+   case E_POINTER:
+     Msg(TEXT("GetCurrentBuffer E_POINTER NULL pointer argument. \r\n"));
+     return;
+   break;
+   case VFW_E_NOT_CONNECTED:
+     Msg(TEXT("GetCurrentBuffer VFW_E_NOT_CONNECTED Filter is not connected. \r\n"));
+     return;
+   break;
+   case VFW_E_WRONG_STATE:
+     Msg(TEXT("GetCurrentBuffer VFW_E_WRONG_STATE The filter is in the wrong state \r\n"));
+     return;
+   break;
+   default:
+     Msg(TEXT("GetCurrentBuffer dans le vent, erreur même pas définit\r\n"));
+     return;
+  }
+ long Width  = GetGrabberWidth();
+ long Height = GetGrabberHeight();
+
+/*Application des filtres de couleurs*/
+ int i, j/*, valR, valV, valB*/, *pixelS, *pixelC;
+ unsigned char *RC, *VC, *BC;
+ unsigned int RS, VS, BS;
+ int *buf2;
+
+/*********Transfo*************/
+ int pos = 0, deb, fin, bx, rx, rxp;
+ bool deja_lie;
+ int *buf_zone, npix;
+
+ buf2 = (int *)buffer;/*(int *)malloc(Width*Height*sizeof(int));
+ memcpy(buf2, buffer, Width*Height*sizeof(int));*/
+
+ //ens_z->Initialiser_dimensions(Width, Height);
+ buf_zone = ens_z->buffer;
+ 
+ switch(mode_photo)
+ {
+ case 1:
+   for(j=0;j<Height;j++)
+    for(i=0;i<Width;i++)
+     {
+      pixelS = &( buf2[pos] );
+    
+      pixelC = pixelS;//&( ((int *)buf2)[i+j*Width] );
+      RC = &( ((unsigned char *)pixelC)[2] );
+      VC = &( ((unsigned char *)pixelC)[1] );
+      BC = &( ((unsigned char *)pixelC)[0] );
+
+      RS = (unsigned int)(*RC);//( ((unsigned char *)pixelS)[2] );
+      VS = (unsigned int)(*VC);//( ((unsigned char *)pixelS)[1] );
+      BS = (unsigned int)(*BC);//( ((unsigned char *)pixelS)[0] );
+      
+      npix = (RS>>3) | ((VS>>3)<<5) | ((BS>>3)<<10);
+      *pixelC = table_correspondance_couleur[npix];
+
+          // Gestion des zones:
+    if(*pixelC != 0)
+    {
+    deja_lie = false;
+    buf_zone[pos] = pos;
+    if(j>0)
+     {
+      if(i>0) deb = pos-1-Width;
+       else deb = pos-Width;
+      if(i+1<Width) fin = pos+1-Width;
+       else fin = pos-Width;
+
+      // Feinte du coup d'oeil juste en dessus et pas en biais:
+      fin = deb;
+      // Parcour des éléments de la ligne du dessus:
+      for(bx=deb;bx<=fin;bx++)
+        {
+         if(buf2[pos] == buf2[bx]) //Les pixels ont ils la même couleur?
+         if(!deja_lie)
+          {
+           rx = ens_z->Representant(bx);
+           buf_zone[pos] = rx;
+           ens_z->Incrementer_zone(rx, buf2[pos], pos);
+           deja_lie = true;
+          }
+          else
+           {
+            rxp = ens_z->Representant(bx);
+            if(rx != rxp)
+             {
+              ens_z->Fusionner_zones(rx, rxp, buf2[pos]);
+             }
+           }
+        }
+     }
+    // Test avec l'élément juste à gauche
+    if(i>0)
+     {
+      bx = pos - 1;
+         if(buf2[pos] == buf2[bx]) //Les pixels ont ils la même couleur?
+         if(!deja_lie)
+          {
+           rx = ens_z->Representant(bx);
+           buf_zone[pos] = rx;
+           ens_z->Incrementer_zone(rx, buf2[pos], pos);
+           deja_lie = true;
+          }
+          else
+           {
+            rxp = ens_z->Representant(bx);
+            if(rx != rxp)
+             {
+              ens_z->Fusionner_zones(rx, rxp, buf2[pos]);
+             }
+           }
+     }
+    // Création de la zone si le pixel n'est lié à personne:
+    if(!deja_lie)
+     {
+      ens_z->Creer_zone(pos, buf2[pos]); // Créer une zone de représantant pos et de couleur buf2[pos].
+     }
+    } // Fin du traitement pour les zones.
+
+    pos++;// = i+j*Width;
+
+     }
+ break;
+   
+ case 2:
+ for(j=0;j<Height;j++)
+  for(i=0;i<Width;i++)
+   {
+    pixelS = &( ((int *)buffer)[i+j*Width] );
+    
+    pixelC = pixelS;//&( ((int *)buf2)[i+j*Width] );
+    RC = &( ((unsigned char *)pixelC)[2] );
+    VC = &( ((unsigned char *)pixelC)[1] );
+    BC = &( ((unsigned char *)pixelC)[0] );
+
+      RS = (unsigned int)(*RC);//( ((unsigned char *)pixelS)[2] );
+      VS = (unsigned int)(*VC);//( ((unsigned char *)pixelS)[1] );
+      BS = (unsigned int)(*BC);//( ((unsigned char *)pixelS)[0] );
+/*    RS = *RC;//( ((unsigned char *)pixelS)[2] );
+    VS = *VC;//( ((unsigned char *)pixelS)[1] );
+    BS = *BC;//( ((unsigned char *)pixelS)[0] );
+*/
+
+
+/*    valR = (int)RS - ((int)VS)/2 - ((int)BS)/2;
+    valV = (int)VS - ((int)BS)/2 - ((int)RS)/2;
+    valB = (int)BS - ((int)VS)/2 - ((int)RS)/2;*/
+
+   // Rouge
+    if( (BS<RpropB*(RS))
+      &&(VS<RpropV*(RS))       //(valB>0)
+      &&(abs((VS)-(BS)) < RecartVB*(RS))
+      &&(RS >= RseuilMin)
+      &&(RS <= RseuilMax) ) //(valR>90)
+     {
+      *RC = 255;//valR;
+      *BC = 0;
+      *VC = 0;
+     }
+     else {
+   // Vert
+    if( (BS < VpropB*(VS))//(valB>0)
+      &&(RS < VpropR*(VS))
+      &&(abs((RS)-(BS)) < VecartRB*(VS))
+      &&(VS >= VseuilMin)
+      &&(VS <= VseuilMax) ) //(valV>50)
+     {
+      *VC = 255;
+      *BC = 0;
+      *RC = 0;
+     }
+     else {
+   // Bleu
+    if( (RS<BpropR*(BS)) //(valB>0)
+      &&(VS<BpropV*(BS))
+      &&(abs((VS)-(RS)) < BecartVR*(BS))
+      &&(BS >= BseuilMin)
+      &&(BS <= BseuilMax) )
+     {
+      *BC = 255;
+      *VC = 0;
+      *RC = 0;
+     }
+     else {
+   // Jaune
+   if( ( abs((RS)-(VS)) < Jecartmax*(max(RS, VS)) )
+     &&(BS < BpropJ*(max(RS, VS))
+     &&(max(RS, VS) >= JseuilMin)
+     &&(max(RS, VS) <= JseuilMax)) )
+     //&&(((*RS)+(*VS)) > 8*(*BS)) )
+    {
+     //Beep(500, 10);
+     //*RC = min(2*(*RS), 255);
+     //*VC = min(2*(*VS), 255);
+     *RC = 255; //max(*RC, *VS);
+     *VC = 255; //max(*RC, *VS);
+     *BC = 0;
+    } else //Mauve?
+     {if( ( abs((RS)-(BS)) < Mecartmax*(max(RS, BS)) )
+         &&(VS < MpropV*(max(RS, BS)))
+         &&(max(RS, BS) >= MseuilMin)
+         &&(max(RS, BS) <= MseuilMax))
+       {
+        *RC = 255;
+        *VC = 0;
+        *BC = 255;
+       }
+       else
+       {
+        *pixelC = 0xFF000000;
+        /**BC = 0;
+        *RC = 0;
+        *VC = 0;*/
+       } }}}}
+
+    // Gestion des zones:
+    if(buf2[pos] != 0xFF000000)
+    {
+    deja_lie = false;
+    buf_zone[pos] = pos;
+    if(j>0)
+     {
+      if(i>0) deb = pos-1-Width;
+       else deb = pos-Width;
+      if(i+1<Width) fin = pos+1-Width;
+       else fin = pos-Width;
+
+      // Feinte du coup d'oeil juste en dessus et pas en biais:
+      fin = deb;
+      // Parcour des éléments de la ligne du dessus:
+      for(bx=deb;bx<=fin;bx++)
+        {
+         if(buf2[pos] == buf2[bx]) //Les pixels ont ils la même couleur?
+         if(!deja_lie)
+          {
+           rx = ens_z->Representant(bx);
+           buf_zone[pos] = rx;
+           ens_z->Incrementer_zone(rx, buf2[pos], pos);
+           deja_lie = true;
+          }
+          else
+           {
+            rxp = ens_z->Representant(bx);
+            if(rx != rxp)
+             {
+              ens_z->Fusionner_zones(rx, rxp, buf2[pos]);
+             }
+           }
+        }
+     }
+    // Test avec l'élément juste à gauche
+    if(i>0)
+     {
+      bx = pos - 1;
+         if(buf2[pos] == buf2[bx]) //Les pixels ont ils la même couleur?
+         if(!deja_lie)
+          {
+           rx = ens_z->Representant(bx);
+           buf_zone[pos] = rx;
+           ens_z->Incrementer_zone(rx, buf2[pos], pos);
+           deja_lie = true;
+          }
+          else
+           {
+            rxp = ens_z->Representant(bx);
+            if(rx != rxp)
+             {
+              ens_z->Fusionner_zones(rx, rxp, buf2[pos]);
+             }
+           }
+     }
+    // Création de la zone si le pixel n'est lié à personne:
+    if(!deja_lie)
+     {
+      ens_z->Creer_zone(pos, buf2[pos]); // Créer une zone de représantant pos et de couleur buf2[pos].
+     }
+    } // Fin du traitement pour les zones.
+
+    pos++;// = i+j*Width;
+
+   }
+   break;
+   } // fin du switch;
+ ens_z->Afficher_centres(buf2);
+
+ *res = buf2;
+ //UnLock();
+}
+
+
+/**************************************************************************************/
+/**************************************************************************************/
+/***************************Définition du grabber**************************************/
+/**************************************************************************************/
+/**************************************************************************************/
+AGrabber::AGrabber ()		//initialise le grabber
+{
+ int i;
+//	if (DEBUG) fprintf (debugfile,"Entree dans le constructeur 'Grabber'\n");
+
+ for(i=0;i<NB_BUFFERS;i++)
+  {
+   etat[i] = vide;
+  }
+ g_psCurrent = Stopped;
+ // Le callback
+ cb = NULL;
+ cb = new CGrabCB();
+ 
+}
+
+
+		
+/**************************************************************************************/
+/**************************************************************************************/
+/**************************************************************************************/
+int AGrabber::GetGrabberWidth ()
+{
+	//if (DEBUG) fprintf (debugfile,"Grabber Width = %d\n", GrabberWidth);
+	return GrabberWidth;
+}
+
+
+int AGrabber::GetGrabberHeight ()
+{
+	//if (DEBUG) fprintf (debugfile,"Grabber Height = %d\n", GrabberHeight);
+	return GrabberHeight;
+}
+
+
+
+int AGrabber::GetGrabberBitLength ()
+{
+//	if (DEBUG) fprintf (debugfile,"Grabber BitLength = %d\n", GrabberBitLength);
+	return GrabberBitLength;
+}
+
+
+
+/**************************************************************************************/
+/**************************************************************************************/
+/**************************************************************************************/
+unsigned long * AGrabber::GetGrabberPtr ()
+{
+ unsigned long *rep = NULL;
+ int i = 0;
+
+ while( (i<NB_BUFFERS)
+      &&(etat[i] != bloque))
+   i++;
+
+ if(i<NB_BUFFERS)
+   rep = tempon[i];
+
+ return rep;
+}
+
+unsigned long * AGrabber::Lock ()
+{
+ unsigned long *rep = NULL;
+ int i = 0;
+ HRESULT hr; 
+ void *buffer = NULL;
+ long pBufferSize = GrabberSize;
+
+ while( (i<NB_BUFFERS)
+      &&(etat[i] != libre))
+   i++;
+
+ if(i<NB_BUFFERS)
+  {
+   // Acquérir un pointeur sur l'image
+   hr = pGrab->GetCurrentBuffer(&pBufferSize, (long *)tempon[i]);
+   // Copier l'image dans ce buffer si il n'y a pas eut de pbs.
+   if(hr == S_OK)
+    {
+     etat[i] = bloque;
+     rep = tempon[i];
+     //memcpy(rep, buffer, min(pBufferSize, GrabberSize));
+    }
+  }
+
+ return rep;
+}
+
+unsigned long * AGrabber::UnLock ()
+{
+ unsigned long *rep = NULL;
+ int i = NB_BUFFERS-1;
+
+ while( (i>=0)
+      &&(etat[i] != bloque))
+   i--;
+
+ if(i>=0)
+  {
+   rep = tempon[i];
+   etat[i] = libre;
+  }
+
+ return rep;
+}
+
+
+// others
+//******************************************
+
+
+HRESULT AGrabber::Run(int lx, int ly, int fr, int num_cam) // lance la capture du flux video
+{
+ int i;
+ HRESULT rep;
+
+//	if (DEBUG) fprintf (debugfile," -> Mise en route de l'acquisition video\n");
+ // Acquisition de la video et donc de ses dimensions
+/*
+ GrabberWidth 	  = lx;
+ GrabberHeight 	  = ly;
+ GrabberFrameRate = fr;
+ GrabberBitLength = 32;
+*/
+ GrabberWidth 	  = lx;
+ GrabberHeight 	  = ly;
+ GrabberFrameRate = fr;
+ GrabberBitLength = 32;
+
+ rep = CaptureVideo( GrabberWidth
+                   , GrabberHeight
+                   , GrabberFrameRate
+                   , num_cam);
+ if(SUCCEEDED(rep))
+  {
+   // mise a jour des variables privees
+   // A RENDRE VARIABLE
+
+
+   // Pour le cas d'une profondeur non multiple de 8 on fait:
+   GrabberSize = GrabberWidth*GrabberHeight*((GrabberBitLength+7)/8); 
+   // Création et initialisation du triple buffer
+   for(i=0;i<NB_BUFFERS;i++)
+    {
+     etat[i] = libre;
+     tempon[i] = (unsigned long *)malloc(GrabberSize);
+    }
+  }
+
+ return rep;
+}
+
+
+		
+//destructor
+//*********************************************
+
+AGrabber::~AGrabber ()
+{
+ int i;
+//	if (DEBUG) fprintf (debugfile," Liberation des objets utilises dans le Grabber\n");
+ for(i=0;i<NB_BUFFERS;i++)
+  {
+   free(tempon[i]);
+  }
+ CloseInterfaces();
+//	if (DEBUG) fprintf (debugfile," Liberation des objets utilises dans le Grabber terminee\n");
+}
+
+
+
+/********************Un petit truc pour les zones****************************/
+Zone* AGrabber::Pointer_zone(int coul, int num)
+{
+ Zone *z;
+ ENS_Zones_meme_couleur *pezmc;
+ int i = 0;
+
+ pezmc = les_zones.ezmc_sentinnelle.svt;
+ while( (pezmc != NULL)
+      &&((pezmc->couleur&0x00ffffff) != (coul&0x00ffffff)))
+   pezmc = pezmc->svt;
+ if(pezmc == NULL)
+  {
+   return NULL;
+  }
+ 
+ z = pezmc->z_sentinnelle.svt;
+
+ while( (i<num)
+      &&(z != NULL))
+   z = z->svt;
+
+ return z;
+}
+
+/***********************Capture d'image et sauvegarde**************************/
+void AGrabber::Enregistrer_image(char *nom)
+{
+ FILE *ftete, *fichier;
+ char entete[56];
+ void *ptr_source;
+ unsigned long i, taille, *ptr, *P;
+ int zero = 0;
+ fpos_t position, depart;
+ char *buffer, alxff = 0xff, alx88 = 0x88, alx44 = 0x44;
+
+ ptr_source = Lock();
+
+ ftete = fopen("cadre.bmp", "rb");
+ fread(entete, 1, 54, ftete);
+ fclose(ftete);
+
+ fichier = fopen(nom, "wb");
+ fwrite(entete, 54, 1, fichier);
+
+ taille = GetGrabberWidth()*GetGrabberHeight();
+ P = (unsigned long *)ptr_source;
+
+ for(i=0;i<taille;i++)
+  {
+   ptr = &(P[i]);
+   fwrite(ptr, 3, 1, fichier);
+  }
+
+ _flushall();
+ fclose(fichier);
+
+ UnLock();
+}

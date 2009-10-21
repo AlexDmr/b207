@@ -1,0 +1,49 @@
+
+typedef struct ZONE
+ {
+  struct ZONE *prcdt, *svt;
+  int sx, sy, nb_pts;
+  int representant;
+ } Zone;
+
+typedef struct ENS_ZONES_MEME_COULEUR
+ {
+  struct ENS_ZONES_MEME_COULEUR *prcdt, *svt;
+  int nb;
+  int couleur;
+  Zone z_sentinnelle, *derniere;
+ } ENS_Zones_meme_couleur;
+
+typedef void* Pvoid;
+
+class ENS_Zones
+ {
+  private:
+   int nb_types_zones;
+   ENS_Zones_meme_couleur* Pointer_zone_coul(int coul);
+   Zone* Rechercher_zone(int r, int coul, ENS_Zones_meme_couleur **pezmc);
+
+  public:
+   ENS_Zones_meme_couleur ezmc_sentinnelle;
+
+
+
+
+   ENS_Zones();
+
+   void Initialiser_dimensions(int l, int h);
+   void Reinitialiser();
+   int Representant(int x);
+   void Incrementer_zone(int r, int coul, int nv);
+   void Fusionner_zones(int r, int rp, int coul);
+   // Créer une zone de représantant pos et de couleur buf2[pos].
+   void Creer_zone(int rx, int coul);
+   void Afficher_centres(int *buf);
+    
+   ~ENS_Zones();
+
+   int *buffer;
+   Pvoid *tab_zones;
+   Pvoid *tab_ens_zones;
+   int largeur, hauteur;
+ };

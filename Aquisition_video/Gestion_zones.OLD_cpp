@@ -1,0 +1,272 @@
+#include "Gestion_zones.h"
+#include <atlbase.h>
+//#include <windows.h>
+//#include <dshow.h>
+#include <stdio.h>
+#include <qedit.h>
+
+ENS_Zones::ENS_Zones()
+{
+ nb_types_zones = 0;
+ ezmc_sentinnelle.svt = NULL;
+ buffer = NULL;
+ tab_zones = NULL;
+}
+
+int ENS_Zones::Representant(int x)
+{
+ while(buffer[x] != x)
+   x = buffer[x];
+
+ return x;
+}
+
+void ENS_Zones::Creer_zone(int rx, int coul)
+{
+ // Voir si un ensemble de zones de cette couleur n'éxiste pas déja:
+ // En créer un nouveau sinon.
+ ENS_Zones_meme_couleur *pezmc, *prcdt, *nouveau;
+
+ pezmc = ezmc_sentinnelle.svt;
+ prcdt = &ezmc_sentinnelle;
+ while( (pezmc != NULL)
+      &&(pezmc->couleur != coul))
+  {
+   prcdt = pezmc;
+   pezmc = pezmc->svt;
+  }
+ 
+ if(pezmc == NULL) // Créer un nouvel ensemble regroupant les zones de couleur coul
+  {
+   nb_types_zones++;
+   nouveau = (ENS_Zones_meme_couleur *)malloc(sizeof(ENS_Zones_meme_couleur));
+   nouveau->prcdt = prcdt;
+   prcdt->svt = nouveau;
+   nouveau->svt = NULL;
+   nouveau->nb = 0;
+   nouveau->couleur = coul;
+   nouveau->z_sentinnelle.svt = NULL;
+   nouveau->z_sentinnelle.nb_pts = 2000000000;
+   nouveau->derniere = &nouveau->z_sentinnelle;
+   pezmc = nouveau;
+  }
+
+ // On a notre ensemble de zone, il faut lui adjoindre une nouvelle zone
+ Zone *nz;
+ 
+ // On initialise:
+ nz = (Zone *)malloc(sizeof(Zone));
+ nz->nb_pts = 1;
+ nz->sx = rx % largeur;
+ nz->sy = rx / largeur;
+ nz->representant = rx;
+ // On fait les liens:
+ nz->prcdt = pezmc->derniere;
+ nz->svt = NULL;
+ pezmc->derniere->svt = nz;
+ pezmc->derniere = nz;
+ pezmc->nb++;
+ // Hop l'insertion dans le tableau de zones
+ tab_zones[rx] = (void *)nz;
+ tab_ens_zones[rx] = (void *)pezmc;
+}
+
+Zone* ENS_Zones::Rechercher_zone(int r, int coul, ENS_Zones_meme_couleur **pezmc)
+{
+ // On cherche d'abord l'ensemble de zone de la couleur spécifié:
+// ENS_Zones_meme_couleur *pezmc;
+
+ 
+ *pezmc = (ENS_Zones_meme_couleur *)tab_ens_zones[r];
+ /*ezmc_sentinnelle.svt;
+ while((*pezmc)->couleur != coul)
+   *pezmc = (*pezmc)->svt;*/
+
+ 
+ /*// Dans cet ensemble on cherche celui de représentant r
+ Zone *z;
+
+ z = (*pezmc)->z_sentinnelle.svt;
+ while(z->representant != r)
+   z = z->svt;*/
+
+ return (Zone *)tab_zones[r];
+}
+
+void ENS_Zones::Incrementer_zone(int r, int coul, int nv)
+{
+ Zone *z, *apos, *npos;
+ int nnbpts;
+ ENS_Zones_meme_couleur *pezmc;
+
+ z = (Zone *)tab_zones[r];//Rechercher_zone(r, coul, &pezmc);
+ pezmc = (ENS_Zones_meme_couleur *)tab_ens_zones[r];
+
+ apos = z;
+ z->nb_pts++;
+ z->sx += nv % largeur;
+ z->sy += nv / largeur;
+
+ // Replacer la zone si besoin est de façon à ce que les zones
+ // soient triées par ordre décroissant du nombre de points qu'elles contiennent.
+ nnbpts = z->nb_pts;
+ npos = apos->prcdt;
+ while(npos->nb_pts < nnbpts)
+   npos = npos->prcdt;
+
+ // Réinsérer si nécessaire:
+ if(npos != apos->prcdt)
+  {
+   apos->prcdt->svt = apos->svt;
+   if(apos->svt != NULL) 
+     apos->svt->prcdt = apos->prcdt;
+    else // On a un nouveau dernier:
+      pezmc->derniere = apos->prcdt;
+   
+   apos->prcdt = npos;
+   apos->svt   = npos->svt;
+   npos->svt->prcdt = apos;
+   npos->svt = apos;
+  } 
+}
+
+ENS_Zones_meme_couleur* ENS_Zones::Pointer_zone_coul(int coul)
+{
+ // On cherche d'abord l'ensemble de zone de la couleur spécifié:
+ ENS_Zones_meme_couleur *pezmc;
+
+ pezmc = ezmc_sentinnelle.svt;
+ while(pezmc->couleur != coul)
+   pezmc = pezmc->svt;
+
+ return pezmc;
+}
+
+void ENS_Zones::Fusionner_zones(int r, int rp, int coul)
+{
+ Zone *zr, *zrp;
+ ENS_Zones_meme_couleur *pezmc;
+
+ zr  = (Zone *)tab_zones[r];//Rechercher_zone(r , coul, &pezmc);
+ zrp = (Zone *)tab_zones[rp];//Rechercher_zone(rp, coul, &pezmc);
+ pezmc = (ENS_Zones_meme_couleur *)tab_ens_zones[r];
+
+ // Tout mettre dans zr:
+ zr->nb_pts += zrp->nb_pts;
+ zr->sx += zrp->sx;
+ zr->sy += zrp->sy;
+ // Mettre à jour le représentant de rp:
+ buffer[rp] = r;
+ // Ejecter zrp de la liste et l'effacer:
+ //pezmc = Pointer_zone_coul(coul);
+ zrp->prcdt->svt = zrp->svt;
+ if(zrp->svt != NULL)
+  {
+   zrp->svt->prcdt = zrp->prcdt;
+  }
+  else
+   {
+    pezmc->derniere = zrp->prcdt;
+   }
+
+ pezmc->nb--;
+ free(zrp);
+
+
+
+ Zone *z, *apos, *npos;
+ int nnbpts;
+
+ z = zr;
+ apos = z;
+ // Replacer la zone si besoin est de façon à ce que les zones
+ // soient triées par ordre décroissant du nombre de points qu'elles contiennent.
+ nnbpts = zr->nb_pts;
+ npos = apos->prcdt;
+ while(npos->nb_pts < nnbpts)
+   npos = npos->prcdt;
+
+ // Réinsérer si nécessaire:
+ if(npos != apos->prcdt)
+  {
+   apos->prcdt->svt = apos->svt;
+   if(apos->svt != NULL) 
+     apos->svt->prcdt = apos->prcdt;
+    else // On a un nouveau dernier:
+      pezmc->derniere = apos->prcdt;
+   
+   apos->prcdt = npos;
+   apos->svt   = npos->svt;
+   npos->svt->prcdt = apos;
+   npos->svt = apos;
+  } 
+}
+
+void ENS_Zones::Reinitialiser()
+{
+ // Tous effacer:
+ // Parcourir les ensemble de zone de couleur
+ Zone *z, *zsvt;
+ ENS_Zones_meme_couleur *pezmc, *pezmcsvt;
+ int i, j;
+
+ pezmc = ezmc_sentinnelle.svt;
+ for(i=0;i<nb_types_zones;i++)
+  {
+   pezmcsvt = pezmc->svt;
+   // Effacer toutes les zones de cette couleur
+   z = pezmc->z_sentinnelle.svt;
+   for(j=0;j<pezmc->nb;j++)
+    {
+     zsvt = z->svt;
+     free(z);
+     z = zsvt;
+    }
+   // Effacer l'ensemble:
+   free(pezmc);
+   pezmc = pezmcsvt;
+  }
+ nb_types_zones = 0;
+ ezmc_sentinnelle.svt = NULL;
+}
+
+void ENS_Zones::Initialiser_dimensions(int l, int h)
+{
+ largeur = l;
+ hauteur = h;
+ buffer = (int *)malloc(l*h*sizeof(int));
+ tab_zones     = (Pvoid *)malloc(l*h*sizeof(Pvoid));
+ tab_ens_zones = (Pvoid *)malloc(l*h*sizeof(Pvoid));
+}
+
+void ENS_Zones::Afficher_centres(int *buf)
+{
+ Zone *z;
+ ENS_Zones_meme_couleur *pezmc;
+ int i, j;
+
+ pezmc = ezmc_sentinnelle.svt;
+ for(i=0;i<nb_types_zones;i++)
+  {
+   z = pezmc->z_sentinnelle.svt;
+   for(j=0;j<pezmc->nb;j++)
+    {
+     buf[((z->sx)/z->nb_pts)
+        +((z->sy)/z->nb_pts)*largeur] = 0;//0xffffffff;
+     z = z->svt;
+    }
+   // Effacer l'ensemble:
+   pezmc = pezmc->svt;
+  }
+}
+
+ENS_Zones::~ENS_Zones()
+{
+ Reinitialiser();
+ if(buffer != NULL) free(buffer);
+ if(tab_zones != NULL) free(tab_zones);
+ if(tab_ens_zones != NULL) free(tab_ens_zones);
+ nb_types_zones = 0;
+ ezmc_sentinnelle.svt = NULL;
+}
+

@@ -1,0 +1,57 @@
+<help id="window">
+  <scenario id="Drag" name="Drag the window">
+    set ox [$obj Px]; set oy [$obj Py]
+	set px [expr [$obj Longueur_corp]/2]
+	set py [expr [$obj Hauteur_corp] + [$obj Hauteur_entete]/2]
+	Convert_in_screen_space_from $obj px py
+    $helper Do Move_hand R index 1000 $px $py \
+	           Press R index \
+			   Move_hand R index 1000 [expr [N_i_mere Largeur] / 2] 0 \
+			   Move_hand R index 1000 [expr [N_i_mere Largeur] / 2] [N_i_mere Hauteur] \
+			   Move_hand R index 1000 [expr [N_i_mere Largeur]] [expr [N_i_mere Hauteur]/2] \
+			   Move_hand R index 1000 $px $py \
+			   Release R index \
+			   Exec R index "$obj Origine $ox $oy"
+  </scenario>
+  <scenario id="Resize" name="Resize the window">
+    set e [$obj Epaisseur_bordure]
+	set sx [$obj Longueur_corp]; set sy [$obj Hauteur_corp]
+	set tx [$obj Longueur_corp]; set ty [expr [$obj Hauteur_corp] + [$obj Hauteur_entete]]
+	set px [expr [$obj Longueur_corp]/2]; set py [expr [$obj Hauteur_corp] + [$obj Hauteur_entete]/2]
+	  Convert_in_screen_space_from $obj px py
+	set br_x [expr $tx + $e/2]; set br_y [expr -$e/2]
+	  Convert_in_screen_space_from $obj br_x br_y
+	set tl_x [expr -$e/2]; set tl_y [expr $ty + $e/2]
+	  Convert_in_screen_space_from $obj tl_x tl_y
+	set l_x [expr -$e/2]; set l_y [expr $ty/2]
+	  Convert_in_screen_space_from $obj l_x l_y
+    $helper Do Move_hand R index 1000 $br_x $br_y \
+	           Press R index \
+			   Move_hand R index 1000 [N_i_mere Largeur] [N_i_mere Hauteur] \
+			   Move_hand R index 1000 [N_i_mere Largeur] 0 \
+			   Move_hand R index 1000 0 [N_i_mere Hauteur] \
+			   Move_hand R index 1000 $br_x $br_y \
+			   Release R index \
+			   Exec R index "$obj Longueur_corp $sx; $obj Hauteur_corp $sy; $obj Mettre_a_jour" \
+			   SYNCHRO \
+			   Move_hand L index 1000 $px $py \
+			   SYNCHRO \
+			   Press R index Press L index \
+			   Move_hand R index 1000 [N_i_mere Largeur] [N_i_mere Hauteur] \
+			   Move_hand R index 1000 0 0 \
+			   Move_hand R index 1000 [N_i_mere Largeur] 0 \
+			   Move_hand R index 1000 0 [N_i_mere Hauteur] \
+			   Move_hand R index 1000 [N_i_mere Largeur] 0 \
+			   Move_hand R index 1000 0 0 \
+			   Move_hand R index 1000 $br_x $br_y \
+			   Release R index \
+			   Move_hand L index 1000 0 0 \
+			   Move_hand L index 1000 [N_i_mere Largeur] [N_i_mere Hauteur] \
+			   Move_hand L index 1000 0 [N_i_mere Hauteur] \
+			   Move_hand L index 1000 [N_i_mere Largeur] 0 \
+			   Move_hand L index 1000 0 [N_i_mere Hauteur] \
+			   Move_hand L index 1000 [N_i_mere Largeur] [N_i_mere Hauteur] \
+			   Move_hand L index 1000 $px $py \
+			   Release L index \
+  </scenario>
+</help>

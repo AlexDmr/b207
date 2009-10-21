@@ -1,0 +1,49 @@
+<help id="image">
+  <scenario id="Resize" name="Resize the image">
+    set bg_x [$obj Px]; set bg_y [$obj Py]
+	set hd_x [$obj Lg]; set hd_y [$obj Ht]
+	  set bg_x [expr $bg_x + 0.1*($hd_x-$bg_x)]; set bg_y [expr $bg_y + 0.1*($hd_y-$bg_y)]
+	  set hd_x [expr $bg_x + 0.9*($hd_x-$bg_x)]; set hd_y [expr $bg_y + 0.9*($hd_y-$bg_y)]
+	Convert_in_screen_space_from $obj bg_x bg_y
+	Convert_in_screen_space_from $obj hd_x hd_y
+    $helper Do Move_hand L index 1000 $bg_x $bg_y \
+	           Press L index \
+			   Move_hand R index 1000 $hd_x $hd_y \
+			   Press R index \
+			   SYNCHRO \
+			   Move_hand R index 1000 0 0 \
+			   Move_hand R index 1000 [expr [N_i_mere Largeur] / 2] 0 \
+			   SYNCHRO \
+			   Move_hand L index 1000 0 0 \
+			   Move_hand L index 1000 [expr [N_i_mere Largeur] / 2] 0 \
+			   Move_hand L index 1000 $bg_x $bg_y \
+			   Release L index  \
+			   Move_hand R index 1000 [expr [N_i_mere Largeur] / 2] [N_i_mere Hauteur] \
+			   Move_hand R index 1000 [expr [N_i_mere Largeur]] [expr [N_i_mere Hauteur]/2] \
+			   Move_hand R index 1000 $hd_x $hd_y \
+			   Release R index 
+  </scenario>
+  <scenario id="Browse" name="Browse the pile">
+    set bg_x [$obj Px]; set bg_y [$obj Py]
+	set hd_x [$obj Lg]; set hd_y [$obj Ht]
+	  set bg_x [expr $bg_x + 0.1*($hd_x-$bg_x)]; set bg_y [expr $bg_y + 0.1*($hd_y-$bg_y)]
+	  set hd_x [expr $bg_x + 0.9*($hd_x-$bg_x)]; set hd_y [expr $bg_y + 0.9*($hd_y-$bg_y)]
+	Convert_in_screen_space_from $obj bg_x bg_y
+	Convert_in_screen_space_from $obj hd_x hd_y
+	  set c_x [expr ($bg_x + $hd_x)/2.0]; set c_y [expr ($bg_y + $hd_y)/2.0]
+    $helper Do Move_hand L middle 1000 $bg_x $bg_y \
+	           Press L middle Press L index \
+			   SYNCHRO \
+			   Move_hand R index 1000 $c_x $c_y \
+			   Press R index \
+			   Move_hand R index 1000 [N_i_mere Largeur] [N_i_mere Hauteur] \
+			   SYNCHRO \
+			   Move_hand R index  1000 [N_i_mere Largeur] 0 \
+			   Move_hand L middle 1000 0 [N_i_mere Hauteur] \
+			   Move_hand L middle 1000 $bg_x $bg_y \
+			   SYNCHRO \
+			   Release L index \
+			   Release L middle \
+			   Release R index
+  </scenario>
+</help>

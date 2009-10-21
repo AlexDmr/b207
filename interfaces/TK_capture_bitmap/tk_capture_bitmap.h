@@ -1,0 +1,1 @@
+void* get_Buffer_for_HBITMAP_pixels();

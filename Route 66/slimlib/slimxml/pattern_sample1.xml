@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sxp:pattern xmlns:sxp="http://iihm.imag.fr/balme/sxp/01" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://iihm.imag.fr/balme/sxp/01 slimxmlpattern.xsd" sxp:id="pattern_sample1">
+	<sxp:and>
+		<sxp:element sxp:name="software" sxp:id="remotable_software">
+			<sxp:complexcontent_contain>
+				<sxp:element sxp:name="class">
+					<sxp:simplecontent_equal>browser</sxp:simplecontent_equal>
+				</sxp:element>
+				<sxp:element sxp:name="caracteristics">
+					<sxp:simplecontent_contain>PLASTIC_PORT</sxp:simplecontent_contain>
+				</sxp:element>
+			</sxp:complexcontent_contain>
+		</sxp:element>
+		<sxp:element sxp:name="software" sxp:id="remote_software">
+			<sxp:complexcontent_contain>
+				<sxp:element sxp:name="class">
+					<sxp:simplecontent_equal>browser</sxp:simplecontent_equal>
+				</sxp:element>
+				<sxp:element sxp:name="caracteristics">
+					<sxp:simplecontent_contain>MSIE_PDA</sxp:simplecontent_contain>
+				</sxp:element>
+			</sxp:complexcontent_contain>
+		</sxp:element>
+	</sxp:and>
+</sxp:pattern>

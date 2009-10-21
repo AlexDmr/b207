@@ -1,0 +1,201 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!-- C++Builder XML Project -->
+<PROJECT>
+  <MACROS>
+    <VERSION value="BCB.05.03"/>
+    <PROJECT value="Commandes_TCL.dll"/>
+    <OBJFILES value="Commandes_TCL.obj ..\opengl\alx_image.obj ..\opengl\alx_image_opengl.obj 
+      ..\opengl\alx_materiel.obj ..\opengl\alx_sommet_opengl.obj 
+      ..\opengl\alx_texture_rendu.obj ..\opengl\config_opengl.obj 
+      ..\opengl\principal.obj ..\opengl\texte.obj ..\physique\constantes.obj 
+      ..\physique\alx_choc2D.obj ..\physique\alx_classe_base_liant.obj 
+      ..\physique\alx_classe_base_model.obj 
+      ..\physique\alx_controleur_de_choc2D.obj ..\physique\alx_deplacement2D.obj 
+      ..\physique\alx_droite2D.obj ..\physique\alx_ellipse2D.obj 
+      ..\physique\alx_entite_bloc.obj ..\physique\alx_entite_palet.obj 
+      ..\physique\alx_geometrie2D.obj ..\physique\alx_methode_rappel.obj 
+      ..\physique\alx_model_simulation_bidon1.obj 
+      ..\physique\alx_model_simulation_physique1.obj ..\physique\alx_point2D.obj 
+      ..\physique\alx_polygone2D.obj ..\physique\alx_primitive2D.obj 
+      ..\physique\alx_repere2D.obj ..\physique\alx_segment2D.obj 
+      ..\physique\alx_simulateur_boite_rectangulaire.obj 
+      ..\physique\alx_simulateur_choc_2D.obj 
+      ..\physique\alx_simulateur_global_jeu_palet.obj 
+      ..\physique\alx_simulateur_mouvement_newton.obj 
+      ..\physique\alx_simulateur_physique_champs_uniforme.obj 
+      ..\physique\alx_simulateur_physique_initialisation.obj 
+      ..\physique\alx_simulateur_points_contact.obj 
+      ..\physique\alx_simulateur_ressort_2D.obj ..\physique\alx_vecteur2D.obj 
+      ..\physique\classes_traitement_chocs.obj ..\physique\alx_cercle2D.obj 
+      ..\physique\element_generique.obj ..\physique\math_alex.obj 
+      ..\physique\test_arbre.obj &quot;..\Route 66\regerror.obj&quot; 
+      &quot;..\Route 66\regexp.obj&quot; &quot;..\Route 66\reggetsub.obj&quot; 
+      &quot;..\Route 66\regsub.obj&quot; &quot;..\Route 66\Route66.obj&quot; 
+      ..\tcl\alx_interpreteur_tcl.obj ..\utilitaires\alx_arbre.obj 
+      ..\Aquisition_video\messages.obj 
+      ..\interfaces\alx_evennement_dispositif_saisie.obj 
+      ..\interfaces\alx_evennement_pointeur.obj 
+      ..\interfaces\alx_liant_ptr_contact.obj 
+      ..\interfaces\alx_lieur_ptr_liant.obj ..\interfaces\alx_noeud_scene.obj 
+      ..\interfaces\alx_simulateur_clavier.obj 
+      ..\interfaces\alx_simulateur_couche.obj 
+      ..\interfaces\alx_simulateur_dispositif_saisie.obj 
+      ..\interfaces\alx_simulateur_pointeurs.obj 
+      ..\interfaces\alx_simulateur_pointeurs_generique.obj 
+      ..\interfaces\alx_simulateur_pointeurs_joystick.obj 
+      ..\interfaces\alx_simulateur_pointeurs_souris.obj 
+      ..\interfaces\choses_communes.obj ..\interfaces\fontes.obj 
+      ..\interfaces\classiques\alx_fenetre.obj 
+      ..\interfaces\classiques\alx_fenetre_opengl.obj 
+      ..\interfaces\classiques\alx_fiche.obj 
+      ..\interfaces\classiques\alx_fiche_opengl.obj 
+      ..\interfaces\classiques\alx_fiche_ovale.obj 
+      ..\interfaces\classiques\alx_fiche_ovale_opengl.obj 
+      ..\interfaces\classiques\alx_zone_texte.obj 
+      ..\interfaces\classiques\alx_zone_texte_opengl.obj 
+      ..\interfaces\sdl_opengl\alx_noeud_fiche_sdl_opengl.obj 
+      ..\interfaces\sdl_opengl\alx_interface_sdl_opengl_1.obj 
+      ..\interfaces\sdl_opengl\alx_noeud_bouton_sdl_opengl.obj 
+      ..\interfaces\sdl_opengl\alx_noeud_editeur_olfa_comet.obj 
+      ..\interfaces\sdl_opengl\alx_noeud_entete_sdl_opengl.obj 
+      ..\interfaces\sdl_opengl\alx_noeud_fenetre_sdl_opengl.obj 
+      ..\interfaces\sdl_opengl\alx_noeud_fiche_ovale_sdl_opengl.obj 
+      ..\interfaces\sdl_opengl\affichage_pointeurs.obj 
+      ..\interfaces\sdl_opengl\alx_noeud_figure2D_sdl_opengl.obj 
+      ..\interfaces\sdl_opengl\alx_noeud_image_sdl_opengl.obj 
+      ..\interfaces\sdl_opengl\alx_noeud_potentiometre_sdl_opengl.obj 
+      ..\interfaces\sdl_opengl\alx_noeud_transformations_sdl_opengl.obj 
+      ..\interfaces\sdl_opengl\alx_noeud_visualisation_camera.obj 
+      ..\interfaces\sdl_opengl\alx_noeud_zone_rendu_sdl_opengl.obj 
+      ..\interfaces\sdl_opengl\alx_noeud_zone_texte_interpreteur_tcl_sdl_opengl.obj 
+      ..\interfaces\sdl_opengl\alx_noeud_zone_texte_sdl_opengl.obj 
+      ..\interfaces\sdl_opengl\alx_prerendeur.obj 
+      ..\interfaces\sdl_opengl\deformations_dynamiques.obj 
+      &quot;..\Comet Olfa\Creation_objet_dans_tcl.obj&quot; &quot;..\Comet Olfa\olfa_comet.obj&quot; 
+      &quot;..\Comet Olfa\olfa_comet_fenetre_sdl_opengl.obj&quot; 
+      ..\CamNote\alx_telec_camnote_cpp.obj 
+      ..\CamNote\alx_telec_camnote_cpp_bigre.obj ..\CamNote\alx_telec_cpp.obj 
+      ..\CamNote\alx_visu_image_camnote_cpp.obj 
+      ..\CamNote\alx_visu_image_camnote_cpp_bigre.obj 
+      ..\CamNote\alx_visu_image_cpp.obj ..\CamNote\CamNote.obj"/>
+    <RESFILES value=""/>
+    <DEFFILE value=""/>
+    <RESDEPEN value="$(RESFILES)"/>
+    <LIBFILES value="src\sdl.lib C:\FMOD\api\lib\fmodbc.lib 
+      &quot;C:\SDL et OpenGL\OGLSDK\bclib\opengl.lib&quot; 
+      &quot;C:\SDL et OpenGL\OGLSDK\bclib\glu.lib&quot; 
+      &quot;C:\SDL et OpenGL\glut-3.7\glut32.lib&quot; 
+      &quot;C:\SDL et OpenGL\SDL_NET\SDL_net-1.2.4\lib\bc_SDL_net.lib&quot; 
+      &quot;C:\SDL et OpenGL\Image_lib\bc\libimage.lib&quot; 
+      &quot;C:\Program Files\Borland\CBuilder5\Lib\PSDK\kernel32.lib&quot; 
+      &quot;C:\Program Files\Borland\CBuilder5\Lib\PSDK\cap.lib&quot; 
+      &quot;C:\Program Files\Borland\CBuilder5\Lib\PSDK\user32.lib&quot; 
+      &quot;C:\Program Files\Borland\CBuilder5\Lib\PSDK\vfw32.lib&quot; 
+      ..\..\..\..\..\TCL\bin\tcl83.lib 
+      ..\..\..\..\..\Graphes\Cogitant\cogitant_prog\lib\cogitant.dll.lib 
+      &quot;C:\Program Files\Borland\CBuilder5\Lib\oleaut32.lib&quot; &quot;C:\Program Files\Borland\CBuilder5\Lib\bcbatl.lib&quot;"/>
+    <LIBRARIES value=""/>
+    <SPARELIBS value=""/>
+    <PACKAGES value=""/>
+    <PATHCPP value=".;..\opengl;..\physique;..\Route 
+      66;..\tcl;..\utilitaires;..\Aquisition_video;..\interfaces;..\interfaces\classiques;..\interfaces\sdl_opengl;..\Comet 
+      Olfa;..\CamNote"/>
+    <PATHPAS value=".;"/>
+    <PATHRC value=".;"/>
+    <PATHASM value=".;"/>
+    <DEBUGLIBPATH value="$(BCB)\lib\debug"/>
+    <RELEASELIBPATH value="$(BCB)\lib\release"/>
+    <LINKER value="tlink32"/>
+    <USERDEFINES value="_DEBUG"/>
+    <SYSDEFINES value="NO_STRICT;_NO_VCL"/>
+    <MAINSOURCE value="Commandes_TCL.bpf"/>
+    <INCLUDEPATH value="..\utilitaires;..\tcl;&quot;..\Route 66&quot;;..\RegExp;..\physique;..\opengl;..\interfaces\sdl_opengl;..\interfaces\classiques;..\interfaces;&quot;..\Comet Olfa&quot;;..\CamNote;..\Aquisition_video;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\TCL\include;&quot;C:\SDL et OpenGL\OGLSDK\include\&quot;;&quot;C:\SDL et OpenGL\OGLSDK\include\gl\&quot;;&quot;C:\SDL et OpenGL\SDL-1.2.3\include\&quot;;&quot;C:\SDL et OpenGL\SDL_NET\SDL_net-1.2.4\include\&quot;;&quot;C:\SDL et OpenGL\Image_lib\borland\&quot;;&quot;C:\SDL et OpenGL\Image_lib\include\&quot;;&quot;C:\SDL et OpenGL\OGLSDK\Extensions\GLsdk\GL\&quot;;&quot;C:\SDL et OpenGL\OGLSDK\Extensions\&quot;;..\..\GMLGrabber1.0;..\..\GMLGrabber1.0\build\win32-DirectX;&quot;C:\Program Files\Microsoft Visual Studio\VC98\ATL\Include\&quot;"/>
+    <LIBPATH value="..\utilitaires;..\tcl;&quot;..\Route 66&quot;;..\RegExp;..\physique;..\opengl;..\interfaces\sdl_opengl;..\interfaces\classiques;..\interfaces;&quot;..\Comet Olfa&quot;;..\CamNote;..\Aquisition_video;$(BCB)\lib\obj;$(BCB)\lib;..\..\..\..\..\TCL\lib;&quot;C:\OGLSDK\bclib\&quot;"/>
+    <WARNINGS value="-w-par"/>
+  </MACROS>
+  <OPTIONS>
+    <CFLAG1 value="-WD -Od -H=$(BCB)\lib\vcl50.csm -Hc -Vx -Ve -X- -r- -a8 -b -k -y -v -vi- 
+      -tWD -tWM- -c"/>
+    <PFLAGS value="-$YD -$W -$O- -v -JPHNE -M"/>
+    <RFLAGS value=""/>
+    <AFLAGS value="/mx /w2 /zd"/>
+    <LFLAGS value="-D&quot;&quot; -aa -Tpd -x -Gn -v"/>
+  </OPTIONS>
+  <LINKER>
+    <ALLOBJ value="c0d32.obj $(OBJFILES)"/>
+    <ALLRES value="$(RESFILES)"/>
+    <ALLLIB value="$(LIBFILES) $(LIBRARIES) import32.lib cw32.lib"/>
+  </LINKER>
+  <IDEOPTIONS>
+[Version Info]
+IncludeVerInfo=0
+AutoIncBuild=0
+MajorVer=1
+MinorVer=0
+Release=0
+Build=0
+Debug=0
+PreRelease=0
+Special=0
+Private=0
+DLL=0
+Locale=1036
+CodePage=1252
+
+[Version Info Keys]
+CompanyName=
+FileDescription=
+FileVersion=1.0.0.0
+InternalName=
+LegalCopyright=
+LegalTrademarks=
+OriginalFilename=
+ProductName=
+ProductVersion=1.0.0.0
+Comments=
+
+[HistoryLists\hlIncludePath]
+Count=12
+Item0=..\utilitaires;..\tcl;..\Route 66;..\RegExp;..\physique;..\opengl;..\interfaces\sdl_opengl;..\interfaces\classiques;..\interfaces;..\Comet Olfa;..\CamNote;..\Aquisition_video;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\TCL\include;C:\SDL et OpenGL\OGLSDK\include\;C:\SDL et OpenGL\OGLSDK\include\gl\;C:\SDL et OpenGL\SDL-1.2.3\include\;C:\SDL et OpenGL\SDL_NET\SDL_net-1.2.4\include\;C:\SDL et OpenGL\Image_lib\borland\;C:\SDL et OpenGL\Image_lib\include\;C:\SDL et OpenGL\OGLSDK\Extensions\GLsdk\GL\;C:\SDL et OpenGL\OGLSDK\Extensions\;..\..\GMLGrabber1.0;..\..\GMLGrabber1.0\build\win32-DirectX;C:\Program Files\Microsoft Visual Studio\VC98\ATL\Include
+Item1=..\utilitaires;..\tcl;..\Route 66;..\RegExp;..\physique;..\opengl;..\interfaces\sdl_opengl;..\interfaces\classiques;..\interfaces;..\Comet Olfa;..\CamNote;..\Aquisition_video;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\TCL\include;C:\SDL et OpenGL\OGLSDK\include\;C:\SDL et OpenGL\OGLSDK\include\gl\;C:\SDL et OpenGL\SDL-1.2.3\include\;C:\SDL et OpenGL\SDL_NET\SDL_net-1.2.4\include\;C:\SDL et OpenGL\Image_lib\borland\;C:\SDL et OpenGL\Image_lib\include\;C:\SDL et OpenGL\OGLSDK\Extensions\GLsdk\GL\;C:\SDL et OpenGL\OGLSDK\Extensions\;..\..\GMLGrabber1.0;..\..\GMLGrabber1.0\build\win32-DirectX;C:\Program Files\Borland\CBuilder5\Include\Atl\
+Item2=..\utilitaires;..\tcl;..\Route 66;..\RegExp;..\physique;..\opengl;..\interfaces\sdl_opengl;..\interfaces\classiques;..\interfaces;..\Comet Olfa;..\CamNote;..\Aquisition_video;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\TCL\include;C:\SDL et OpenGL\OGLSDK\include\;C:\SDL et OpenGL\OGLSDK\include\gl\;C:\SDL et OpenGL\SDL-1.2.3\include\;C:\SDL et OpenGL\SDL_NET\SDL_net-1.2.4\include\;C:\SDL et OpenGL\Image_lib\borland\;C:\SDL et OpenGL\Image_lib\include\;C:\SDL et OpenGL\OGLSDK\Extensions\GLsdk\GL\;C:\SDL et OpenGL\OGLSDK\Extensions\;..\..\GMLGrabber1.0;..\..\GMLGrabber1.0\build\win32-DirectX;C:\Program Files\Borland\CBuilder5\Include\Atl
+Item3=..\utilitaires;..\tcl;..\Route 66;..\RegExp;..\physique;..\opengl;..\interfaces\sdl_opengl;..\interfaces\classiques;..\interfaces;..\Comet Olfa;..\CamNote;..\Aquisition_video;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\TCL\include;C:\SDL et OpenGL\OGLSDK\include\;C:\SDL et OpenGL\OGLSDK\include\gl\;C:\SDL et OpenGL\SDL-1.2.3\include\;C:\SDL et OpenGL\SDL_NET\SDL_net-1.2.4\include\;C:\SDL et OpenGL\Image_lib\borland\;C:\SDL et OpenGL\Image_lib\include\;C:\SDL et OpenGL\OGLSDK\Extensions\GLsdk\GL\;C:\SDL et OpenGL\OGLSDK\Extensions\;..\..\GMLGrabber1.0;..\..\GMLGrabber1.0\build\win32-DirectX
+Item4=..\utilitaires;..\tcl;..\Route 66;..\RegExp;..\physique;..\opengl;..\interfaces\sdl_opengl;..\interfaces\classiques;..\interfaces;..\Comet Olfa;..\CamNote;..\Aquisition_video;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\TCL\include;C:\SDL et OpenGL\OGLSDK\include\;C:\SDL et OpenGL\OGLSDK\include\gl\;C:\SDL et OpenGL\SDL-1.2.3\include\;C:\SDL et OpenGL\SDL_NET\SDL_net-1.2.4\include\;C:\SDL et OpenGL\Image_lib\borland\;C:\SDL et OpenGL\Image_lib\include\;C:\SDL et OpenGL\OGLSDK\Extensions\GLsdk\GL\;C:\SDL et OpenGL\OGLSDK\Extensions\;C:\Alexandre\MAGISTERE2\Plasticité\Jeu de modeles physiques\GMLGrabber1.0;C:\Alexandre\MAGISTERE2\Plasticité\Jeu de modeles physiques\GMLGrabber1.0\build\win32-DirectX
+Item5=..\utilitaires;..\tcl;..\Route 66;..\RegExp;..\physique;..\opengl;..\interfaces\sdl_opengl;..\interfaces\classiques;..\interfaces;..\Comet Olfa;..\CamNote;..\Aquisition_video;$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\TCL\include;C:\SDL et OpenGL\OGLSDK\include\;C:\SDL et OpenGL\OGLSDK\include\gl\;C:\SDL et OpenGL\SDL-1.2.3\include\;C:\SDL et OpenGL\SDL_NET\SDL_net-1.2.4\include\;C:\SDL et OpenGL\Image_lib\borland\;C:\SDL et OpenGL\Image_lib\include\;C:\SDL et OpenGL\OGLSDK\Extensions\GLsdk\GL\;C:\SDL et OpenGL\OGLSDK\Extensions\
+Item6=$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\TCL\include;C:\SDL et OpenGL\OGLSDK\include\;C:\SDL et OpenGL\OGLSDK\include\gl\;C:\SDL et OpenGL\SDL-1.2.3\include\;C:\SDL et OpenGL\SDL_NET\SDL_net-1.2.4\include\;C:\SDL et OpenGL\Image_lib\borland\;C:\SDL et OpenGL\Image_lib\include\;C:\SDL et OpenGL\OGLSDK\Extensions\GLsdk\GL\;C:\SDL et OpenGL\OGLSDK\Extensions\
+Item7=$(BCB)\include;$(BCB)\include\vcl;..\..\..\..\..\TCL\include;C:\OGLSDK\include\;C:\OGLSDK\include\gl\
+Item8=$(BCB)\include;$(BCB)\include\vcl;C:\Alexandre\TCL\include;C:\OGLSDK\include;C:\OGLSDK\include\gl
+Item9=$(BCB)\include;$(BCB)\include\vcl;C:\Tcl\include\
+Item10=$(BCB)\include;$(BCB)\include\vcl;C:\Tcl\include
+Item11=$(BCB)\include;$(BCB)\include\vcl
+
+[HistoryLists\hlLibraryPath]
+Count=4
+Item0=..\utilitaires;..\tcl;..\Route 66;..\RegExp;..\physique;..\opengl;..\interfaces\sdl_opengl;..\interfaces\classiques;..\interfaces;..\Comet Olfa;..\CamNote;..\Aquisition_video;$(BCB)\lib\obj;$(BCB)\lib;..\..\..\..\..\TCL\lib;C:\OGLSDK\bclib\
+Item1=$(BCB)\lib\obj;$(BCB)\lib;..\..\..\..\..\TCL\lib;C:\OGLSDK\bclib\
+Item2=$(BCB)\lib\obj;$(BCB)\lib;C:\Alexandre\TCL\lib;C:\OGLSDK\bclib
+Item3=$(BCB)\lib\obj;$(BCB)\lib
+
+[HistoryLists\hlDebugSourcePath]
+Count=1
+Item0=$(BCB)\source\vcl
+
+[HistoryLists\hlConditionals]
+Count=1
+Item0=_DEBUG
+
+[Debugging]
+DebugSourceDirs=$(BCB)\source\vcl
+
+[Parameters]
+RunParams=
+HostApplication=
+RemoteHost=
+RemotePath=
+RemoteDebug=0
+
+[Compiler]
+ShowInfoMsgs=0
+LinkDebugVcl=0
+  </IDEOPTIONS>
+</PROJECT>

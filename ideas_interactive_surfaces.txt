@@ -1,0 +1,16 @@
+Ideas about the multitouch surface for sharing things between peoples:
+  - not necessarily front to front interaction, but possible.
+  - can be side by side, then UI to navigate in the whole 2D space, radar view...)
+  - can be everyone is sharing the same view, and have to represent what peoples are doing (with particular pointeurs by exemple)
+  - pixel mirror exploitation...how to combine several videos streams then? And event how to do a pixel mirror with 2 person WHILE interacting with UIs...
+  - test press-trough UI versus clipboards (shared by all users) or side by side drag and drop...
+  - possibility (UI) to switch between users kind of radar view in 2D space..)
+  - using pressure to go through layer, each layer represent a user or a shared zone.
+  - Worms hole metaphore, can put something inside, something can spread from it.
+  
+  - using video stream as pixels mirror or putting videos on "windows" and can switch between fullscreen and windows mode...
+  
+  - Pb if front to front and lot of images widgets..., then you can not see "behind that images so you do not see the other user...
+  - If multiple layer of images, then what clic through mean? Clic to other image (link to) or send to oter user?
+  - Sound in 3D space to locate other peoples
+  - Halo on the screen to see where peoples are

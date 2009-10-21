@@ -1,0 +1,10 @@
+LIBRARY     MULTIMOUSE.DLL
+
+EXPORTS
+    _ManyMouse_DeviceName         = ManyMouse_DeviceName                ; ManyMouse_DeviceName
+    _ManyMouse_Init               = ManyMouse_Init                      ; ManyMouse_Init
+    _ManyMouse_PollEvent          = ManyMouse_PollEvent                 ; ManyMouse_PollEvent
+    _ManyMouse_Quit               = ManyMouse_Quit                      ; ManyMouse_Quit
+    _Multimouse_Init              = Multimouse_Init                     ; Multimouse_Init
+    _Multimouse_SafeInit          = Multimouse_SafeInit                 ; Multimouse_SafeInit
+    _Tcl_multimouse_Init          = Tcl_multimouse_Init                 ; Tcl_multimouse_Init

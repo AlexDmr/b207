@@ -1,0 +1,1 @@
+swig -small -fcompact -O -c++ -tcl8 -verbose alx_noeud_sdl_opengl.i

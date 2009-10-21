@@ -1,0 +1,58 @@
+<situation user_name="Bob">
+        <current_tasks>
+                <task>
+                        <name>consulter info gen</name>
+                        <software_id>1109947899</software_id>
+                        <component>ca_home.php</component>
+                </task>
+                <task>
+                        <name>naviguer</name>
+                        <software_id>1109947923</software_id>
+                        <component>ca_navigation.php</component>
+                </task>
+        </current_tasks>
+        <platform>
+                <elementary_platform>
+                        <ip>127.0.0.1</ip>
+                        <os>WINDOWS XP</os>
+                        <peripheral>
+                                <gender>O</gender>
+                                <category>surface</category>
+                                <sub_category>graphical</sub_category>
+                                <caracteristics>PIX_WIDTH:1280; PIX_HEIGHT:1024; COLOR_DEPTH:32;</caracteristics>
+                        </peripheral>
+                        <software>
+                                <service>browser</service>
+                                <software_id>1109947923</software_id>
+                                <caracteristics>
+                                	BROWSER_CLASS:MSIE_PDA; WINDOW_WIDTH:343; WINDOW_HEIGHT:433;
+                                </caracteristics>
+                        </software>
+                        <software>
+                                <service>browser</service>
+                                <software_id>1109947899</software_id>
+                                <caracteristics>
+                                	BROWSER_CLASS:MSIE; PLASTIC_PORT:2958; WINDOW_WIDTH:931; WINDOW_HEIGHT:578;
+								</caracteristics>
+                        </software>
+                </elementary_platform>
+        </platform>
+</situation>
+
+
+
+ <platform>
+                <elementary_platform>
+                        <ip>127.0.0.1</ip>
+                        <os>WINDOWS XP</os>
+                        <peripheral>
+                                <gender>O</gender>
+                                <category>surface</category>
+                                <sub_category>graphical</sub_category>
+                                <caracteristics>PIX_WIDTH:1280; PIX_HEIGHT:1024; COLOR_DEPTH:32;</caracteristics>
+                        </peripheral>
+                        <caracteristics>
+                        	MOBILITY: NO 
+                        </caracteristics>
+                </elementary_platform>
+        </platform>

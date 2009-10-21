@@ -1,0 +1,21 @@
+<?xml version="1.0" ?>
+<!DOCTYPE platform "//CAMELEON_RT/PLATFORM DESCRIPTION/V2.0">
+<platform>
+	<name>CHIet</name>
+	
+	<hardware>
+		<cpu>0x020302</cpu>
+		<frequency unit="MHz">3000</frequency>
+		<memory unit="ko">512000</memory>
+		<network_type>0x04</network_type>
+		<mobility>0x02</mobility>
+	</hardware>
+
+	<os>0x020300</os>
+		
+	<display>
+		<size unit="inch">15</size>
+		<color_depth unit="bit">32</color_depth>
+		<resolution unit="pixel" x="1024" y="768"/>
+	</display>
+</platform>

@@ -1,0 +1,7 @@
+; (c) 2007 Katsankat
+EXPORTS
+	; fonctions exportees
+    Tk_capture_bitmap_SafeInit
+    Tk_capture_bitmap_Init
+    Get_bitmap_from_TK_win
+    
