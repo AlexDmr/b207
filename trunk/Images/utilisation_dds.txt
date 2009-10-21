@@ -1,0 +1,8 @@
+#include "nv_dds.h"
+using namespace nv_dds;
+
+CDDSImage image;
+image.load("myimage.dds");
+glBindTexture(GL_TEXTURE_2D, texobj);
+image.upload_texture2D();
+

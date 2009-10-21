@@ -1,0 +1,3 @@
+set fzo [$fiche_oz_bigre {Fiche de zoom ovale} 256 256 $n_i_mere
+$Noeud_scene Ajouter_fils_au_debut $fzo
+

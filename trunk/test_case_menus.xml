@@ -1,0 +1,86 @@
+<root>
+
+<Testcase title="INFOS"  description="Task1_menus">
+  <Task title="TASK1" menu="TASK1">
+  Prepare for the first task.
+  You have to select the items
+  that appear in this
+  window. Once you selected
+  the correct item in the menu, 
+  click here to go to the next
+  step... Good luck!
+  </Task>
+</Testcase>
+
+<Testcase title="Select menu items" description="Select the menu item we show you, both fast and precise." pick_random_tasks="16" repeats="4">
+  <Task title="Select menu item" menu="cmd_polygone">"Freehand drawing"</Task>
+	<Task title="Select menu item" menu="cmd_rectangle">"Rectangle"</Task>
+	<Task title="Select menu item" menu="cmd_oval">"Oval"</Task>
+	<Task title="Select menu item" menu="cmd_triangle">"Triangle"</Task>
+
+	<Task title="Select menu item" menu="cmd_red">"Brown"</Task>
+	<Task title="Select menu item" menu="cmd_green">"Green"</Task>
+	<Task title="Select menu item" menu="cmd_blue">"Blue"</Task>
+	<Task title="Select menu item" menu="cmd_yellow">"Yellow"</Task>
+
+	<Task title="Select menu item" menu="cmd_select">"Copy"</Task>
+	<Task title="Select menu item" menu="cmd_paste">"Paste"</Task>
+	<Task title="Select menu item" menu="cmd_delete">"Delete object"</Task>
+	<Task title="Select menu item" menu="cmd_clear">"Clear canvas"</Task>
+
+	<Task title="Select menu item" menu="menu_Difference">"Difference"</Task>
+	<Task title="Select menu item" menu="menu_Union">"Union"</Task>
+	<Task title="Select menu item" menu="menu_Intersection">"Intersection"</Task>
+	<Task title="Select menu item" menu="menu_XOR">"XOR"</Task>
+</Testcase>
+
+<Testcase title="INFOS" description="Task2_menus">
+  <Task title="TASK2" menu="TASK2" >
+  You finished the first task.
+  In the second task,
+  you are going to draw a
+  beautiful landscape...
+  Follow the instructions
+  that appear in this window 
+  and click here to go to 
+  the next step....
+  </Task>
+</Testcase>
+
+<Testcase title="Make a drawing" description="Reconstruct the drawing we show you." repeats="4">
+
+<Task title="Draw shapes" menu="Draw shapes" image="Picture1.png">
+Draw a triangle and rectangle 
+to represent the house, an 
+oval for the sun, a freehand 
+drawing for a cloud, and a 
+rectangle and oval for a tree.
+</Task>
+
+<Task title="Copy shapes" menu="Copy shapes"  image="Picture2.png">
+Copy the cloud and tree and 
+paste them several times.
+</Task>
+	
+<Task title="Change colours" menu="Change colours" image="Picture3.png">
+Give objects a different 
+colour.
+</Task>
+
+<Task title="Operations" menu="Operations" image="Picture4.png">
+Select the house and use the 
+union operation to attach a 
+garage, and the difference 
+operation to create a door 
+and an oval window.
+</Task>
+
+<Task title="Delete" menu="Delete" >Delete all the clouds.</Task>
+<Task title="Clear" menu="Clear" >Clear the canvas.</Task>
+</Testcase>
+
+<Testcase title="INFOS" description="END" repeats="1">
+  <Task title="FINISHED" menu="FINISHED" >FINISHED</Task>
+</Testcase>
+
+</root>

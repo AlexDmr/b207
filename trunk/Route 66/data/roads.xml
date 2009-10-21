@@ -1,0 +1,7 @@
+<?xml version="1.0" ?>
+<!DOCTYPE roads "Route66 1.0 roads description">
+<roads>
+	<road multicast_group="224.0.0.80" port="1500">test_route66</road>
+	<road multicast_group="224.0.0.80" port="1500">test_cameleon</road>
+	<road multicast_group="224.0.0.80" port="1500">test_autre</road>
+</roads>

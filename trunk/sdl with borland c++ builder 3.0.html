@@ -1,0 +1,27 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1252">
+<META NAME="Generator" CONTENT="Microsoft Word 97">
+<TITLE>How to make a project using SDL library with Borland C++ Builder 3</TITLE>
+</HEAD>
+<BODY>
+
+<B><I><FONT FACE="Arial"><P>How to make a project using SDL library with Borland C++ Builder 3.0</P>
+</B></I></FONT><FONT SIZE=2>
+
+<UL>
+<P ALIGN="JUSTIFY"><LI>First of all we must rebuild the SDL.DLL import library: using the command line tool IMPLIB (you must use the version included with the Borland C++ 5.5 freeware, becouse the one that comes with the compiler don’t let you add the &quot;_&quot; for MS flavor cdecl functions. So, the command line is: &quot;IMPLIB –a –c SDL.LIB SDL.DLL&quot; (THANK YOU VERY MUCH, </FONT><A HREF="mailto:chris@newpublishing.com"><U><FONT SIZE=2 COLOR="#0000ff">Chris Dion</U></FONT></A><FONT SIZE=2>). </LI></P></UL>
+
+
+<UL>
+<P ALIGN="JUSTIFY"><LI>Load Borland C++ Builder Ide and create a new project: select &quot;Console Wizard&quot; and then &quot;Window (GUI)&quot;. Automatically the Builder will create for you the main file with an empty WinMain function (that you CAN’T DELETE).</LI></P></UL>
+
+
+<UL>
+<P ALIGN="JUSTIFY"><LI>Open the &quot;SDL_main.c&quot; and copy all the source in place of the Borland WinMain function. DON’T DELETE all the code: it’s needed by the Builder!</LI></P>
+<P ALIGN="JUSTIFY"><LI>Add &quot;extern &quot;C&quot; {&quot; before the first #include of the previously pasted code, and &quot;}&quot; after the #endif</LI></P>
+<P ALIGN="JUSTIFY"><LI>Open the project &quot;OPTIONS&quot; and go in the &quot;DIRECTORIES/CONDITIONALS&quot; tab, and add &quot;WIN32&quot; in the &quot;CONDITIONAL DEFINES&quot;.</LI></P></UL>
+
+<P ALIGN="JUSTIFY"></P>
+<P ALIGN="JUSTIFY">Now all should work…</P></FONT></BODY>
+</HTML>

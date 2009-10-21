@@ -1,0 +1,190 @@
+#include <atlbase.h>
+#include <windows.h>
+#include <dshow.h>
+#include <stdio.h>
+#include <qedit.h>
+#include <math.h>
+/*#include <streams.h>
+*/
+//#include "Affichage_texte.h"
+#include "Gestion_zones.h"
+
+//void Msg(char *szFormat, ...);
+//void ResizeVideoWindow(void);
+
+// Remote graph viewing functions
+HRESULT AddGraphToRot(IUnknown *pUnkGraph, DWORD *pdwRegister);
+void RemoveGraphFromRot(DWORD pdwRegister);
+
+enum PLAYSTATE {Stopped, Paused, Running, Init};
+
+//
+// Macros
+//
+#define SAFE_RELEASE(x) { if (x) x->Release(); x = NULL; }
+
+/*
+#define JIF(x) if (FAILED(hr=(x))) \
+    {Msg(TEXT("FAILED(hr=0x%x) in ") TEXT(#x) TEXT("\n"), hr); return hr;}
+*/
+//
+// Constants
+//
+//#define DEFAULT_VIDEO_WIDTH     320
+//#define DEFAULT_VIDEO_HEIGHT    320
+
+//#define APPLICATIONNAME TEXT("Video Capture Previewer")
+//#define CLASSNAME       TEXT("VidCapPreviewer")
+
+// Application-defined message to notify app of filtergraph events
+#define WM_GRAPHNOTIFY  WM_APP+1
+
+//
+// Resource constants
+//
+//#define IDI_VIDPREVIEW          100
+/************************La classe du callback pour la video***************************/
+class CGrabCB: public CUnknown, public ISampleGrabberCB
+{
+public:
+    DECLARE_IUNKNOWN;
+
+    STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void **ppv)
+    {
+        if( riid == IID_ISampleGrabberCB )
+        {
+            return GetInterface((ISampleGrabberCB*)this, ppv);
+        }
+        return CUnknown::NonDelegatingQueryInterface(riid, ppv);
+    }
+
+    // ISampleGrabberCB methods
+    STDMETHODIMP SampleCB(double SampleTime, IMediaSample *pSample)
+    {
+        //printf("Sample time: %f\n", SampleTime);
+        return S_OK;
+    }
+
+    STDMETHODIMP BufferCB(double SampleTime, BYTE *pBuffer, long BufferLen)
+    {
+        return E_NOTIMPL;
+    }
+    
+    // Constructor
+    CGrabCB( ) : CUnknown("SGCB", NULL/*(ISampleGrabberCB*)this*/)
+    { }
+};
+
+/**************************************************************************************/
+typedef struct ALX_CAPTEUR_INFOS
+ {
+  int num_capteur, largeur, hauteur, taux_rafraichissement;
+ } ALX_Capteur_infos;
+
+typedef struct ALX_CAPTEURS_INFOS
+ {
+  int nb_capteurs;
+  ALX_Capteur_infos liste[100];
+ } ALX_Capteurs_infos;
+
+/**************************************************************************************/
+#define NB_BUFFERS 3
+#define bloque 'b'
+#define libre  'l'
+#define vide   'v'
+typedef unsigned long* Pulong;
+
+class AGrabber 
+{
+private :
+ int GrabberWidth;
+ int GrabberHeight;
+ int GrabberBitLength;
+ int GrabberSize;
+ int GrabberFrameRate;
+ char etat[NB_BUFFERS];		
+ Pulong tempon[NB_BUFFERS];
+ 
+/************Top bordélique****************/
+ IVideoWindow  * g_pVW;
+ IMediaControl * g_pMC;
+ IMediaEventEx * g_pME;
+ IGraphBuilder * g_pGraph;
+ ICaptureGraphBuilder2 * g_pCapture;
+ ISampleGrabber  *pGrab;//IBaseFilter *filtre_alex;
+ PLAYSTATE g_psCurrent;
+ IBaseFilter     *pF;
+ AM_MEDIA_TYPE   mt;
+ CGrabCB *cb; // Le callback
+/******************************************/
+ HRESULT GetInterfaces(void);
+ HRESULT CaptureVideo( int& GrabberWidth
+                     , int& GrabberHeight
+                     , int& GrabberFrameRate
+                     , int num_cam);
+ HRESULT FindCaptureDevice(IBaseFilter ** ppSrcFilter, int num);
+ HRESULT SetupVideoWindow(void);
+ HRESULT ChangePreviewState(int nShow);
+ HRESULT HandleGraphEvent(void);
+ void CloseInterfaces(void);
+ STDMETHODIMP SampleCB(double SampleTime, IMediaSample *pSample);
+/******************************************/
+        // Mise au point:
+        int SetCaptureParameters( ICaptureGraphBuilder2 * pBuilder
+                                , IBaseFilter * pFilter
+                                , int& framerate
+                                , int& width
+                                , int& height);
+		
+ int Donner_infos_capteur( ICaptureGraphBuilder2 *pBuilder
+                         , IBaseFilter * pFilter
+                         , ALX_Capteurs_infos *info_capteur
+                         , int num_capteur);
+
+public :
+		//constructeur
+		AGrabber ();		// initialise le grabber
+		// Methodes Informatives
+		int GetGrabberWidth ();
+		int GetGrabberHeight ();
+		int GetGrabberBitLength ();
+		int GetGrabberSize ();
+		int GetGrabberDShow ();
+		// Methodes d'acquisition
+		unsigned long* GetGrabberPtr();
+        unsigned long* Lock();
+        unsigned long* UnLock();
+
+
+		// Démarrage
+        HRESULT Run (int lx, int ly, int fr, int num_cam); // lance la capture du flux video, utilise la feinte du triple buffer
+        void Prendre_photo( int **res, ENS_Zones *ens_z, int filtre
+                            , float RpropB, float RpropV, float RecartVB, int RseuilMin, int RseuilMax
+                            , float VpropB, float VpropR, float VecartRB, int VseuilMin, int VseuilMax
+                            , float BpropR, float BpropV, float BecartVR, int BseuilMin, int BseuilMax
+                            , float Jecartmax, float BpropJ, int JseuilMin, int JseuilMax
+                            , float Mecartmax, float MpropV, int MseuilMin, int MseuilMax
+                            , int mode_photo
+                            , int *table_correspondance_couleur, int nb_bits
+                            );
+
+        void Construire_table_crspd( int *table_correspondance_couleur
+                                   , int nb_bits
+                            , float RpropB, float RpropV, float RecartVB, int RseuilMin, int RseuilMax
+                            , float VpropB, float VpropR, float VecartRB, int VseuilMin, int VseuilMax
+                            , float BpropR, float BpropV, float BecartVR, int BseuilMin, int BseuilMax
+                            , float Jecartmax, float BpropJ, int JseuilMin, int JseuilMax
+                            , float Mecartmax, float MpropV, int MseuilMin, int MseuilMax);
+
+        HRESULT Donner_infos_capteurs_presents(ALX_Capteurs_infos *liste_capteurs);
+		
+        void Enregistrer_image(char *nom);
+		// Héhéhé je suis là
+        ENS_Zones les_zones;
+		Zone* Pointer_zone(int coul, int num);
+
+		//destructor
+		~AGrabber ();
+		
+
+};

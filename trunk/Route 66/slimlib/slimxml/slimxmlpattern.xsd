@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2005 sp2 U (http://www.altova.com) by RENE GARCIA (UNIVERSITE GRENOBLE 1) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:sxp="http://iihm.imag.fr/balme/sxp/01" targetNamespace="http://iihm.imag.fr/balme/sxp/01" elementFormDefault="qualified" attributeFormDefault="qualified">
+	<xs:annotation>
+		<xs:documentation>
+		Slim XML Pattern Schema
+		SlimLib Project
+		Author: L.Balme
+	</xs:documentation>
+	</xs:annotation>
+	<xs:complexType name="logical_element_operator">
+		<xs:choice maxOccurs="unbounded">
+			<xs:element name="and" type="sxp:logical_element_operator"/>
+			<xs:element name="or" type="sxp:logical_element_operator"/>
+			<xs:group ref="sxp:simplecontent_operators"/>
+			<xs:group ref="sxp:attribute_operators"/>
+			<xs:group ref="sxp:complexcontent_operators"/>
+		</xs:choice>
+	</xs:complexType>
+	<xs:complexType name="logical_toplevel_operator">
+		<xs:choice maxOccurs="unbounded">
+			<xs:element ref="sxp:element"/>
+			<xs:element name="and" type="sxp:logical_toplevel_operator"/>
+			<xs:element name="or" type="sxp:logical_toplevel_operator"/>
+		</xs:choice>
+	</xs:complexType>
+	<xs:element name="pattern">
+		<xs:annotation>
+			<xs:documentation>This is a root element for describing an SlimXmlPattern</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:choice>
+				<xs:group ref="sxp:logical_toplevel_operators"/>
+				<xs:element ref="sxp:element"/>
+			</xs:choice>
+			<xs:attribute name="id" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="element">
+		<xs:annotation>
+			<xs:documentation>This tag describe the element to match. Worth true if the element described exists in the xml document analysed</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:choice minOccurs="0">
+				<xs:group ref="sxp:complexcontent_operators"/>
+				<xs:group ref="sxp:simplecontent_operators"/>
+				<xs:group ref="sxp:attribute_operators"/>
+				<xs:group ref="sxp:logical_element_operators"/>
+			</xs:choice>
+			<xs:attribute name="name" type="xs:string" use="required">
+				<xs:annotation>
+					<xs:documentation>This attribute contains the name of the element to find</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="id" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>If id attribute is specified, matching elements in the analysed XML document will be returned in the result element </xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:group name="simplecontent_operators">
+		<xs:choice>
+			<xs:element name="simplecontent_equal" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Worth true if simplecontent of sxp:simplecontent_equal and simplecontent of the analysed element are the same</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="simplecontent_exclude" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Worth true if simplecontent of the analysed element does not contain the substring specified by simplecontent of sxp:simplecontent_exclude</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="simplecontent_contain" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Worth true if simplecontent of the analysed element contains the substring specified by simplecontent of sxp:simplecontent_contain</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="simplecontent_match" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Worth true if simplecontent of the analysed element match the regular expression specified by simplecontent of sxp:simplecontent_match</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:choice>
+	</xs:group>
+	<xs:group name="complexcontent_operators">
+		<xs:choice>
+			<xs:element name="complexcontent_exclude">
+				<xs:annotation>
+					<xs:documentation>Worth false if one of the subelement of sxp:complexcontent_exclude is found in the analysed element</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence maxOccurs="unbounded">
+						<xs:element ref="sxp:element"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="complexcontent_contain">
+				<xs:annotation>
+					<xs:documentation>Worth true if all of the subelement of sxp:complexcontent_contain is found in the analysed element</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence maxOccurs="unbounded">
+						<xs:element ref="sxp:element"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:choice>
+	</xs:group>
+	<xs:group name="logical_toplevel_operators">
+		<xs:choice>
+			<xs:element name="and" type="sxp:logical_toplevel_operator"/>
+			<xs:element name="or" type="sxp:logical_toplevel_operator"/>
+		</xs:choice>
+	</xs:group>
+	<xs:element name="pattern_match">
+		<xs:annotation>
+			<xs:documentation>This is a root element for SlimXmlPattern result</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="xs:anyType">
+					<xs:attribute name="id" type="xs:string" use="required">
+						<xs:annotation>
+							<xs:documentation>This attribute contains the name of the pattern that sxp:pattern_match is a result</xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:group name="attribute_operators">
+		<xs:choice>
+			<xs:element name="attribute_exist" type="xs:token"/>
+			<xs:element name="attribute_equal">
+				<xs:complexType>
+					<xs:simpleContent>
+						<xs:extension base="xs:string">
+							<xs:attribute name="name" type="xs:string" use="required"/>
+						</xs:extension>
+					</xs:simpleContent>
+				</xs:complexType>
+			</xs:element>
+		</xs:choice>
+	</xs:group>
+	<xs:group name="logical_element_operators">
+		<xs:choice>
+			<xs:element name="and" type="sxp:logical_element_operator"/>
+			<xs:element name="or" type="sxp:logical_element_operator"/>
+		</xs:choice>
+	</xs:group>
+</xs:schema>

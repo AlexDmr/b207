@@ -1,0 +1,1 @@
+void Msg(char *szFormat, ...);

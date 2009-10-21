@@ -1,0 +1,12 @@
+set lg [$fen Longueur_corp]
+set ht [$fen Hauteur_corp]
+
+set poly_in_fen_ex [inter_extra_polate $lg [list "320 1" "640 2" "640 2"]]
+set poly_in_fen_ey [inter_extra_polate $ht [list "240 1" "480 5.8"]]
+
+set poly_in_fen_ox [inter_extra_polate $lg [list "320 30" "640 40" "640 40"]]
+set poly_in_fen_oy 50
+
+$pol_in_fen Etirement $poly_in_fen_ex $poly_in_fen_ey
+$pol_in_fen Origine   $poly_in_fen_ox $poly_in_fen_oy 
+

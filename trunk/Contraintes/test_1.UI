@@ -1,0 +1,109 @@
+set fen [B_fiche "Constraints 1" 320 240 [N_i_mere]]
+  $noeud_partage Ajouter_fils $fen
+set pol_in_fen [B_polygone]
+  $pol_in_fen Ajouter_contour [ProcTabDouble "-10 -10 200 -10 200 50 -10 50"]
+  $pol_in_fen Origine 30 50
+  $pol_in_fen Couleur 1 0 0 1
+  $fen Ajouter_fils $pol_in_fen
+  
+Meta_IHM_PM_P_B207_toolglass_art_resizing m_rsz n d
+$noeud_partage Ajouter_fils [m_rsz get_prim_handle]
+
+cr Add_daughter_R [CometContainer cont_test Container d]
+  cont_test Add_daughter_R [CometSlideRemoteController telec_test n d]
+  set PM_cont_test [CSS++ cr {#cont_test->PMs[soft_type == BIGre]}] 
+  $PM_cont_test Update_factories Container_CUI_window_BIGre
+  set PM_cont_test [CSS++ cr {#telec_test->PMs[soft_type == BIGre]}] 
+  B207_Line_h [$PM_cont_test get_prim_handle]
+  
+  cr Add_daughter_R [CometTab tab_interpol n d]
+  tab_interpol set_dims 10 5
+  tab_interpol set_case 2 1 coucou
+  tab_interpol set_case 5 4 hehe
+  
+proc tab2interpolator2 {tab interpolator} {
+ set nb_C [$tab get_nb_C]
+ set nb_L [$tab get_nb_L]
+ set L 0
+ while {$L < $nb_L} {
+   set C 1
+   set v [$tab get_case [expr $L+1] 0]
+   $v set_L_examples ""
+   for {set C 1} {$C < $nb_C} {incr C} {
+     set ref [$tab get_case $L $C]
+	 set val [$tab get_case [expr $L+1] $C]
+     if {![string equal $ref ""]} {$v Add_exemple $ref $val <=}
+	 incr C
+	 if {$C < $nb_C} {set ref [$tab get_case $L $C]} else {set ref ""}
+    }
+   incr L 2
+  }
+}
+
+proc interpolator2tab {interpolator tab} {
+# number of columns?
+ set nb_max 0; set nb_L 0
+ foreach infos_scalar [$interpolator get_L_infos_scalar] {
+   set nb [$infos_scalar get_nb_max_example]
+   set nb_max [expr $nb>$nb_max?$nb:$nb_max]
+   incr nb_L [expr 2*[$infos_scalar get_nb_related_vars]]
+  }
+# set the size of tab (one more column for name of the variables)  
+ $tab set_dims $nb_L [expr $nb_max+1]
+ 
+# Fill the tab with informations
+ set L 0
+ foreach infos_scalar [$interpolator get_L_infos_scalar] {
+   foreach v [$infos_scalar get_L_related_vars] {
+     $tab set_case $L          0 $infos_scalar
+	 $tab set_case [expr $L+1] 0 $v
+	 set C 1; set L_e [$v get_L_examples]; set nb_e [llength $L_e]
+     foreach e $L_e {
+	   $tab set_case $L          $C [lindex $e 0]
+	   $tab set_case [expr $L+1] $C [lindex $e 1]
+       incr C
+	  }
+	 for {set i $nb_e} {$i < $nb_max} {incr i} {
+	   $tab set_case $L          $i {}
+	   $tab set_case [expr $L+1] $i {}
+	  }
+	 incr L 2
+	}
+  }
+}
+
+# Links
+tab_interpol Subscribe_to_Delete_line Alex "Tab_del_line2interpolator \$pos tab_interpol [m_rsz get_interpolator]"
+
+proc Tab_del_line2interpolator {num tab interpolator} {
+ set obj [$tab get_case $num 0]
+ set Lc  [gmlObject info classes $obj]
+ if {[lsearch $Lc B207_var_obj] != -1} {
+   puts "$obj dispose"
+   $obj dispose
+  }
+}
+# Sub ccn comets to see better what happen there...
+  ci Sub_daughter_R ccn
+  
+# Let's go...
+source "c:/These/Projet\ Interface/BIGre/B207_graph_plot.tcl"
+set fen_m_rsz [B_fiche "Design Space Editor" 512 384 [N_i_mere]]
+  $noeud_partage Ajouter_fils_au_debut $fen_m_rsz
+  $fen_m_rsz Etirement_du_contenu 0.5 0.5
+  $fen_m_rsz Fenetre_translucide 1
+  $fen_m_rsz Couleur_fond 0 0 1 0.4
+B207_graph_plot gp; $fen_m_rsz Ajouter_fils [set root [gp get_root]]
+  m_rsz set_space_of_ref_exemples gp
+
+cd c:/These/Projet\ Interface/BIGre/
+  source B_2D_multi_plotter.tcl 
+  B_2D_multi_plotter_2_ref multi_plotter
+    $noeud_partage Ajouter_fils_au_debut [multi_plotter get_root]
+  
+# B207_Line_h [$PM_cont_test get_prim_handle]
+# interpolator2tab [m_rsz get_interpolator] tab_interpol
+# tab2interpolator tab_interpol [m_rsz get_interpolator] 
+
+# PROBLEMS TO SOLVE :
+#   - avoid the background image...

@@ -1,0 +1,10 @@
+; (c) 2007 Katsankat
+EXPORTS
+	; fonctions exportees
+    Multimouse_Init
+    Multimouse_SafeInit
+	ManyMouse_Init
+	ManyMouse_Quit
+	ManyMouse_DeviceName
+	ManyMouse_PollEvent
+    

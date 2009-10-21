@@ -1,0 +1,18 @@
+source [file join . gmlObject.tcl]
+
+// La première déclaration de méthode définit aussi la classe, quelque soit la méthode
+method mot constructor {valeur defi} {
+
+set this(val) $valeur
+set this(d) $defi
+
+return $objName
+
+}
+
+method mot getval {} {
+
+return $this(val)
+
+}
+

@@ -1,0 +1,6 @@
+; Lionel_Connectors.def : déclare les paramètres de module pour la DLL.
+
+LIBRARY      "Lionel_Connectors"
+
+EXPORTS
+    ; Les exportations explicites peuvent être placées ici

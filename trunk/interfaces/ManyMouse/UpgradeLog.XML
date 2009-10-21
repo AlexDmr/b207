@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="multimouse_dll">
+</Property><Property Name="Fichier solution" Value="C:\These\Projet Interface\BIGre\interfaces\ManyMouse\multimouse_dll.sln">
+</Property><Property Name="Date" Value="mercredi 9 septembre 2009">
+</Property><Property Name="Time" Value="14:28:14">
+</Property></Properties><Event ErrorLevel="0" Project="multimouse_dll" Source="multimouse_dll.vcproj" Description="Le déploiement Web sur le serveur IIS local IIS n'est plus pris en charge. L'outil de génération Déploiement Web a été supprimé des paramètres de votre projet.">
+</Event><Event ErrorLevel="1" Project="multimouse_dll" Source="multimouse_dll.vcproj" Description="Cette application a été mise à jour pour inclure les paramètres liés à la fonctionnalité Contrôle de compte d'utilisateur de Windows Vista. Par défaut, lorsqu'elle est exécutée sur Windows Vista avec le Contrôle de compte d'utilisateur activé, cette application est marquée pour s'exécuter avec les mêmes privilèges que le processus qui l'a lancée. Ce marquage empêche l'application de s'exécuter avec la virtualisation. Vous pouvez changer les paramètres du Contrôle de compte d'utilisateur dans les pages de propriétés du projet.">
+</Event><Event ErrorLevel="0" Project="multimouse_dll" Source="multimouse_dll.vcproj" Description="Fichier projet correctement sauvegardé en tant que 'C:\These\Projet Interface\BIGre\interfaces\ManyMouse\multimouse_dll.vcproj.8.00.old'.">
+</Event><Event ErrorLevel="0" Project="multimouse_dll" Source="multimouse_dll.vcproj" Description="Mise à niveau du projet terminée.">
+</Event><Event ErrorLevel="3" Project="multimouse_dll" Source="multimouse_dll.vcproj" Description="Converted">
+</Event></UpgradeLog>
