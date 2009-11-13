@@ -135,9 +135,11 @@ Automate_Menu_Main automate_main $poly_pour_main menu_item_root
 if {![gmlObject info exists object Liant_mutable]} {
   source test_mutable.tcl
   Liant_Mutable_sim_ptr Liant_mutable; Liant_mutable startListening 8910
-  #source sim_mutable.tcl
-  #Sim_MuTable sim_table localhost 8910
-  #sim_table Send_infos 20
+  proc Simulate_table {} {
+    source sim_mutable.tcl
+    Sim_MuTable sim_table localhost 8910
+    sim_table Send_infos 20
+   }
  }
 #___________________________________________________________________________________________________________________________________________
 #___________________________________________________________________________________________________________________________________________
