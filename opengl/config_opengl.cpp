@@ -82,6 +82,9 @@ void CreerTexture(int *id_texture, const int tx, const int ty, const unsigned in
  int taille_x = puissance_de_2_superieur(tx, 64)
    , taille_y = puissance_de_2_superieur(ty, 64);
 
+ taille_x = taille_x<=2048?taille_x:2048;
+ taille_y = taille_y<=2048?taille_y:2048;
+
  if(taille_x*taille_y*4 > taille_buffer)
   {delete[] pTexture;
    pTexture = new unsigned char[taille_x*taille_y*4];

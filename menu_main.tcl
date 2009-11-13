@@ -87,8 +87,7 @@ method Automate_Menu_Main Position_menu {rap} {
    
  if {$noeud == $b_pol} {
    set ptr [$infos Ptr]
-   puts "ptr metadata : [$ptr get_MetaData]"
-   if { ([$ptr Appuie] == 0) || [$ptr Val_MetaData ${objName}_cmd_to_exec] != "" || [$ptr Val_MetaData ${objName}_thumb] != ""} {puts "Not a good ptr..."; return}
+   if { ([$ptr Appuie] == 0) || [$ptr Val_MetaData ${objName}_cmd_to_exec] != "" || [$ptr Val_MetaData ${objName}_thumb] != ""} {return}
    $ptr Add_MetaData ${objName}_thumb $b_pol
    this Switch_L_items $b_pol $ptr
   } 

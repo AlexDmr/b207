@@ -102,6 +102,9 @@ void alx_noeud_zone_rendu_sdl_opengl::maj_texture_tempon()
  while(txp2 < tx) txp2 = txp2<<1;
  while(typ2 < ty) typ2 = typ2<<1;
 
+ txp2 = txp2<2048?txp2:2048;
+ typ2 = typ2<2048?typ2:2048;
+
  if(tempon_deja_cree)
   {if( (txp2 == infos_texture_tempon[0].tx)
      &&(typ2 == infos_texture_tempon[0].ty) ) return; // Quitter....MAIS QUITTEZ DONC!!!
