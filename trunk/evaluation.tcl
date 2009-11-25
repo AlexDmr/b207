@@ -1,7 +1,7 @@
 if {[info exists noeud_partage]} {} else {source groupe.tcl}
 proc etire_fond args {}
 
-package require xml
+catch "package require xml"
 
 #___________________________________________________________________________________________________________________________________________
 proc Generate_accessors {class_name L_vars} {

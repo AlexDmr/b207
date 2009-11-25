@@ -18,7 +18,7 @@ source menu_main.tcl
 
 puts "END Sourcing automates"
 
-source evaluation.tcl
+#source evaluation.tcl
 
 #source test_usb_mouse.tcl
 #N_i_mere Cacher_souris
@@ -206,14 +206,14 @@ method Experimentator Next_user {} {
 }
 
 #___________________________________________________________________________________________________________________________________________
-source Tracer.tcl
-  Tracer tracer_automate
-  tracer_automate Insert_tracer_in_L Automate_quickmenu [list New_start Go_to_submenu Activate_item]
-  tracer_automate Insert_tracer_in_L Experiment         [list Start_task]
-  tracer_automate Insert_tracer_in_L Experimentator     [list Next_user Activate_automate]
+#source Tracer.tcl
+#  Tracer tracer_automate
+#  tracer_automate Insert_tracer_in_L Automate_quickmenu [list New_start Go_to_submenu Activate_item]
+#  tracer_automate Insert_tracer_in_L Experiment         [list Start_task]
+#  tracer_automate Insert_tracer_in_L Experimentator     [list Next_user Activate_automate]
 puts coucou
-Experimentator exper
-test Subscribe_Test_case_finished experimentator "exper Next_automate"
-test Subscribe_User_finished      experimentator "exper Next_user; puts \"Enter a new user description trace\\n  tracer_automate Add_trace_new_user name sex age experienced(0 or 1)\""
+#Experimentator exper
+#test Subscribe_Test_case_finished experimentator "exper Next_automate"
+#test Subscribe_User_finished      experimentator "exper Next_user; puts \"Enter a new user description trace\\n  tracer_automate Add_trace_new_user name sex age experienced(0 or 1)\""
 
 puts "Enter a new user description trace\ntracer_automate Add_trace_new_user name sex age experienced(0 or 1)"

@@ -11,9 +11,13 @@ set img [B_image]
 #cd {C:\Alexandre\Pol\Heaven}
 #set id [FFMPEG_Open_video_stream {Heaven.avi}]
 
-cd {C:\Documents and Settings\ademeure\Desktop\TMP\Incomes\videos}
-set id [FFMPEG_Open_video_stream {Spaceballs___State_of_the_Art_(Amiga_Demo_Scene).avi}]
-FFMPEG_set_Synchronisation_threshold $id 0.5
+cd {C:\Alexandre\Videos}
+set id [FFMPEG_Open_video_stream "Utah_Saints_-_Somethin_Good_'08_HQ.mp4"]
+#set id [FFMPEG_Open_video_stream "2Unlimited_RealThing.flv"]
+#cd {C:\Alexandre\CHI09\videos}
+#set id [FFMPEG_Open_video_stream "p789.avi"]
+
+FFMPEG_set_Synchronisation_threshold $id 20
 
 set t  [FFMPEG_startAcquisition $id]
 set tx [FFMPEG_Width $id]
@@ -23,19 +27,21 @@ set buf [FFMPEG_Get_a_buffer $t]
 
 set rap_img [B_rappel [Interp_TCL]]
 set start_ms [N_i_mere ms]; set frame_num 0
-set time_frame [expr int(1000/[FFMPEG_getFramerate $id])]
-  $rap_img Texte "set ms \[N_i_mere ms\]; set num \[expr int((\$ms - \$start_ms)/\$time_frame)\]; if {\$num != \$frame_num} {set frame_num \$num; FFMPEG_getImage $id $buf; $img maj_raw $tx $ty [GL_rvb] 3 $buf;}"
+set time_frame [expr int(1000.0/[FFMPEG_getFramerate $id])]
+  puts "____ time_frame = $time_frame\n  frame rate is [FFMPEG_getFramerate $id]"
+  $rap_img Texte "set ms \[N_i_mere ms\]; set num \[expr int((\$ms - \$start_ms)*\[FFMPEG_getFramerate $id\]/1000.0)\]; if {\$num != \$frame_num} {set frame_num \$num; FFMPEG_getImage $id $buf; $img maj_raw $tx $ty [GL_rvb] 3 $buf;}"
 
 # Sound
  set sample_rate [FFMPEG_Sound_sample_rate $id]
- #set cb_audio [Get_B207_FMOD_Stream_Info_audio]
  set cb_audio [Get_FFMPEG_FMOD_Stream_Info_audio]
    set canal_audio 0
    set buf_len 8192
    set L_infos_B207_sound [FFMPEG_Info_for_sound_CB $id]
    if {[FFMPEG_Nb_channels $id] == 2} {set mono_stereo [FSOUND_Stereo]} else {set mono_stereo [FSOUND_Mono]}
  
- set B207_audio_stream [N_i_mere Nouveau_flux $cb_audio $canal_audio $buf_len [expr $mono_stereo | [FSOUND_signed] | [FSOUND_16b]] $sample_rate $L_infos_B207_sound]
+ if {[catch {set B207_audio_stream [N_i_mere Nouveau_flux $cb_audio $canal_audio $buf_len [expr $mono_stereo | [FSOUND_signed] | [FSOUND_16b]] $sample_rate $L_infos_B207_sound]} err]} {
+   puts "Error while loading the audio (N_i_mere Nouveau_flux $cb_audio ...):\n$err"
+  }
  FFMPEG_set_Debug_mode $id 0
  FFMPEG_Audio_buffer_size $id
  puts "Info audio :\n  - Sample rate : $sample_rate\n  - Mono([FSOUND_Mono])/Stereo([FSOUND_Stereo]) : $mono_stereo "
@@ -57,6 +63,7 @@ proc gogo_video {} {
    $prim Origine 300 300
 }
 
+proc gogo_video_test_2 {} {
  ci Add_daughters_R [list [CometVideo c_vid n d] [CometVideo c_vid2 n d]]
  cd {C:\Alexandre\Pol\Heaven}
  c_vid2 set_video_source {Heaven.avi} 1
@@ -64,6 +71,7 @@ proc gogo_video {} {
 
 Vos informations de compte TrackMania Forever:
 
-Votre login: ademeure
-Votre mot de passe: hehehe
-Votre clé: TMNF-MMK7-EDAA-CXHR-M8D
+#Votre login: ademeure
+#Votre mot de passe: hehehe
+#Votre clé: TMNF-MMK7-EDAA-CXHR-M8D
+}
