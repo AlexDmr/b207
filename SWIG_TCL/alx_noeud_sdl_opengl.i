@@ -1,10 +1,10 @@
 /* File : example.i */
 %module alx_noeud_sdl_opengl
 
-#include "C:\FMOD\api\inc\fmod.h"
+//#include "C:\FMOD\api\inc\fmod.h"
 
 %{
-#include "C:\FMOD\api\inc\fmod.h"
+//#include "C:\FMOD\api\inc\fmod.h"
 #include "..\\opengl\\config_opengl.h"
 #include "..\\utilitaires\\alx_chaine_char.h"
 #include "..\\utilitaires\\alx_arbre.h"
@@ -56,7 +56,7 @@
 %}
 
 /* Let's just grab the original header file here */
-%include "C:\FMOD\api\inc\fmod.h"
+//%include "C:\FMOD\api\inc\fmod.h"
 
 %include "..\\opengl\\config_opengl.h"
   %template(Couleur_RVBAf) Couleur_RVBA<float>;

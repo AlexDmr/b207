@@ -133,7 +133,7 @@ method Pointer_catcher Contact_rap {rap} {
  if {[lsearch $this(L_ptr_on_it) $ptr] == -1 && [$evt Type_evt] != [ALX_pointeur_relache]}   {lappend this(L_ptr_on_it) $ptr; puts "L_pointeurs : {$this(L_ptr_on_it)}"}
  if {[$evt Type_evt] == [ALX_pointeur_relache]} {puts RELACHE; set     this(L_ptr_on_it) [lremove $this(L_ptr_on_it) $ptr]}
  
- $this(poly_root_menu) Afficher_noeud 1; $this(poly_root_menu) Gerer_contacts 1
+ $this(poly_root_menu) Afficher_noeud 1; $this(poly_root_menu) Gerer_contacts 1; B_Raise $this(poly_root_menu)
  if {[$this(poly_root_menu) Val_MetaData Linked_to_ptr] == ""} {
    $this(menu) Start_mode_expert
    $this(poly_root_menu) Ajouter_MetaData_T Linked_to_ptr $ptr

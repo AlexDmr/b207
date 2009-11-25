@@ -26,6 +26,7 @@
 
 #include "C:\FMOD\api\inc\fmod.h"
 
+
 //______________________________________________________________________________
 
 class Route66;
@@ -103,7 +104,7 @@ class B207_info_sound_TCL {
 };
 Info_for_sound_CB* Void_vers_B207_info_sound_TCL(void *ptr) {return (Info_for_sound_CB*)ptr;}
 
-signed char F_CALLBACKAPI B207_FMOD_Stream_Info_audio(FSOUND_STREAM *stream, void *buff, int len, void *userdata);
+//signed char F_CALLBACKAPI B207_FMOD_Stream_Info_audio(FSOUND_STREAM *stream, void *buff, int len, void *userdata);
 FSOUND_STREAMCALLBACK Get_B207_FMOD_Stream_Info_audio();
 
 //______________________________________________________________________________
@@ -379,6 +380,10 @@ class alx_interface_sdl_opengl_1 : public olfa_comet
    alx_noeud_scene * Trouver_noeud_nomme(const alx_chaine_char &cc_nom_demande ) const;
 };
 
+extern "C" {
+  //#define __BC_COMPILER_PIPO_PROTECTION__   1
+  //#include "c:\These\Hasselt\Mutable\Eunomia\FFMpegInit.h"
+}
 
 /*int Send_data_on_chan( ClientData clientData, Tcl_Interp *interp, int argc, char *argv[]);
 

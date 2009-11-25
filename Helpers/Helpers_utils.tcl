@@ -5,6 +5,7 @@ proc Load_helper_in {helper_file B207_node} {
    dom parse [read $f] doc
    $doc documentElement root
    set L_rep [$root asList]
+   puts $L_rep
    $B207_node Ajouter_MetaData_T help $L_rep
  close $f
 }

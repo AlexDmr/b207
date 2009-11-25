@@ -27,3 +27,7 @@ source B207_Pile_image.tcl
   
  Load_helper_in Helpers/alx_noeud_fiche_sdl_opengl.B207_helper $output_window
  $output_window Nom_IU "Current task window"
+ 
+ proc #text args ""
+
+ 
