@@ -20,6 +20,9 @@
 //______________________________________________________________________________
 void alx_image_32::init()
    {num_il_img = 0;
+    mode_traitement_image_transparent = 0;
+    R_TRANSPARENT = V_TRANSPARENT = B_TRANSPARENT = 0; SEUIL_TRANSPARENT = 64;
+    Pixels_transparents_mtd_2(1, 1, 1, 0.2, 128, 128, 128);
     Inverser_x( false );
     Inverser_y( false );
     tempon_a_effacer = false;
@@ -46,6 +49,88 @@ void alx_image_32::Lock_mutex_tempon  () {mutex_tempon->lock();}
 
 //______________________________________________________________________________
 void alx_image_32::UnLock_mutex_tempon() {mutex_tempon->unlock();}
+
+//______________________________________________________________________________
+void alx_image_32::Fixer_couleur_transparente_mtd_2(const float r, const float v, const float b, const float seuil, const int min_r, const int min_v, const int min_b)
+{ unsigned int pos = 0;
+  unsigned char *T = (unsigned char *)tempon
+              , m_r = (unsigned char)min_r
+              , m_v = (unsigned char)min_v
+              , m_b = (unsigned char)min_b;
+  float rap_rv = (1+r) / (1+v)
+      , rap_rb = (1+r) / (1+b)
+      , rap_vb = (1+v) / (1+b)
+      , rb, rv, vb;
+
+  for(int y=0; y < H(); y++)
+   {for(int x=0; x < L(); x++)
+     {rv = (1+(float)T[pos+0]) / (1+(float)T[pos+1]);
+      rb = (1+(float)T[pos+0]) / (1+(float)T[pos+2]);
+      vb = (1+(float)T[pos+1]) / (1+(float)T[pos+2]);
+      if( rv < rap_rv) {rv = rv / rap_rv;} else {rv = rap_rv / rv;}
+      if( rb < rap_rb) {rb = rb / rap_rb;} else {rb = rap_rb / rb;}
+      if( vb < rap_vb) {vb = vb / rap_vb;} else {vb = rap_vb / vb;}
+      if( rv > seuil
+        &&rb > seuil
+        &&vb > seuil
+        &&(unsigned char)T[pos+0] > m_r
+        &&(unsigned char)T[pos+1] > m_v
+        &&(unsigned char)T[pos+2] > m_b
+        ) {T[pos + 3] = 0;} else {T[pos + 3] = 0xFF;}
+
+      pos += 4;
+     }
+   }
+}
+
+//______________________________________________________________________________
+void alx_image_32::Fixer_couleur_transparente_mtd_1(const int r, const int v, const int b, const int seuil)
+{ unsigned int pos = 0;
+  unsigned char *T = (unsigned char *)tempon;
+
+  for(int y=0; y < H(); y++)
+   {for(int x=0; x < L(); x++)
+     {if( (int)T[pos+0] > (r - seuil) && (int)T[pos+0] < (r + seuil)
+        &&(int)T[pos+1] > (v - seuil) && (int)T[pos+1] < (v + seuil)
+        &&(int)T[pos+2] > (b - seuil) && (int)T[pos+2] < (b + seuil)
+        ) {T[pos + 3] = 0;} else {T[pos + 3] = 0xFF;}
+
+      pos += 4;
+     }
+   }
+}
+
+//______________________________________________________________________________
+void alx_image_32::Merge_Tempon_void_4(void *T_void)
+{ unsigned int pos = 0;
+  char *T = (char*) T_void;
+
+  for(int y=0; y < H(); y++)
+   {for(int x=0; x < L(); x++)
+     {if( T[pos+3] ) {tempon[pos]   = T[pos];
+                      tempon[pos+1] = T[pos+1];
+                      tempon[pos+2] = T[pos+2];
+                     }
+      pos += 4;
+     }
+   }
+}
+
+//______________________________________________________________________________
+void alx_image_32::Colorier(const int r, const int v, const int b, const int a)
+{unsigned char R = r, V = v, B = b, A = a, *T = (unsigned char*) tempon;
+ unsigned int pos = 0;
+
+ for(int y=0; y < H(); y++)
+  {for(int x=0; x < L(); x++)
+    {T[pos+0] = R;
+     T[pos+1] = V;
+     T[pos+2] = B;
+     T[pos+3] = A;
+     pos += 4;
+    }
+  }
+}
 
 //______________________________________________________________________________
 bool alx_image_32::fixer_alpha(char *nf, int seuil, int mode)
@@ -130,6 +215,7 @@ bool alx_image_32::Charger_par_sdl(const char *nf)
     }
    memcpy(tempon, ilGetData(), t);
 
+ if( Mode_traitement_image_transparent() ) {Fixer_couleur_transparente();}
  mutex_tempon->unlock();
  return true;
 }
@@ -187,6 +273,8 @@ bool alx_image_32::charger_bmp(const char *n)
                                   | a ;//& amask; */
       }
     fclose(f);
+
+    if( Mode_traitement_image_transparent() ) {Fixer_couleur_transparente();}
     mutex_tempon->unlock();
     return true;
    }
@@ -215,6 +303,8 @@ void alx_image_32::maj(const int tx, const int ty, const int ordre_couleur, cons
  Nb_octets_par_pixel     (nb_octet_par_pix);
  l = tx;
  h = ty;
+
+ if( Mode_traitement_image_transparent() ) {Fixer_couleur_transparente();}
  mutex_tempon->unlock();
 }
 
@@ -238,6 +328,7 @@ void alx_image_32::maj(const alx_image_32 &img)
  Inverser_y( img.Inverser_y() );
  Inverser_x( img.Inverser_x() );
 
+ if( Mode_traitement_image_transparent() ) {Fixer_couleur_transparente();}
  mutex_tempon->unlock();
 }
 

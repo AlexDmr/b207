@@ -27,6 +27,9 @@ class alx_noeud_visualisation_camera : public alx_noeud_image_sdl_opengl
 
    void init();
 
+ protected:
+   void Resize_camera_image_buffer();
+
  public :
   // Les constructeurs
    alx_noeud_visualisation_camera();
@@ -43,6 +46,19 @@ class alx_noeud_visualisation_camera : public alx_noeud_image_sdl_opengl
 //   inline const INFOS_TEXTURE* Info_texture()       const {return info_texture;}
    inline bool Nouvelle_image()                     const {return nouvelle_image;}
    inline void Nouvelle_image(const bool b)               {nouvelle_image = b;}
+
+   inline void Stop () {gmlStopGrabber (acquisiteur);}
+   inline void Start() {gmlStartGrabber(acquisiteur);}
+
+   inline const int get_resolution_x() const {return gmlGetWidth (acquisiteur);}
+   inline const int get_resolution_y() const {return gmlGetHeight(acquisiteur);}
+   inline void set_resolution(const int x, const int y) {
+     Stop();
+     gmlSetResolution(acquisiteur, x, y);
+     Resize_camera_image_buffer();
+     Start();
+    }
+
    inline const int Frequence() const {return gmlGetFrameRate(acquisiteur);}
    inline int  Frequence(const int f) {if(acquisiteur)
                                          return gmlSetFrameRate(acquisiteur, f);
