@@ -26,22 +26,30 @@ void alx_noeud_visualisation_camera::init()
  Nb_octets_par_pixels_texture(3);
 }
 
+//---------------------------------------------------------------------------------------------------------------------------------
 alx_noeud_visualisation_camera::alx_noeud_visualisation_camera() : alx_noeud_image_sdl_opengl()
 {init();
 
- alx_noeud_image_sdl_opengl::maj_raw( gmlGetWidth (acquisiteur)
-                                    , gmlGetHeight(acquisiteur)
-                                    , Ordonnancement_couleurs()
-                                    , Nb_octets_par_pixel()
-                                    , NULL);
+ Resize_camera_image_buffer();
+
  nouvelle_image = true;
  PreRendre();
 }
 
+//---------------------------------------------------------------------------------------------------------------------------------
 alx_noeud_visualisation_camera::~alx_noeud_visualisation_camera()
 {gmlStopGrabber   (acquisiteur);
  gmlDestroyGrabber(acquisiteur);
 };
+
+//---------------------------------------------------------------------------------------------------------------------------------
+void alx_noeud_visualisation_camera::Resize_camera_image_buffer()
+{alx_noeud_image_sdl_opengl::maj_raw( gmlGetWidth (acquisiteur)
+                                    , gmlGetHeight(acquisiteur)
+                                    , Ordonnancement_couleurs()
+                                    , Nb_octets_par_pixel()
+                                    , NULL);
+}
 
 //---------------------------------------------------------------------------------------------------------------------------------
 //------------------------------------ Les méthodes -------------------------------------------------------------------------------
