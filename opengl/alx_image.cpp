@@ -175,6 +175,36 @@ bool alx_image_32::fixer_alpha(char *nf, int seuil, int mode)
    }
 
 //______________________________________________________________________________
+const bool alx_image_32::Sauver_dans_fichier(const char *nf)
+{if(num_il_img > 0)
+  {ilBindImage(num_il_img);
+  } else {// Créer une image, charger les données
+          ilGenImages(1, &num_il_img);
+          ilBindImage(num_il_img);
+          ilSetInteger(IL_IMAGE_WIDTH , L());
+          ilSetInteger(IL_IMAGE_HEIGHT, H());
+
+          ilSetInteger(IL_IMAGE_BYTES_PER_PIXEL, nb_octets_par_pixel);
+          switch(ordonnancement_couleurs)
+           {case GL_RGB             : ilSetInteger(IL_IMAGE_FORMAT, IL_RGB);             break;
+            case GL_BGR             : ilSetInteger(IL_IMAGE_FORMAT, IL_BGR);             break;
+            case GL_RGBA            : ilSetInteger(IL_IMAGE_FORMAT, GL_RGBA);            break;
+            case GL_BGRA            : ilSetInteger(IL_IMAGE_FORMAT, GL_BGRA);            break;
+            case GL_LUMINANCE       : ilSetInteger(IL_IMAGE_FORMAT, GL_LUMINANCE);       break;
+            case GL_LUMINANCE_ALPHA : ilSetInteger(IL_IMAGE_FORMAT, GL_LUMINANCE_ALPHA); break;
+            case GL_COLOR_INDEX     : ilSetInteger(IL_IMAGE_FORMAT, GL_COLOR_INDEX);     break;
+          //     case IL_COLOUR_INDEX: ordonnancement_couleurs = GL_COLOUR_INDEX; break;
+            default:
+              printf("Au secours !!! Pb de sauvegarde de %s", nf);
+            break;
+           }
+          ilSetData(tempon);
+         }
+
+ return ilSaveImage(nf);;
+}
+
+//______________________________________________________________________________
 bool alx_image_32::Charger_par_sdl(const char *nf)
 {mutex_tempon->lock();
    if(num_il_img > 0)
