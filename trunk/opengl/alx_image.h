@@ -92,6 +92,7 @@ class alx_image_32
   inline void Inverser_y(bool e) {inverser_y = e;}
 
   /*********************************************************************************/
+  const bool Sauver_dans_fichier(const char *nf);
   void maj(const int tx, const int ty, const int ordre_couleur, const int nb_octet_par_pix, const char *buffer);
   void maj(const char *n);
   void maj(const alx_image_32 &img);

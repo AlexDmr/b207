@@ -45,6 +45,7 @@ class alx_noeud_image_sdl_opengl : public alx_noeud_scene, public alx_image_open
    inline void maj(const alx_image_opengl &img)                                                                         {alx_image_opengl::maj(img);                                           ; L_rap_fin_maj_data_texture.Rappeler(this);}
    inline void maj(const alx_image_32 *img_32)                                                                          {alx_image_opengl::maj(img_32);                                        ; L_rap_fin_maj_data_texture.Rappeler(this);}
 
+   inline const bool Sauver_dans_fichier(const char *nf)                                                                {return alx_image_opengl::Sauver_dans_fichier(nf);}
   //____________________________________________________________________________
    inline virtual void Calculer_boites() {alx_noeud_scene::Calculer_boite_fils(); alx_noeud_image_sdl_opengl::Calculer_boite_noeud();}
    virtual void Calculer_boite_noeud();
