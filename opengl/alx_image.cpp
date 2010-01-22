@@ -181,26 +181,34 @@ const bool alx_image_32::Sauver_dans_fichier(const char *nf)
   } else {// Créer une image, charger les données
           ilGenImages(1, &num_il_img);
           ilBindImage(num_il_img);
-          ilSetInteger(IL_IMAGE_WIDTH , L());
-          ilSetInteger(IL_IMAGE_HEIGHT, H());
 
-          ilSetInteger(IL_IMAGE_BYTES_PER_PIXEL, nb_octets_par_pixel);
+          ILenum format_il;
           switch(ordonnancement_couleurs)
-           {case GL_RGB             : ilSetInteger(IL_IMAGE_FORMAT, IL_RGB);             break;
-            case GL_BGR             : ilSetInteger(IL_IMAGE_FORMAT, IL_BGR);             break;
-            case GL_RGBA            : ilSetInteger(IL_IMAGE_FORMAT, GL_RGBA);            break;
-            case GL_BGRA            : ilSetInteger(IL_IMAGE_FORMAT, GL_BGRA);            break;
-            case GL_LUMINANCE       : ilSetInteger(IL_IMAGE_FORMAT, GL_LUMINANCE);       break;
-            case GL_LUMINANCE_ALPHA : ilSetInteger(IL_IMAGE_FORMAT, GL_LUMINANCE_ALPHA); break;
-            case GL_COLOR_INDEX     : ilSetInteger(IL_IMAGE_FORMAT, GL_COLOR_INDEX);     break;
+           {case GL_RGB             : format_il = IL_RGB;             break;
+            case GL_BGR             : format_il = IL_BGR;             break;
+            case GL_RGBA            : format_il = IL_RGBA;            break;
+            case GL_BGRA            : format_il = IL_BGRA;            break;
+            case GL_LUMINANCE       : format_il = IL_LUMINANCE;       break;
+            case GL_LUMINANCE_ALPHA : format_il = IL_LUMINANCE_ALPHA; break;
+            case GL_COLOR_INDEX     : format_il = IL_COLOR_INDEX;     break;
           //     case IL_COLOUR_INDEX: ordonnancement_couleurs = GL_COLOUR_INDEX; break;
             default:
               printf("Au secours !!! Pb de sauvegarde de %s", nf);
             break;
            }
-          ilSetData(tempon);
+          ilEnable(IL_FILE_OVERWRITE);
+
+          ilTexImage( L()                 // ILuint Width
+                    , H()                 // ILuint Height
+                    , 0                   // ILuint Depth
+                    , nb_octets_par_pixel // ILubyte Bpp
+                    , format_il           // ILenum Format
+                    , IL_UNSIGNED_BYTE    // ILenum Type
+                    , NULL              // ILvoid *Data
+                    );
          }
 
+ ilSetData( tempon );
  return ilSaveImage(nf);;
 }
 
