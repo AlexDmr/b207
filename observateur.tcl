@@ -1,3 +1,4 @@
+
 set f_obs [$fiche_bigre {Overview} 300 200 $n_i_mere]
 
 set f_obs_tx 8192.0
@@ -11,7 +12,9 @@ append cmd "$f_obs Etirement_du_contenu \$f_ex \$f_ey\n"
 append cmd "$f_obs Origine_du_contenu \[expr -(\$f_tx-1024*\$f_ex)/2.0\] \[expr -(\$f_ty-768*\$f_ey)/2.0\];\n"
 append cmd "puts coco"
 
-set r_obs [$Rappel_TCL $interp_tcl $cmd]
+global interp_tcl
+
+set r_obs [B_rappel [Interp_TCL] $cmd]
 set f1 [$f_obs Fenetre]
 $f1 abonner_a_dimension [$r_obs Rappel]
 $f_obs Longueur_corp 256
@@ -54,7 +57,7 @@ source fonctions_observateur.tcl
 
 
 
-set r_contient [$Rappel_TCL $interp_tcl]
+set r_contient [B_rappel [Interp_TCL]]
 set    cmd {}
 append cmd "set p \[$r_contient Param\];\n"
 append cmd "set info \[Void_vers_info \$p\];\n"

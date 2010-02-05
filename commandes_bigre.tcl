@@ -1,3 +1,4 @@
+global i_mere; global n_i_mere; global tcl_version
 set n_i_mere    [$i_mere get_Noeud_interface]
 set Arbre_scene [$n_i_mere Arbre_scene]
 set Noeud_scene [$n_i_mere Noeud_scene]
