@@ -1576,6 +1576,8 @@ bool Prise_en_compte_des_reperes_ou_pas(alx_noeud_scene **e, void *info_comp)
 {unsigned int m = *((unsigned int *)info_comp);
  if( m == (*e)->Marqueur_de_parcours() ) return false;
 
+ (*e)->Marqueur_de_parcours( m );
+
  const bool a_changer_tmp = (*e)->A_changer();
  if( (*e)->Est_entite() ) {
    (*e)->Prendre_en_compte_repere(false);

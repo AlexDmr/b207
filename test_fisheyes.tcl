@@ -5,15 +5,18 @@ method FishEye_on_Images constructor {L_images} {
  set this(root) [B_polygone]; 
    set c [ProcRect 0 0 400 300]
    B_configure $this(root) -Ajouter_contour $c 
-   set this(rap_aff_root) [B_rappel [Interp_TCL]]
-   $this(root) abonner_a_LR_parcours [$this(root) LR_Ap_PR_fils] [$this(rap_aff_root) Rappel]
+   set this(rap_in_root) [B_rappel [Interp_TCL]]
+   $this(root) abonner_a_detection_pointeur [$this(rap_in_root)  Rappel] [expr [ALX_pointeur_mouvement]]
+   set this(rap_out_root) [B_rappel [Interp_TCL]]
+   $this(root) abonner_a_detection_pointeur [$this(rap_out_root) Rappel] [expr [ALX_pointeur_disparition]]
+   
  set this(L_pool_img) {}
- set this(L_images) ""
+ set this(L_images) [list]
  this set_L_images $L_images
 }
 
 #___________________________________________________________________________________________________________________________________________
-Generate_accessors FishEye_on_Images [list root rap_aff_root L_images]
+Generate_accessors FishEye_on_Images [list root rap_in_root rap_out_root L_images]
 
 #___________________________________________________________________________________________________________________________________________
 method FishEye_on_Images set_color_bg {r g b a} {
@@ -29,14 +32,13 @@ method FishEye_on_Images set_dims {tx ty} {
 }
 
 #___________________________________________________________________________________________________________________________________________
-method FishEye_on_Images get_rap_aff_roo_txt {} {
- return [$this(rap_aff_root) Texte]
-}
-
+method FishEye_on_Images get_rap_in_roo_txt {} {return [$this(rap_in_root) Texte]}
 #___________________________________________________________________________________________________________________________________________
-method FishEye_on_Images set_rap_aff_roo_txt {txt} {
- $this(rap_aff_root) Texte $txt
-}
+method FishEye_on_Images set_rap_in_roo_txt {txt} {$this(rap_in_root) Texte $txt}
+#___________________________________________________________________________________________________________________________________________
+method FishEye_on_Images get_rap_out_roo_txt {} {return [$this(rap_out_root) Texte]}
+#___________________________________________________________________________________________________________________________________________
+method FishEye_on_Images set_rap_out_roo_txt {txt} {$this(rap_out_root) Texte $txt}
 
 #___________________________________________________________________________________________________________________________________________
 method FishEye_on_Images Release_img {img} {
@@ -46,6 +48,9 @@ method FishEye_on_Images Release_img {img} {
 
 #___________________________________________________________________________________________________________________________________________
 method FishEye_on_Images get_a_img {{src {}}} {
+ if {[Type_objet_SWIG $src] == "alx_noeud_image_sdl_opengl"} {
+   return $src
+  }
  if {[llength $this(L_pool_img)]} {
    set rep [lindex $this(L_pool_img) 0]
    foreach img $this(L_pool_img) {
@@ -57,6 +62,15 @@ method FishEye_on_Images get_a_img {{src {}}} {
          }
  $rep Ajouter_MetaData_T src $src
  return $rep
+}
+
+#___________________________________________________________________________________________________________________________________________
+method FishEye_on_Images Add_L_images {L} {
+ foreach e $L {
+   set img [this get_a_img $e]
+   $this(root) Ajouter_fils_au_debut $img
+   lappend this(L_images) $img
+  }
 }
 
 #___________________________________________________________________________________________________________________________________________
@@ -206,10 +220,9 @@ proc Change_fish {rap root pt_tmp} {
  set infos [Void_vers_info $infos]
  set ptr [$infos Ptr]
  set n [Real_class [$infos NOEUD]]
- set L_rep [Ancetre_de_a $n $root]
-     $pt_tmp maj [$infos Point_au_contact]
-	 B207_transformation_inverse $pt_tmp [lrange $L_rep 1 end]
+ set L_rep [Ancetre_de_a $root [N_i_mere Noeud_scene]]
+	 $pt_tmp maj [$ptr X] [$ptr Y]
+	 B207_transformation $pt_tmp $L_rep
    $root Ajouter_MetaData_T L_ptr [list "souris [$pt_tmp X] [$pt_tmp Y] [$ptr Id]"]
-   #puts "ptr : $ptr\n  - Is : [$ptr Id]"
 }
 
