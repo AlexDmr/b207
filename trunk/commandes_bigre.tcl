@@ -46,6 +46,12 @@ proc Real_class {n} {
 }
 
 #___________________________________________________________________________________________________________________________________________
+proc Type_objet_SWIG {obj} {
+ if {[regexp {^_[0-9a-f]*_p_(.*)$} $obj reco class]} {return $class}
+ return ""
+}
+
+#___________________________________________________________________________________________________________________________________________
 proc Detruire {obj} {
  if {[regexp {^_[0-9a-f]*_p_(.*)$} $obj reco class]} {
    return [delete_$class $obj]
@@ -200,6 +206,23 @@ proc B_Aide_nom {v re} {
 #______________________________________________________________________________
 #______________________________________________________________________________
 #______________________________________________________________________________
+proc Redirect_key_events_from_to {prim dest_prim} {
+ puts "Redirect_key_events_from_to $prim $dest_prim"
+ set    cmd "set dest_prim $dest_prim\n"
+ append cmd {set evt [B_sim_couche Evt_courant];} "\n"
+ append cmd {set ptr [$evt Ptr]; set pt [$ptr P_Point];} "\n"
+ append cmd {set res ""; puts "Redirect keys from->to pt = $pt dest_prim = $dest_prim"; if {[catch "B_sim_sds Prendre_evennements_lies_a $pt \[$dest_prim Liant\]" res]} {puts "ERROR in Redirect_key_events_from_to:\n$err"}; }
+
+ set rap_redirect_key [$prim Val_MetaData rap_redirect_key]
+ if {$rap_redirect_key == ""} {set rap_redirect_key [B_rappel [Interp_TCL]]}
+ $rap_redirect_key Texte $cmd
+ $prim desabonner_de_detection_pointeur [$rap_redirect_key Rappel]
+ $prim abonner_a_detection_pointeur     [$rap_redirect_key Rappel]
+}
+
+#______________________________________________________________________________
+#______________________________________________________________________________
+#______________________________________________________________________________
 proc B_transfo_rap {t txt_rap_pdt {txt_rap_before {}} {txt_rap_after {}}} {
  set transfo [B_transfo $t]
    set rap [B_rappel [Interp_TCL]]; $rap Texte "set v \[$transfo V_courant\]; $txt_rap_pdt"; $transfo abonner_a_rappel_pendant [$rap Rappel]
@@ -260,11 +283,21 @@ proc Aide {{sujet "rien"}} {
 }
 
 #____________________________________________________________________________
+proc B207_transformation {pt L_reperes} {
+ foreach R $L_reperes {$R Changer_coordonnees $pt}
+}
+
+#____________________________________________________________________________
 proc B207_transformation_inverse {pt L_reperes} {
- if {[string equal $L_reperes {}]} {return}
- set repere [lindex $L_reperes end]
-   $repere Changer_coordonnees_inverse $pt
- return [B207_transformation_inverse $pt [lrange $L_reperes 0 end-1]]
+ while {[llength $L_reperes]} {
+   set R [lindex $L_reperes end]
+   $R Changer_coordonnees_inverse $pt
+   set L_reperes [lrange $L_reperes 0 end-1]
+  }
+ # if {[string equal $L_reperes {}]} {return}
+ # set repere [lindex $L_reperes end]
+   # $repere Changer_coordonnees_inverse $pt
+ # return [B207_transformation_inverse $pt [lrange $L_reperes 0 end-1]]
 }
 
 #____________________________________________________________________________

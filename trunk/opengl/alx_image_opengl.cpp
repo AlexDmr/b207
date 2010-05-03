@@ -98,6 +98,22 @@ void alx_image_opengl::maj(const char *n)
 }
 
 //______________________________________________________________________________
+void alx_image_opengl::maj_transfo( const int tx, const int ty
+        , const int source_ordre_couleur, const int source_nb_octet_par_pix
+        , const int target_ordre_couleur, const int target_nb_octet_par_pix
+        , const char *buffer)
+{alx_image_32::maj_transfo(tx, ty, source_ordre_couleur, source_nb_octet_par_pix, target_ordre_couleur, target_nb_octet_par_pix, buffer);
+ if(buffer)
+  {image_creer = true;
+   maj_tempon();
+   Image_creer_en_interne(true);}
+ alx_chaine_char cc_tmp;
+ cc_tmp  = (unsigned long int)time(NULL);
+ cc_tmp += " ";
+ Info_texture().Info_data_CC( cc_tmp );
+}
+
+//______________________________________________________________________________
 void alx_image_opengl::maj(const int tx, const int ty, const int ordre_couleur, const int nb_octet_par_pix, const char *buffer)
 {alx_image_32::maj(tx, ty, ordre_couleur, nb_octet_par_pix, buffer);
  if(buffer)

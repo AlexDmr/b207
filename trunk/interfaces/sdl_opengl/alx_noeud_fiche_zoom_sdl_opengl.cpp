@@ -121,14 +121,20 @@ void alx_noeud_fiche_zoom_sdl_opengl::PreRendre()
 void alx_noeud_fiche_zoom_sdl_opengl::maj_lentille()
 {// On redéfinie la lentille à partir des informations de la fenêtre
  double centre[4]
-      , coord_x = zdr_corp.Nb_unite_x()*zdr_corp.Nb_pixels_par_unite()/zdr_corp.Infos_texture_tempon(0)->tx
-      , coord_y = zdr_corp.Nb_unite_y()*zdr_corp.Nb_pixels_par_unite()/zdr_corp.Infos_texture_tempon(0)->ty
+      , coord_x = 0
+      , coord_y = 0
       , bordure[4*4] // 4 points de 4 coordonnées chacun
       , l = Longueur_corp()
       , h = Hauteur_corp();
 
+ if (  zdr_corp.Infos_texture_tempon(0)->tx > 0
+    && zdr_corp.Infos_texture_tempon(0)->ty > 0) {
+   coord_x = zdr_corp.Nb_unite_x()*zdr_corp.Nb_pixels_par_unite()/zdr_corp.Infos_texture_tempon(0)->tx;
+   coord_y = zdr_corp.Nb_unite_y()*zdr_corp.Nb_pixels_par_unite()/zdr_corp.Infos_texture_tempon(0)->ty;
+  }
  // On fixe les niveaux de détail.
- rep_lentille->Niveaux_details(Tab_niveaux_details(1), 1);
+ if(Tab_niveaux_details(1))
+   rep_lentille->Niveaux_details(Tab_niveaux_details(1), 1);
 
  // On fixe les coordonnées effectives des texture utilisées:
  rep_lentille->Dimensions_effectives_texture(coord_x, coord_y);

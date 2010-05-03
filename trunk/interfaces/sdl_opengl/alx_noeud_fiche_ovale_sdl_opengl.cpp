@@ -84,7 +84,7 @@ void alx_noeud_fiche_ovale_sdl_opengl::init()
 alx_noeud_fiche_ovale_sdl_opengl::alx_noeud_fiche_ovale_sdl_opengl( const char *nom, const double tx, const double ty
                                                                   , alx_interface_sdl_opengl_1 *interface_m) : alx_noeud_fenetre_sdl_opengl( nom, tx, ty, interface_m )
                                                                                                              , origine_interne_logique(0,0)
-{fiche = new alx_fiche_ovale(nom, tx, ty, 25, 15);
+{fiche    = new alx_fiche_ovale(nom, tx, ty, 25, 15);
  fiche_gl = new alx_fiche_ovale_opengl(fiche, fonte_Arial(), Matos());
  fiche->repere = (alx_repere2D*)this;
  fiche_gl->Zdr_entete(&zdr_entete);
@@ -141,6 +141,7 @@ void alx_noeud_fiche_ovale_sdl_opengl::Dessin_noeud()
    return;
 
  double coord_x, coord_y;
+ glPushMatrix();
  glPushAttrib(GL_ENABLE_BIT);
 
  fiche_gl->maj_fact();
@@ -200,6 +201,7 @@ void alx_noeud_fiche_ovale_sdl_opengl::Dessin_noeud()
    if(Afficher_zone_rot()) fiche_gl->afficher_zone_rot();}
 
  glPopAttrib();
+ glPopMatrix();
 }
 
 //------------------------------------------------------------------------------

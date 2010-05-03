@@ -56,7 +56,7 @@ class alx_image_32
     MIN_R = min_r; MIN_V = min_v; MIN_B = min_b;
    }
   void Fixer_couleur_transparente_mtd_2(const float r, const float v, const float b, const float seuil, const int min_r, const int min_v, const int min_b);
-  void Merge_Tempon_void_4(void *T);
+  void Merge_Tempon_void(void *T, const unsigned int nb_T_pix);
 
   void Colorier(const int r, const int v, const int b, const int a);
 
@@ -93,6 +93,10 @@ class alx_image_32
 
   /*********************************************************************************/
   const bool Sauver_dans_fichier(const char *nf);
+  void maj_transfo( const int tx, const int ty
+          , const int source_ordre_couleur, const int source_nb_octet_par_pix
+          , const int target_ordre_couleur, const int target_nb_octet_par_pix
+          , const char *buffer);
   void maj(const int tx, const int ty, const int ordre_couleur, const int nb_octet_par_pix, const char *buffer);
   void maj(const char *n);
   void maj(const alx_image_32 &img);

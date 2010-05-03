@@ -22,6 +22,7 @@ class alx_noeud_repere_lentille : public alx_noeud_scene
    virtual inline info_du_contenant* Contient(const alx_point2D &pt, int action)
     {if(deja_teste) return NULL;
      deja_teste = true;
+       Prendre_en_compte_repere( true );
        info_du_contenant *rep = alx_noeud_scene::Contient(pt, action);
      deja_teste = false;
      return rep;

@@ -52,7 +52,9 @@ void alx_image_32::UnLock_mutex_tempon() {mutex_tempon->unlock();}
 
 //______________________________________________________________________________
 void alx_image_32::Fixer_couleur_transparente_mtd_2(const float r, const float v, const float b, const float seuil, const int min_r, const int min_v, const int min_b)
-{ unsigned int pos = 0;
+{ if( nb_octets_par_pixel < 4 ) return;
+
+  unsigned int pos = 0;
   unsigned char *T = (unsigned char *)tempon
               , m_r = (unsigned char)min_r
               , m_v = (unsigned char)min_v
@@ -70,7 +72,8 @@ void alx_image_32::Fixer_couleur_transparente_mtd_2(const float r, const float v
       if( rv < rap_rv) {rv = rv / rap_rv;} else {rv = rap_rv / rv;}
       if( rb < rap_rb) {rb = rb / rap_rb;} else {rb = rap_rb / rb;}
       if( vb < rap_vb) {vb = vb / rap_vb;} else {vb = rap_vb / vb;}
-      if( rv > seuil
+
+      if(rv > seuil
         &&rb > seuil
         &&vb > seuil
         &&(unsigned char)T[pos+0] > m_r
@@ -78,40 +81,43 @@ void alx_image_32::Fixer_couleur_transparente_mtd_2(const float r, const float v
         &&(unsigned char)T[pos+2] > m_b
         ) {T[pos + 3] = 0;} else {T[pos + 3] = 0xFF;}
 
-      pos += 4;
+      pos += nb_octets_par_pixel;
      }
    }
 }
 
 //______________________________________________________________________________
 void alx_image_32::Fixer_couleur_transparente_mtd_1(const int r, const int v, const int b, const int seuil)
-{ unsigned int pos = 0;
+{ if( nb_octets_par_pixel < 4 ) return;
+
+  unsigned int pos = 0;
   unsigned char *T = (unsigned char *)tempon;
 
   for(int y=0; y < H(); y++)
    {for(int x=0; x < L(); x++)
-     {if( (int)T[pos+0] > (r - seuil) && (int)T[pos+0] < (r + seuil)
+     {if( nb_octets_par_pixel >= 4
+        &&(int)T[pos+0] > (r - seuil) && (int)T[pos+0] < (r + seuil)
         &&(int)T[pos+1] > (v - seuil) && (int)T[pos+1] < (v + seuil)
         &&(int)T[pos+2] > (b - seuil) && (int)T[pos+2] < (b + seuil)
         ) {T[pos + 3] = 0;} else {T[pos + 3] = 0xFF;}
 
-      pos += 4;
+      pos += nb_octets_par_pixel;
      }
    }
 }
 
 //______________________________________________________________________________
-void alx_image_32::Merge_Tempon_void_4(void *T_void)
-{ unsigned int pos = 0;
+void alx_image_32::Merge_Tempon_void(void *T_void, const unsigned int nb_T_pix)
+{ unsigned int pos = 0, pos_T = 0;
   char *T = (char*) T_void;
 
   for(int y=0; y < H(); y++)
    {for(int x=0; x < L(); x++)
-     {if( T[pos+3] ) {tempon[pos]   = T[pos];
-                      tempon[pos+1] = T[pos+1];
-                      tempon[pos+2] = T[pos+2];
-                     }
-      pos += 4;
+     {if( T[pos_T+3] ) {tempon[pos]   = T[pos_T];
+                        tempon[pos+1] = T[pos_T+1];
+                        tempon[pos+2] = T[pos_T+2];
+                       }
+      pos += nb_octets_par_pixel; pos_T += nb_T_pix;
      }
    }
 }
@@ -328,17 +334,36 @@ void alx_image_32::prendre_N_dernier_char(unsigned int N, const char *chaine1, c
 
 //______________________________________________________________________________
 void alx_image_32::maj(const int tx, const int ty, const int ordre_couleur, const int nb_octet_par_pix, const char *buffer)
-{unsigned int t = tx*ty*nb_octet_par_pix;
+{maj_transfo(tx, ty, ordre_couleur, nb_octet_par_pix, ordre_couleur, nb_octet_par_pix, buffer);}
+
+//______________________________________________________________________________
+void alx_image_32::maj_transfo( const int tx, const int ty
+                      , const int source_ordre_couleur, const int source_nb_octet_par_pix
+                      , const int target_ordre_couleur, const int target_nb_octet_par_pix
+                      , const char *buffer)
+{if(target_nb_octet_par_pix == 0 || target_nb_octet_par_pix < source_nb_octet_par_pix) {printf("ERROR : trying to copy an image with too much byte per pixel (%d compared to %d)\n", source_nb_octet_par_pix, target_nb_octet_par_pix);}
+ unsigned int t = tx*ty*target_nb_octet_par_pix/*nb_octet_par_pix*/;
  mutex_tempon->lock();
  if (t>taille_tempon) {
    if(tempon) delete[] tempon;
-   taille_tempon = nb_octet_par_pix * tx * ty;
+   taille_tempon = target_nb_octet_par_pix/*nb_octet_par_pix*/ * tx * ty;
    tempon = new char[taille_tempon];
   }
+
  if(buffer && tempon)
-   memcpy(tempon, buffer, t);
- Ordonnancement_couleurs (ordre_couleur);
- Nb_octets_par_pixel     (nb_octet_par_pix);
+  {if(source_nb_octet_par_pix == target_nb_octet_par_pix)
+    {memcpy(tempon, buffer, t);
+    } else {const char *src_pos = buffer;
+                  char *tgt_pos = tempon;
+            for(int pos=0; pos < tx*ty; pos++)
+             {for(int j=0; j<source_nb_octet_par_pix; j++) *(tgt_pos++) = *(src_pos++);
+              tgt_pos += target_nb_octet_par_pix-source_nb_octet_par_pix;
+             }
+           }
+  }
+
+ Ordonnancement_couleurs (target_ordre_couleur);
+ Nb_octets_par_pixel     (target_nb_octet_par_pix);
  l = tx;
  h = ty;
 
