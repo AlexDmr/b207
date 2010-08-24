@@ -1,0 +1,2 @@
+A faire après avoir fait un checkout de b207
+1/ definir TCL_LIBRARY and TCL_TK_LIBRARY B207_LIBRARY avec quelque chose comme c:\tcl\lib\tcl8.5 c:\tcl\lib\tk8.5 et le chemin jusqu a B207
