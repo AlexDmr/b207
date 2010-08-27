@@ -1,7 +1,7 @@
 if {[info exists ::env(ROOT_COMETS)]} {
- set path_now [pwd]
  cd $::env(ROOT_COMETS)/Comets
  source gml_Object.tcl
- cd $path_now
+ set msg "cd $::env(B207_LIBRARY)"
+ cd $::env(B207_LIBRARY)
 } else {load gmlObject.dll}
 

@@ -5,6 +5,9 @@
 #include <tk.h>
 #include "..\utilitaires\alx_chaine_char.h"
 
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 class resultat_interpreteur_tcl
 {public:
    const char *reponse_texte;
@@ -37,6 +40,9 @@ class alx_interpreteur_tcl
 
 class alx_methode_rappel;
 
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 class Appel_TCL
 {private:
    alx_interpreteur_tcl *interp;
@@ -59,5 +65,10 @@ class Appel_TCL
    inline const alx_chaine_char& Texte_cc() const                   {return texte;}
    inline alx_methode_rappel* Rappel() {return m_rappel;}
 };
+
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+int Convert_void_to_binary(alx_interpreteur_tcl *alx_interp, void *ptr_void, int length, char *var_name);
 
 #endif

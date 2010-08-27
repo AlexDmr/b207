@@ -115,6 +115,7 @@ void Appel_TCL::init()
  Tcl_IncrRefCount(tcl_obj);
 }
 
+//______________________________________________________________________________
 void Appel_TCL::F_rappel(void *param)
 {if(interp)
   {Param(param);
@@ -123,20 +124,36 @@ void Appel_TCL::F_rappel(void *param)
   }
 }
 
+//______________________________________________________________________________
 Appel_TCL::Appel_TCL(alx_interpreteur_tcl *i)
 {init();
  interp = i;
 }
 
+//______________________________________________________________________________
 Appel_TCL::Appel_TCL(alx_interpreteur_tcl *i, const char *txt)
 {init();
  Texte(txt);
  interp = i;
 }
 
+//______________________________________________________________________________
 void Appel_TCL::Texte(const char *t)
 {texte = t;
  if (Tcl_IsShared(tcl_obj)) {
    printf("Tcl_IsShared(tcl_obj), can not set texte to \"%s\"", t);
   } else {Tcl_SetStringObj(tcl_obj, texte.Texte(), texte.Taille());}
 }
+
+//______________________________________________________________________________
+//______________________________________________________________________________
+//______________________________________________________________________________
+int Convert_void_to_binary(alx_interpreteur_tcl *alx_interp, void *ptr_void, int length, char *var_name)
+{
+  Tcl_Obj *obj_array = Tcl_NewByteArrayObj((unsigned char *)ptr_void, length);
+  Tcl_SetVar2Ex(alx_interp->Interpreteur_tcl(), var_name, NULL, obj_array, TCL_NAMESPACE_ONLY);
+
+  return length;
+}
+
+
