@@ -59,6 +59,14 @@ class alx_noeud_visualisation_camera : public alx_noeud_image_sdl_opengl
      Start();
     }
 
+   inline const char* get_description() const {gmlGetDescription(acquisiteur);}
+   inline const int   Display_DialogFormat() {int rep = gmlDisplayDialogFormat(acquisiteur);
+                                              if(rep == 2) {
+                                                 Resize_camera_image_buffer();
+                                                }
+                                              return rep;
+                                             }
+
    inline const int Frequence() const {return gmlGetFrameRate(acquisiteur);}
    inline int  Frequence(const int f) {if(acquisiteur)
                                          return gmlSetFrameRate(acquisiteur, f);
