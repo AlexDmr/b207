@@ -24,6 +24,7 @@ void alx_noeud_visualisation_camera::init()
   } else {Ordonnancement_couleurs( GL_bvr() );}
  Ordre_couleur_texture       ( GL_bvr() );
  Nb_octets_par_pixels_texture(3);
+ threaded_mode = false;
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------
@@ -57,13 +58,23 @@ void alx_noeud_visualisation_camera::Resize_camera_image_buffer()
 void alx_noeud_visualisation_camera::PreRendre()
 {if(nouvelle_image)
   {char *tempon = (char*)gmlLockFrame(acquisiteur);
-  alx_noeud_image_sdl_opengl::maj_raw_with_transfo( Lg()
-                                                  , Ht()
-                                                  , Ordonnancement_couleurs()
-                                                  , gmlGetDepth(acquisiteur) >> 3
-                                                  , Ordre_couleur_texture()
-                                                  , Nb_octets_par_pixels_texture()
-                                                  , tempon );
+  if(threaded_mode) {
+    alx_noeud_image_sdl_opengl::Threaded_maj( Lg()
+                                                    , Ht()
+                                                    , Ordonnancement_couleurs()
+                                                    , gmlGetDepth(acquisiteur) >> 3
+                                                    , Ordre_couleur_texture()
+                                                    , Nb_octets_par_pixels_texture()
+                                                    , tempon );
+  } else {
+          alx_noeud_image_sdl_opengl::maj_raw_with_transfo( Lg()
+                                                          , Ht()
+                                                          , Ordonnancement_couleurs()
+                                                          , gmlGetDepth(acquisiteur) >> 3
+                                                          , Ordre_couleur_texture()
+                                                          , Nb_octets_par_pixels_texture()
+                                                          , tempon );
+         }
 /*     alx_noeud_image_sdl_opengl::maj_raw( Lg()
                                         , Ht()
                                         , Ordonnancement_couleurs()
@@ -72,6 +83,8 @@ void alx_noeud_visualisation_camera::PreRendre()
    gmlUnlockFrame(acquisiteur);
   }
  nouvelle_image = false;
+
+ alx_noeud_image_sdl_opengl::PreRendre();
 }
 
 

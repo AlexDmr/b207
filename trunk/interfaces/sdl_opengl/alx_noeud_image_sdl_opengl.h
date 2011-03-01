@@ -40,6 +40,10 @@ class alx_noeud_image_sdl_opengl : public alx_noeud_scene, public alx_image_open
    virtual const char* Real_class_cmd() {return "Void_vers_image";}
    inline void maj(const int tx, const int ty, const int ordre_couleur, const int nb_octet_par_pix, const char *buffer) {alx_image_opengl::maj(tx, ty, ordre_couleur, nb_octet_par_pix, buffer); L_rap_fin_maj_data_texture.Rappeler(this);}
    inline void maj_raw(const int tx, const int ty, const int ordre_couleur, const int nb_octet_par_pix, void *ad)       {maj(tx, ty, ordre_couleur, nb_octet_par_pix, (char*)ad)               ; L_rap_fin_maj_data_texture.Rappeler(this);}
+   inline const bool Threaded_maj_raw_with_transfo( const int tx, const int ty
+                                   , const int ordre_couleur_src, const int nb_octet_par_pix_src
+                                   , const int ordre_couleur_tgt, const int nb_octet_par_pix_tgt, void *ad)          {return Threaded_maj(tx, ty, ordre_couleur_src, nb_octet_par_pix_src, ordre_couleur_tgt, nb_octet_par_pix_tgt, (char*)ad); L_rap_fin_maj_data_texture.Rappeler(this);}
+
    inline void maj_raw_with_transfo( const int tx, const int ty
                                    , const int ordre_couleur_src, const int nb_octet_par_pix_src
                                    , const int ordre_couleur_tgt, const int nb_octet_par_pix_tgt, void *ad)          {maj_transfo(tx, ty, ordre_couleur_src, nb_octet_par_pix_src, ordre_couleur_tgt, nb_octet_par_pix_tgt, (char*)ad); L_rap_fin_maj_data_texture.Rappeler(this);}
@@ -74,7 +78,7 @@ class alx_noeud_image_sdl_opengl : public alx_noeud_scene, public alx_image_open
    inline void Inverser_y(bool e) {alx_image_opengl::Inverser_y(e);}
 
   //____________________________________________________________________________
-   //virtual void PreRendre();
+   virtual void PreRendre();
    void Dessin_noeud();
    virtual info_du_contenant* Noeud_contient(const alx_point2D &pt, int action); // Renvoi un pointeur sur le modèle physique qui contient la primitive, NULL si aucun.
 

@@ -2,6 +2,7 @@
 #define __ALX_IMAGE_H__
 
 #include "config_opengl.h"
+#include <slimthread.h>
 
 class Mutex;
 class alx_image_32
@@ -30,8 +31,44 @@ class alx_image_32
   void prendre_N_dernier_char(unsigned int N, const char *chaine1, char *rep);
 
   bool inverser_x, inverser_y;
+  char *Table_couleurs; unsigned int taille_Table_couleurs, taille_canal_couleurs_pour_Table;
+
+ protected:
+   class Thread_maj : public SlimThread {
+     protected:
+       int tx, ty, source_ordre_couleur, source_nb_octet_par_pix, target_ordre_couleur, target_nb_octet_par_pix;
+       const char *buffer;
+       bool has_terminated;
+       alx_image_32 *img;
+
+      public:
+        Thread_maj( alx_image_32 *img, const int tx, const int ty
+                  , const int source_ordre_couleur, const int source_nb_octet_par_pix
+                  , const int target_ordre_couleur, const int target_nb_octet_par_pix
+                  , const char *buffer ) : SlimThread(true) {
+           this->img = img;
+           this->tx  = tx;
+           this->ty  = ty;
+           this->source_ordre_couleur    = source_ordre_couleur;
+           this->source_nb_octet_par_pix = source_nb_octet_par_pix;
+           this->target_ordre_couleur    = target_ordre_couleur;
+           this->target_nb_octet_par_pix = target_nb_octet_par_pix;
+           this->buffer = buffer;
+           has_terminated = false;
+          }
+        const bool Has_terminated() const {return has_terminated;}
+        virtual void run(void) {
+           img->maj_transfo(tx, ty, source_ordre_couleur, source_nb_octet_par_pix, target_ordre_couleur, target_nb_octet_par_pix, buffer);
+           img->image_processed_by_thread = true; img->thread_is_processing_image = false;
+           has_terminated = true;
+          }
+     };
+
+   Thread_maj *thread_maj;
 
  public:
+  bool image_processed_by_thread, thread_is_processing_image;
+
   alx_image_32()
    {init();}
 
@@ -47,8 +84,12 @@ class alx_image_32
    {switch( Mode_traitement_image_transparent() )
      {case 1: Fixer_couleur_transparente_mtd_1(R_TRANSPARENT, V_TRANSPARENT, B_TRANSPARENT, SEUIL_TRANSPARENT); break;
       case 2: Fixer_couleur_transparente_mtd_2(R_TRANSPARENT_MTD_2, V_TRANSPARENT_MTD_2, B_TRANSPARENT_MTD_2, SEUIL_TRANSPARENT_MTD_2, MIN_R, MIN_V, MIN_B); break;
+      case 3: Fixer_couleur_transparente_mtd_3();
      }
    }
+  void Pixels_transparents_mtd_3_V1(float r, float v, float b, float seuil, int min_r, int min_v, int min_b);
+  void Fixer_couleur_transparente_mtd_3();
+
   inline void Pixels_transparents_mtd_1(int r, int v, int b, int seuil) {R_TRANSPARENT = r; V_TRANSPARENT = v; B_TRANSPARENT = b; SEUIL_TRANSPARENT = seuil;}
   void Fixer_couleur_transparente_mtd_1(const int r, const int v, const int b, const int seuil);
   inline void Pixels_transparents_mtd_2(float r, float v, float b, float seuil, int min_r, int min_v, int min_b) {
@@ -93,6 +134,10 @@ class alx_image_32
 
   /*********************************************************************************/
   const bool Sauver_dans_fichier(const char *nf);
+  const bool Threaded_maj( const int tx, const int ty
+          , const int source_ordre_couleur, const int source_nb_octet_par_pix
+          , const int target_ordre_couleur, const int target_nb_octet_par_pix
+          , const char *buffer);
   void maj_transfo( const int tx, const int ty
           , const int source_ordre_couleur, const int source_nb_octet_par_pix
           , const int target_ordre_couleur, const int target_nb_octet_par_pix

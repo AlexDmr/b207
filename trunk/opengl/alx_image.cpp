@@ -42,6 +42,13 @@ void alx_image_32::init()
     #endif
     //ilGenImages(1, &ImageName);
     mutex_tempon = new Mutex();
+
+    image_processed_by_thread = thread_is_processing_image = false;
+    thread_maj = NULL;
+
+    taille_canal_couleurs_pour_Table = 5;
+    taille_Table_couleurs = 1<<(3*taille_canal_couleurs_pour_Table);
+    Table_couleurs = new char[taille_Table_couleurs];
    }
 
 //______________________________________________________________________________
@@ -49,6 +56,54 @@ void alx_image_32::Lock_mutex_tempon  () {mutex_tempon->lock();}
 
 //______________________________________________________________________________
 void alx_image_32::UnLock_mutex_tempon() {mutex_tempon->unlock();}
+
+//______________________________________________________________________________
+void alx_image_32::Pixels_transparents_mtd_3_V1(float r, float v, float b, float seuil, int min_r, int min_v, int min_b) {
+  unsigned int dec = 8 - taille_canal_couleurs_pour_Table;
+  unsigned char m_r = (unsigned char)min_r >> dec
+              , m_v = (unsigned char)min_v >> dec
+              , m_b = (unsigned char)min_b >> dec;
+  int Table_R, Table_V, Table_B;
+  float rap_rv = (1+r) / (1+v)
+      , rap_rb = (1+r) / (1+b)
+      , rap_vb = (1+v) / (1+b)
+      , rb, rv, vb;
+
+  for(unsigned int pos = 0; pos < 1<<(3*taille_canal_couleurs_pour_Table); pos++) {
+     Table_R = pos                                             & ((1<<taille_canal_couleurs_pour_Table) - 1);
+     Table_V = (pos >> taille_canal_couleurs_pour_Table)       & ((1<<taille_canal_couleurs_pour_Table) - 1);
+     Table_B = (pos >> (taille_canal_couleurs_pour_Table<<1) ) & ((1<<taille_canal_couleurs_pour_Table) - 1);
+
+     rv = (1+(float)Table_R) / (1+(float)Table_V);
+     rb = (1+(float)Table_R) / (1+(float)Table_B);
+     vb = (1+(float)Table_V) / (1+(float)Table_B);
+     if( rv < rap_rv) {rv = rv / rap_rv;} else {rv = rap_rv / rv;}
+     if( rb < rap_rb) {rb = rb / rap_rb;} else {rb = rap_rb / rb;}
+     if( vb < rap_vb) {vb = vb / rap_vb;} else {vb = rap_vb / vb;}
+
+     if( rv > seuil
+       &&rb > seuil
+       &&vb > seuil
+       &&(unsigned char)Table_R > m_r
+       &&(unsigned char)Table_V > m_v
+       &&(unsigned char)Table_B > m_b
+       ) {Table_couleurs[pos] = 0;
+         } else {Table_couleurs[pos] = 0xFF;}
+
+    }
+}
+
+//______________________________________________________________________________
+void alx_image_32::Fixer_couleur_transparente_mtd_3() {
+  if( nb_octets_par_pixel < 4 ) return;
+  unsigned char *T = (unsigned char *)tempon;
+  char tmp; unsigned int dec = 8 - taille_canal_couleurs_pour_Table;
+
+  for(unsigned int pos = 0; pos < 4*L()*H(); pos++) {
+     tmp = Table_couleurs[T[pos++]>>dec | (T[pos++]>>dec)<<taille_canal_couleurs_pour_Table | (T[pos++]>>dec)<<(taille_canal_couleurs_pour_Table<<1)];
+     T[pos] = tmp;
+    }
+}
 
 //______________________________________________________________________________
 void alx_image_32::Fixer_couleur_transparente_mtd_2(const float r, const float v, const float b, const float seuil, const int min_r, const int min_v, const int min_b)
@@ -105,6 +160,23 @@ void alx_image_32::Fixer_couleur_transparente_mtd_1(const int r, const int v, co
      }
    }
 }
+
+//______________________________________________________________________________
+const bool alx_image_32::Threaded_maj( const int tx, const int ty
+        , const int source_ordre_couleur, const int source_nb_octet_par_pix
+        , const int target_ordre_couleur, const int target_nb_octet_par_pix
+        , const char *buffer) {
+   if(thread_maj != NULL) {
+     if(!thread_maj->Has_terminated()) {
+        return false;
+       }
+     delete thread_maj;
+    }
+   thread_maj = new Thread_maj(this, tx, ty, source_ordre_couleur, source_nb_octet_par_pix, target_ordre_couleur, target_nb_octet_par_pix, buffer);
+   thread_is_processing_image = true; image_processed_by_thread = false,
+   thread_maj->resume();
+   return true;
+  }
 
 //______________________________________________________________________________
 void alx_image_32::Merge_Tempon_void(void *T_void, const unsigned int nb_T_pix)

@@ -78,8 +78,14 @@ alx_noeud_image_sdl_opengl::~alx_noeud_image_sdl_opengl()
 //______________________________________________________________________________
 //______________________________________________________________________________
 //______________________________________________________________________________
-//void alx_noeud_image_sdl_opengl::PreRendre()
-//{PreRendre_fils();}
+void alx_noeud_image_sdl_opengl::PreRendre()
+{if(image_processed_by_thread) {
+   // Load the texture in OpenGL
+   image_processed_by_thread = false;
+   maj_tempon();
+  }
+  alx_noeud_scene::PreRendre();
+}
 
 //______________________________________________________________________________
 void alx_noeud_image_sdl_opengl::Dessin_noeud()

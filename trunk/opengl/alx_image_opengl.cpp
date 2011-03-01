@@ -199,6 +199,7 @@ void alx_image_opengl::maj_tempon()
     Etirement_y( H() );
     texture_cree = true;}
 
+ Lock_mutex_tempon();
  if(MipMap())
   {glGenTextures(1, (unsigned int*)(&(info_texture.id_texture)));
    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
@@ -225,7 +226,7 @@ void alx_image_opengl::maj_tempon()
                      , 0, 0 // décalage
                      , L(), H(), Ordonnancement_couleurs(), GL_UNSIGNED_BYTE, TEMPON());
      }
-
+ UnLock_mutex_tempon();
  info_texture.taille_reelle[0] = L();
  info_texture.taille_reelle[1] = H();
 /* VRAIMENT VIEUX
