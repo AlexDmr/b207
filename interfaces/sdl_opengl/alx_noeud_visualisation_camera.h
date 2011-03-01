@@ -17,7 +17,7 @@ class alx_polygone_opengl;
 class alx_noeud_visualisation_camera : public alx_noeud_image_sdl_opengl
 {
  private:
-   bool nouvelle_image/*, couleur_libre*/;
+   bool nouvelle_image, threaded_mode/*, couleur_libre*/;
 //   alx_model_simulation_physique1 mp;
 //   alx_polygone_opengl            *polygone_opengl;
    GMLGrabber                     *acquisiteur;
@@ -46,6 +46,9 @@ class alx_noeud_visualisation_camera : public alx_noeud_image_sdl_opengl
 //   inline const INFOS_TEXTURE* Info_texture()       const {return info_texture;}
    inline bool Nouvelle_image()                     const {return nouvelle_image;}
    inline void Nouvelle_image(const bool b)               {nouvelle_image = b;}
+
+   inline bool Threaded_mode()                     const {return threaded_mode;}
+   inline void Threaded_mode(const bool b)               {threaded_mode = b;}
 
    inline void Stop () {gmlStopGrabber (acquisiteur);}
    inline void Start() {gmlStartGrabber(acquisiteur);}
