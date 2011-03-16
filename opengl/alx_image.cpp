@@ -68,8 +68,8 @@ void alx_image_32::Pixels_transparents_mtd_3_V1(float r, float v, float b, float
       , rap_rb = (1+r) / (1+b)
       , rap_vb = (1+v) / (1+b)
       , rb, rv, vb;
-
-  for(unsigned int pos = 0; pos < 1<<(3*taille_canal_couleurs_pour_Table); pos++) {
+  unsigned int pos;
+  for(pos = 0; pos < taille_Table_couleurs; pos++) {
      Table_R = pos                                             & ((1<<taille_canal_couleurs_pour_Table) - 1);
      Table_V = (pos >> taille_canal_couleurs_pour_Table)       & ((1<<taille_canal_couleurs_pour_Table) - 1);
      Table_B = (pos >> (taille_canal_couleurs_pour_Table<<1) ) & ((1<<taille_canal_couleurs_pour_Table) - 1);
@@ -97,11 +97,14 @@ void alx_image_32::Pixels_transparents_mtd_3_V1(float r, float v, float b, float
 void alx_image_32::Fixer_couleur_transparente_mtd_3() {
   if( nb_octets_par_pixel < 4 ) return;
   unsigned char *T = (unsigned char *)tempon;
-  char tmp; unsigned int dec = 8 - taille_canal_couleurs_pour_Table;
+  unsigned int r, v, b; unsigned int dec = 8 - taille_canal_couleurs_pour_Table;
 
-  for(unsigned int pos = 0; pos < 4*L()*H(); pos++) {
-     tmp = Table_couleurs[T[pos++]>>dec | (T[pos++]>>dec)<<taille_canal_couleurs_pour_Table | (T[pos++]>>dec)<<(taille_canal_couleurs_pour_Table<<1)];
-     T[pos] = tmp;
+  unsigned int pos = 0, size_img = 4*L()*H();
+  while(pos < size_img) {
+     r = T[pos++]>>dec;
+     v = (T[pos++]>>dec)<<taille_canal_couleurs_pour_Table;
+     b = (T[pos++]>>dec)<<(taille_canal_couleurs_pour_Table<<1);
+     T[pos++] = Table_couleurs[ r | v | b ];
     }
 }
 
