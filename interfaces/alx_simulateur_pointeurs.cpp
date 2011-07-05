@@ -173,7 +173,7 @@ const unsigned int alx_simulateur_pointeurs::Simuler()
    if (L_evt_it->E().Type_evt() == ALX_pointeur_disparition())
     {to_be_delete = true;} else {to_be_delete = false;}
   // Prévenir ceux qui se sont abonné à ce pointeur en particulier
-   if( !ptr->Est_une_replique() )
+   if( ptr && !ptr->Est_une_replique() )
     {i = 0;
      while( (i<nb_info_ptr)
           &&(TP_ptr[i] != ptr) ) i++;
@@ -181,18 +181,19 @@ const unsigned int alx_simulateur_pointeurs::Simuler()
       {TP_ptr[nb_info_ptr] = ptr;
        nb_info_ptr++;}
     }
-   ptr->Rappel_changement();
-
-  // Faire suivre aux intéressés.
-   L_evt_it->E().ptr = ptr;
-   for(it=L_interessees.Premier(); (it!=it_fin)&&(!L_evt.Vide())&&(L_evt_it==L_evt.Premier()); it=it->svt)
-     (it->E()).interessee->rationnaliser( (it->E()).num );
+   if(ptr) {
+       ptr->Rappel_changement();
+      // Faire suivre aux intéressés.
+       L_evt_it->E().ptr = ptr;
+       for(it=L_interessees.Premier(); (it!=it_fin)&&(!L_evt.Vide())&&(L_evt_it==L_evt.Premier()); it=it->svt)
+         (it->E()).interessee->rationnaliser( (it->E()).num );
+     } else {printf("Evennement sur un pointeur inconnu %d\n", L_evt_it->E().Identifiant());}
 
    if( (!L_evt.Vide())&&(L_evt_it==L_evt.Premier()) )
      L_evt.Retirer_premier(); // Personne n'à traité le message, on le retire.
 
   // Doit-on maintenant retirer le pointeur de la liste?
-   if(to_be_delete) {
+   if(ptr && to_be_delete) {
      if(ptr->Noeud_representation()) {ptr->Noeud_representation()->Vider_peres();        }
      if( !ptr->Est_une_replique()  ) {L_pointeurs_detruits.Ajouter_a_la_fin( Pipo_pointeur_detruit(ptr->Id(), ptr->X(), ptr->Y()) );}
        ptr->Noeud_pere( NULL );
