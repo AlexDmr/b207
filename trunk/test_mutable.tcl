@@ -1,5 +1,3 @@
-source {C:\These\Projet Interface\COMETS\devCOMETS\Comets\gml_Object.tcl}
-
 #load MuTable_Pointers.dll
 if {[catch "package require Tktable" err]} {
   puts "Error on loading Tktable :\n$err"

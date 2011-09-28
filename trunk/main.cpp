@@ -14,6 +14,12 @@ int main( int argc, char * argv[] )
    , ty = 768
    , propriete = 0;
 
+ if (argc==2 || argc>4) {
+   printf("Usage: %s [$width $height [FS]]\n\where:\n\t\t$width is the width, in pixels, of the window.\n\t\t$height is the height, in pixels, of the window.\n\t\tFS indicate that you want fullscreen mode.\n\tThese parameters are optional. You can launch the program using trhee ways:\n\t\t%s\n\t\t%s $width $height\n\t\t%s $width $height FS\n", argv[0], argv[0], argv[0], argv[0]);
+   return 0;
+  }
+
+
  principal prog(argv[0]);
 
 if(argc >=3 )
@@ -22,6 +28,7 @@ if(argc >=3 )
   if(argc >= 4)
    {if(!strcmp("FULL_SCREEN", argv[3])
      ||!strcmp("FULLSCREEN", argv[3])
+     ||!strcmp("fullscreen", argv[3])
      ||!strcmp("FS", argv[3])
      ||!strcmp("FULL", argv[3]) )
      propriete = SDL_FULLSCREEN;

@@ -1,8 +1,8 @@
 #source {C:\Alexandre\MAGISTERE2\Plasticité\Jeu de modeles physiques\essai_borland_son_sdl_opengl\essai.tcl}
-set chemin_gml {C:\Alexandre\MAGISTERE2\Plasticité\Jeu de modeles physiques\essai_borland_son_sdl_opengl\gml_Object.tcl}
+# set chemin_gml {C:\Alexandre\MAGISTERE2\Plasticité\Jeu de modeles physiques\essai_borland_son_sdl_opengl\gml_Object.tcl}
 source gml_Object.tcl
-set chemin_essai {C:\Alexandre\MAGISTERE2\Plasticité\Jeu de modeles physiques\essai_borland_son_sdl_opengl\essai.tcl}
-set chemin_propositions {C:\Alexandre\MAGISTERE2\Plasticité\Jeu de modeles physiques\essai_borland_son_sdl_opengl\propositions.tcl}
+# set chemin_essai {C:\Alexandre\MAGISTERE2\Plasticité\Jeu de modeles physiques\essai_borland_son_sdl_opengl\essai.tcl}
+# set chemin_propositions {C:\Alexandre\MAGISTERE2\Plasticité\Jeu de modeles physiques\essai_borland_son_sdl_opengl\propositions.tcl}
 #Définition de la liste des propositions
 
 
