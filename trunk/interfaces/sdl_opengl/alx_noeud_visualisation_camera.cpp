@@ -59,16 +59,16 @@ void alx_noeud_visualisation_camera::PreRendre()
 {if(nouvelle_image)
   {char *tempon = (char*)gmlLockFrame(acquisiteur);
   if(threaded_mode) {
-    alx_noeud_image_sdl_opengl::Threaded_maj( Lg()
-                                                    , Ht()
+    alx_noeud_image_sdl_opengl::Threaded_maj( (int)Lg()
+                                                    , (int)Ht()
                                                     , Ordonnancement_couleurs()
                                                     , gmlGetDepth(acquisiteur) >> 3
                                                     , Ordre_couleur_texture()
                                                     , Nb_octets_par_pixels_texture()
                                                     , tempon );
   } else {
-          alx_noeud_image_sdl_opengl::maj_raw_with_transfo( Lg()
-                                                          , Ht()
+          alx_noeud_image_sdl_opengl::maj_raw_with_transfo( (int)Lg()
+                                                          , (int)Ht()
                                                           , Ordonnancement_couleurs()
                                                           , gmlGetDepth(acquisiteur) >> 3
                                                           , Ordre_couleur_texture()

@@ -1,7 +1,10 @@
+
 #ifndef __CONFIG_OPENGL_H__
 #define __CONFIG_OPENGL_H__
 
-#include <extgl.h>
+#define GL_GLEXT_PROTOTYPES 1
+#include <glew.h>
+
 /*
 extern "C" {
 #include <glu.h>
@@ -23,65 +26,65 @@ extern "C" {
 
 // Reféfinition des énumérations OpenGL
 //___________________________________________
-void Desactiver_rendu_du_buffer_couleur() {glDrawBuffer(GL_NONE);}
-void Activer_rendu_du_buffer_couleur()    {glDrawBuffer(GL_BACK);}
+inline void Desactiver_rendu_du_buffer_couleur() {glDrawBuffer(GL_NONE);}
+inline void Activer_rendu_du_buffer_couleur()    {glDrawBuffer(GL_BACK);}
 //___________________________________________
-const GLenum GL_keep()    {return GL_KEEP;}
-const GLenum GL_zero()    {return GL_ZERO;}
-const GLenum GL_replace() {return GL_REPLACE;}
-const GLenum GL_incr()    {return GL_INCR;}
-const GLenum GL_decr()    {return GL_DECR;}
-const GLenum GL_invert()  {return GL_INVERT;}
+inline const GLenum GL_keep()    {return GL_KEEP;}
+inline const GLenum GL_zero()    {return GL_ZERO;}
+inline const GLenum GL_replace() {return GL_REPLACE;}
+inline const GLenum GL_incr()    {return GL_INCR;}
+inline const GLenum GL_decr()    {return GL_DECR;}
+inline const GLenum GL_invert()  {return GL_INVERT;}
 
 //___________________________________________
-const GLenum GL_never()    {return GL_NEVER;}
-const GLenum GL_less()     {return GL_LESS;}
-const GLenum GL_lequal()   {return GL_LEQUAL;}
-const GLenum GL_greater()  {return GL_GREATER;}
-const GLenum GL_gequal()   {return GL_GEQUAL;}
-const GLenum GL_equal()    {return GL_EQUAL;}
-const GLenum GL_notequal() {return GL_NOTEQUAL;}
-const GLenum GL_always()   {return GL_ALWAYS;}
+inline const GLenum GL_never()    {return GL_NEVER;}
+inline const GLenum GL_less()     {return GL_LESS;}
+inline const GLenum GL_lequal()   {return GL_LEQUAL;}
+inline const GLenum GL_greater()  {return GL_GREATER;}
+inline const GLenum GL_gequal()   {return GL_GEQUAL;}
+inline const GLenum GL_equal()    {return GL_EQUAL;}
+inline const GLenum GL_notequal() {return GL_NOTEQUAL;}
+inline const GLenum GL_always()   {return GL_ALWAYS;}
 
 //___________________________________________
-const GLenum GL_points()              {return GL_POINTS;}
-const GLenum GL_lines()               {return GL_LINES;}
-const GLenum GL_line_strip()          {return GL_LINE_STRIP;}
-const GLenum GL_line_loop()           {return GL_LINE_LOOP;}
-const GLenum GL_triangles()           {return GL_TRIANGLES;}
-const GLenum GL_triangle_strip()      {return GL_TRIANGLE_STRIP;}
-const GLenum GL_triangle_fan()        {return GL_TRIANGLE_FAN;}
-const GLenum GL_triangle_quads()      {return GL_QUADS;}
-const GLenum GL_triangle_quad_strip() {return GL_QUAD_STRIP;}
-const GLenum GL_triangle_polygon()    {return GL_POLYGON;}
+inline const GLenum GL_points()              {return GL_POINTS;}
+inline const GLenum GL_lines()               {return GL_LINES;}
+inline const GLenum GL_line_strip()          {return GL_LINE_STRIP;}
+inline const GLenum GL_line_loop()           {return GL_LINE_LOOP;}
+inline const GLenum GL_triangles()           {return GL_TRIANGLES;}
+inline const GLenum GL_triangle_strip()      {return GL_TRIANGLE_STRIP;}
+inline const GLenum GL_triangle_fan()        {return GL_TRIANGLE_FAN;}
+inline const GLenum GL_triangle_quads()      {return GL_QUADS;}
+inline const GLenum GL_triangle_quad_strip() {return GL_QUAD_STRIP;}
+inline const GLenum GL_triangle_polygon()    {return GL_POLYGON;}
 
 //___________________________________________
 //const GLint GL_replace()         {return GL_REPLACE;}
-const GLenum GL_modulate()        {return GL_MODULATE;}
-const GLenum GL_add()             {return GL_ADD;}
-const GLenum GL_add_signed_ARB()  {return GL_ADD_SIGNED_ARB;}
-const GLenum GL_interpolate_ARB() {return 0x8575;}
-const GLenum GL_combine()         {return GL_COMBINE;}
-const GLenum GL_combine_ARB()     {return GL_COMBINE_ARB;}
-const GLenum GL_blend()           {return GL_BLEND;}
-const GLenum GL_decal()           {return GL_DECAL;}
-const GLenum GL_sub()             {return 0x84E7;}
+inline const GLenum GL_modulate()        {return GL_MODULATE;}
+inline const GLenum GL_add()             {return GL_ADD;}
+inline const GLenum GL_add_signed_ARB()  {return GL_ADD_SIGNED_ARB;}
+inline const GLenum GL_interpolate_ARB() {return 0x8575;}
+inline const GLenum GL_combine()         {return GL_COMBINE;}
+inline const GLenum GL_combine_ARB()     {return GL_COMBINE_ARB;}
+inline const GLenum GL_blend()           {return GL_BLEND;}
+inline const GLenum GL_decal()           {return GL_DECAL;}
+inline const GLenum GL_sub()             {return 0x84E7;}
 
-const GLenum GL_rgb_scale_ARB()   {return 0x8573;}
-
-//___________________________________________
-const GLenum GL_texture          () {return GL_TEXTURE;}
-const GLenum GL_constant_ARB     () {return GL_CONSTANT_ARB;}
-const GLenum GL_primary_color_ARB() {return GL_PRIMARY_COLOR_ARB;}
-const GLenum GL_previous_ARB     () {return GL_PREVIOUS_ARB;}
-
-const GLenum GL_src_color        () {return GL_SRC_COLOR;}
-const GLenum GL_1_moins_src_color() {return GL_ONE_MINUS_SRC_COLOR;}
-const GLenum GL_src_alpha        () {return GL_SRC_ALPHA;}
-const GLenum GL_1_moins_src_alpha() {return GL_ONE_MINUS_SRC_ALPHA;}
+inline const GLenum GL_rgb_scale_ARB()   {return 0x8573;}
 
 //___________________________________________
-const unsigned int GLenum2UI(const GLenum e) {return (unsigned int)e;}
+inline const GLenum GL_texture          () {return GL_TEXTURE;}
+inline const GLenum GL_constant_ARB     () {return GL_CONSTANT_ARB;}
+inline const GLenum GL_primary_color_ARB() {return GL_PRIMARY_COLOR_ARB;}
+inline const GLenum GL_previous_ARB     () {return GL_PREVIOUS_ARB;}
+
+inline const GLenum GL_src_color        () {return GL_SRC_COLOR;}
+inline const GLenum GL_1_moins_src_color() {return GL_ONE_MINUS_SRC_COLOR;}
+inline const GLenum GL_src_alpha        () {return GL_SRC_ALPHA;}
+inline const GLenum GL_1_moins_src_alpha() {return GL_ONE_MINUS_SRC_ALPHA;}
+
+//___________________________________________
+inline const unsigned int GLenum2UI(const GLenum e) {return (unsigned int)e;}
 //___________________________________________
 
 // Gestion du stencil buffer
@@ -91,18 +94,18 @@ void Tempon(const unsigned int t);
 const unsigned int Incr_tempon();
 const unsigned int Decr_tempon();
 const unsigned int Nouveau_tempon();
-void Op_stencil(GLenum op_non, GLenum op_oui)
+inline void Op_stencil(GLenum op_non, GLenum op_oui)
   {glStencilOp(op_non, op_oui, op_oui);}
-void Fct_stencil(GLenum fct, const unsigned int val, unsigned int masque = ~0)
+inline void Fct_stencil(GLenum fct, const unsigned int val, unsigned int masque = ~0)
   {glStencilFunc(fct, val, masque);}
-void Activer_stencil(GLenum fct, GLenum op, unsigned int val)
+inline void Activer_stencil(GLenum fct, GLenum op, unsigned int val)
 {
  glPushAttrib(GL_STENCIL_BUFFER_BIT);
    glEnable(GL_STENCIL_TEST);
    Op_stencil(GL_KEEP, op);
    Fct_stencil(fct, val, 127);
 }
-void Depiler_stencil()
+inline void Depiler_stencil()
 {
  glPopAttrib();
 }
@@ -122,10 +125,10 @@ void Etirer(const alx_vecteur2D &e);
   void Changement_repere(const alx_repere2D &rep);
   void Changement_repere_ordre_inverse(const alx_repere2D &rep);
 
-const int GL_rvb()  {return GL_RGB;}
-const int GL_rvba() {return GL_RGBA;}
-const int GL_bvr()  {return GL_BGR;}
-const int GL_bvra() {return GL_BGRA;}
+inline const int GL_rvb()  {return GL_RGB;}
+inline const int GL_rvba() {return GL_RGBA;}
+inline const int GL_bvr()  {return GL_BGR;}
+inline const int GL_bvra() {return GL_BGRA;}
 
 class Liste_de_rappel;
 class alx_methode_rappel;

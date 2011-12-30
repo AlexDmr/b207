@@ -15,7 +15,7 @@ alx_fenetre::alx_fenetre()
 alx_fenetre::alx_fenetre( const char *nom
                         , const double longueur, const double hauteur ) : L_rappel_chgmt_dimension( Ptr_emission_rationnalisation() )
 {init_fenetre();
- strcpy(this->nom, nom);
+ strcpy_s(this->nom, nom);
  Longueur_corp(longueur);
  Hauteur_corp(hauteur);
  Hauteur_entete(hauteur*0.1);
@@ -26,7 +26,7 @@ alx_fenetre::alx_fenetre( const char *nom
                         , const double l_entete, const double h_entete
                         , const double rayon_zone_rotation ) : L_rappel_chgmt_dimension( Ptr_emission_rationnalisation() )
 {init_fenetre();
- strcpy(this->nom, nom);
+ strcpy_s(this->nom, nom);
  Longueur_corp(longueur);
  Hauteur_corp(hauteur);
  Longueur_entete(l_entete);

@@ -66,12 +66,12 @@ class message_a_traiter
 };
 
 
-const unsigned int FSOUND_Mono    () {return FSOUND_MONO;}
-const unsigned int FSOUND_Stereo  () {return FSOUND_STEREO;}
-const unsigned int FSOUND_16b     () {return FSOUND_16BITS;}
-const unsigned int FSOUND_8b      () {return FSOUND_8BITS;}
-const unsigned int FSOUND_unsigned() {return FSOUND_UNSIGNED;}
-const unsigned int FSOUND_signed  () {return FSOUND_SIGNED;}
+inline const unsigned int FSOUND_Mono    () {return FSOUND_MONO;}
+inline const unsigned int FSOUND_Stereo  () {return FSOUND_STEREO;}
+inline const unsigned int FSOUND_16b     () {return FSOUND_16BITS;}
+inline const unsigned int FSOUND_8b      () {return FSOUND_8BITS;}
+inline const unsigned int FSOUND_unsigned() {return FSOUND_UNSIGNED;}
+inline const unsigned int FSOUND_signed  () {return FSOUND_SIGNED;}
 
 class Info_for_sound_CB;
 class B207_info_sound_TCL {
@@ -102,7 +102,7 @@ class B207_info_sound_TCL {
       return nb_to_copy;
      }
 };
-Info_for_sound_CB* Void_vers_B207_info_sound_TCL(void *ptr) {return (Info_for_sound_CB*)ptr;}
+inline Info_for_sound_CB* Void_vers_B207_info_sound_TCL(void *ptr) {return (Info_for_sound_CB*)ptr;}
 
 //signed char F_CALLBACKAPI B207_FMOD_Stream_Info_audio(FSOUND_STREAM *stream, void *buff, int len, void *userdata);
 FSOUND_STREAMCALLBACK Get_B207_FMOD_Stream_Info_audio();
@@ -122,7 +122,7 @@ class R66_B_Rappel_TCL_binding
    unsigned int Nb_args() const {return cp_argc;}
    const char * Arg_num(const unsigned int n) const {return cp_argv[n];}
 };
-R66_B_Rappel_TCL_binding* Void_vers_R66_B_Rappel_TCL_binding(void *p) {return (R66_B_Rappel_TCL_binding*)p;}
+inline R66_B_Rappel_TCL_binding* Void_vers_R66_B_Rappel_TCL_binding(void *p) {return (R66_B_Rappel_TCL_binding*)p;}
 
 //______________________________________________________________________________
 class alx_interface_sdl_opengl_1 : public olfa_comet

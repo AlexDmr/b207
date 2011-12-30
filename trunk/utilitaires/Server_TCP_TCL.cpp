@@ -159,7 +159,7 @@ void Image_net_loader::run(void)
     }
    cc_tmp = txt_buffer;
    unsigned int pos = 0;
-   const unsigned int taille_data_buffer = cc_tmp.Lire_entier(pos), taille_reelle_image_locale = img_locale->Lg() * img_locale->Ht() * img_locale->Nb_octets_par_pixel();
+   const unsigned int taille_data_buffer = cc_tmp.Lire_entier(pos), taille_reelle_image_locale = (int)(img_locale->Lg() * img_locale->Ht() * img_locale->Nb_octets_par_pixel());
    if(nb_failure == 0 && taille_data_buffer >=  taille_reelle_image_locale)
     {char *data_buffer = new char[taille_data_buffer + 1];
      recut = 0; nb_failure = 0;
@@ -175,8 +175,8 @@ void Image_net_loader::run(void)
      Interface_mere_of_image->Demande_acces();
        alx_methode_rappel_de<Image_net_loader> *rappel_chargement_texture = new alx_methode_rappel_de<Image_net_loader>( this, &Image_net_loader::Load_texture );
          info_for_loading_image *info_for_loader = new info_for_loading_image;
-           info_for_loader->lg         = img_locale->Lg();
-           info_for_loader->ht         = img_locale->Ht();
+           info_for_loader->lg         = (int)img_locale->Lg();
+           info_for_loader->ht         = (int)img_locale->Ht();
            info_for_loader->order      = img_locale->Ordonnancement_couleurs();
            info_for_loader->size_pixel = img_locale->Nb_octets_par_pixel();
            info_for_loader->tempon     = data_buffer;
@@ -568,7 +568,7 @@ void Texture_Server_TCP::Interp_msg(void *p)
   // Send image datas
    alx_chaine_char cc_msg_to_send;
    img->Lock_mutex_tempon();
-     unsigned int taille_buf_to_send = img->Lg() * img->Ht() * img->Nb_octets_par_pixel();
+     unsigned int taille_buf_to_send = (int)(img->Lg() * img->Ht() * img->Nb_octets_par_pixel());
      char *buf_to_send = new char[taille_buf_to_send];
      memcpy(buf_to_send, img->Tempon_const(), taille_buf_to_send);
    img->UnLock_mutex_tempon();

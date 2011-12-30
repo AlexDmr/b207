@@ -58,6 +58,7 @@ template <class T> class table_hachage
   // Les méthodes:
    const int Nb_hachage() const {return nb_hachage;}
    alx_liste< conteneur<T> >** Tab() {return tab;}
+   alx_liste< conteneur<T> >** Const_Tab() const {return tab;}
 
  /***********************************************/
    void vider()
@@ -163,7 +164,7 @@ template <class T> class table_hachage
      tab = new alx_liste< conteneur<T> >*[nb_hachage];
      for(int i=0; i<nb_hachage; i++)
       {tab[i] = new alx_liste< conteneur<T> >;
-       tab[i] = t.Tab()[i];}
+       tab[i]->maj( *(t.Const_Tab()[i]) );}
 
      return *this;
     }

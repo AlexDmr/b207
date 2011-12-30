@@ -2,7 +2,9 @@
 #define __ALX_TEXTURE_RENDU_H__
 
 #include <windows.h>
-#include <extgl.h>
+#include <glew.h>
+#define WGL_WGLEXT_PROTOTYPES 1
+#include <wglew.h>
 
 class alx_texture_rendu
 {
@@ -31,14 +33,14 @@ class alx_texture_rendu
    bool Initialiser(int x, int y);
    void Devenir_cible__du_rendu_opengl();
 
-   inline void Hpbuffer(HPBUFFERARB h) {hpbuffer = h;}
+//   inline void Hpbuffer(HPBUFFERARB h) {hpbuffer = h;}
 /*   inline void Hauteur (int        ht) {height = ht;}
    inline void Largeur (int         l) {width = l;}*/
    inline void Hglrc   (HGLRC       h) {hglrc = h;}
    inline void Hdc     (HDC         h) {hdc = h;}
    inline void Dimension(int h, int l) {height = h; width = l;}
 
-   inline HPBUFFERARB Hpbuffer() {return hpbuffer;}
+//   inline HPBUFFERARB Hpbuffer() {return hpbuffer;}
    inline int         Hauteur () {return height;}
    inline int         Largeur () {return width;}
    inline HGLRC       Hglrc   () {return hglrc;}

@@ -32,6 +32,6 @@ class alx_noeud_fiche_zoom_sdl_opengl : public alx_noeud_fiche_sdl_opengl
 };
 
 typedef alx_noeud_fiche_zoom_sdl_opengl* P_alx_noeud_fiche_zoom_sdl_opengl;
-alx_noeud_fiche_zoom_sdl_opengl* Void_vers_fiche_zoom(void *p) {return (alx_noeud_fiche_zoom_sdl_opengl*)p;}
+inline alx_noeud_fiche_zoom_sdl_opengl* Void_vers_fiche_zoom(void *p) {return (alx_noeud_fiche_zoom_sdl_opengl*)p;}
 
 #endif

@@ -1,5 +1,5 @@
 #include "alx_noeud_zone_texte_sdl_opengl.h"
-#include <extgl.h>
+#include <glew.h>
 #include "../../opengl/config_opengl.h"
 #include "../fontes.h"
 
@@ -125,32 +125,34 @@ void alx_noeud_zone_texte_sdl_opengl::init_ptr()
  Couleur_fond(0,0,0,0);
  Translucide(true);
 
- classe_serialisation.fcc[0]   = &(alx_noeud_zone_texte_sdl_opengl::Maj_texte);                    f_deseri[0] = &(classe_serialisation.fcc[0]);
- classe_serialisation.fsd_cc[0]= &(alx_noeud_zone_texte_sdl_opengl::Seri_diff_Texte_a_ete_change); f_diff[0]   = &(classe_serialisation.fsd_cc[0]);
 
- classe_serialisation.fd1[0]   = &(alx_noeud_zone_texte_sdl_opengl::Hauteur);    f_deseri[1] = &(classe_serialisation.fd1[0]);
- classe_serialisation.fsd_d1[0]= &(alx_noeud_zone_texte_sdl_opengl::Hauteur);    f_diff[1]   = &(classe_serialisation.fsd_d1[0]);
- classe_serialisation.fd1[1]   = &(alx_noeud_zone_texte_sdl_opengl::Largeur);    f_deseri[2] = &(classe_serialisation.fd1[1]);
- classe_serialisation.fsd_d1[1]= &(alx_noeud_zone_texte_sdl_opengl::Largeur);    f_diff[2]   = &(classe_serialisation.fsd_d1[1]);
- classe_serialisation.fd1[2]   = &(alx_noeud_zone_texte_sdl_opengl::Zoom);       f_deseri[3] = &(classe_serialisation.fd1[2]);
- classe_serialisation.fsd_d1[2]= &(alx_noeud_zone_texte_sdl_opengl::Zoom);       f_diff[3]   = &(classe_serialisation.fsd_d1[2]);
 
- classe_serialisation.fb1[0]   = &(alx_noeud_zone_texte_sdl_opengl::Afficher_fond); f_deseri[4] = &(classe_serialisation.fb1[0]);
- classe_serialisation.fsd_b1[0]= &(alx_noeud_zone_texte_sdl_opengl::Afficher_fond); f_diff[4]   = &(classe_serialisation.fsd_b1[0]);
- classe_serialisation.fb1[1]   = &(alx_noeud_zone_texte_sdl_opengl::Editable); f_deseri[5] = &(classe_serialisation.fb1[1]);
- classe_serialisation.fsd_b1[1]= &(alx_noeud_zone_texte_sdl_opengl::Editable); f_diff[5]   = &(classe_serialisation.fsd_b1[1]);
- classe_serialisation.fb1[2]   = &(alx_noeud_zone_texte_sdl_opengl::Lisser); f_deseri[6] = &(classe_serialisation.fb1[2]);
- classe_serialisation.fsd_b1[2]= &(alx_noeud_zone_texte_sdl_opengl::Lisser); f_diff[6]   = &(classe_serialisation.fsd_b1[2]);
+ classe_serialisation.fcc[0]   = &alx_noeud_zone_texte_sdl_opengl::Maj_texte;                    f_deseri[0] = &(classe_serialisation.fcc[0]);
+ classe_serialisation.fsd_cc[0]= &alx_noeud_zone_texte_sdl_opengl::Seri_diff_Texte_a_ete_change; f_diff[0]   = &(classe_serialisation.fsd_cc[0]);
 
- classe_serialisation.fi1[0]   = &(alx_noeud_zone_texte_sdl_opengl::Position_curseur);f_deseri[7] = &(classe_serialisation.fi1[0]);
- classe_serialisation.fsd_i1[0]= &(alx_noeud_zone_texte_sdl_opengl::Position_curseur);f_diff[7] = &(classe_serialisation.fsd_i1[0]);
- classe_serialisation.fi1[1]   = &(alx_noeud_zone_texte_sdl_opengl::Position_curseur);f_deseri[8] = &(classe_serialisation.fi1[1]);
- classe_serialisation.fsd_i1[1]= &(alx_noeud_zone_texte_sdl_opengl::Position_curseur);f_diff[8] = &(classe_serialisation.fsd_i1[1]);
+ classe_serialisation.fd1[0]   = &alx_noeud_zone_texte_sdl_opengl::Hauteur;    f_deseri[1] = &(classe_serialisation.fd1[0]);
+ classe_serialisation.fsd_d1[0]= &alx_noeud_zone_texte_sdl_opengl::Hauteur;    f_diff[1]   = &(classe_serialisation.fsd_d1[0]);
+ classe_serialisation.fd1[1]   = &alx_noeud_zone_texte_sdl_opengl::Largeur;    f_deseri[2] = &(classe_serialisation.fd1[1]);
+ classe_serialisation.fsd_d1[1]= &alx_noeud_zone_texte_sdl_opengl::Largeur;    f_diff[2]   = &(classe_serialisation.fsd_d1[1]);
+ classe_serialisation.fd1[2]   = &alx_noeud_zone_texte_sdl_opengl::Zoom;       f_deseri[3] = &(classe_serialisation.fd1[2]);
+ classe_serialisation.fsd_d1[2]= &alx_noeud_zone_texte_sdl_opengl::Zoom;       f_diff[3]   = &(classe_serialisation.fsd_d1[2]);
 
- classe_serialisation.fd4[0]   = &(alx_noeud_zone_texte_sdl_opengl::Couleur_texte); f_deseri[9] = &(classe_serialisation.fd4[0]);
- classe_serialisation.fsd_d4[0]= &(alx_noeud_zone_texte_sdl_opengl::Couleur_texte); f_diff[9]   = &(classe_serialisation.fsd_d4[0]);
- classe_serialisation.fd4[1]   = &(alx_noeud_zone_texte_sdl_opengl::Couleur_curseur); f_deseri[10] = &(classe_serialisation.fd4[1]);
- classe_serialisation.fsd_d4[1]= &(alx_noeud_zone_texte_sdl_opengl::Couleur_curseur); f_diff[10]   = &(classe_serialisation.fsd_d4[1]);
+ classe_serialisation.fb1[0]   = &alx_noeud_zone_texte_sdl_opengl::Afficher_fond; f_deseri[4] = &(classe_serialisation.fb1[0]);
+ classe_serialisation.fsd_b1[0]= &alx_noeud_zone_texte_sdl_opengl::Afficher_fond; f_diff[4]   = &(classe_serialisation.fsd_b1[0]);
+ classe_serialisation.fb1[1]   = &alx_noeud_zone_texte_sdl_opengl::Editable; f_deseri[5] = &(classe_serialisation.fb1[1]);
+ classe_serialisation.fsd_b1[1]= &alx_noeud_zone_texte_sdl_opengl::Editable; f_diff[5]   = &(classe_serialisation.fsd_b1[1]);
+ classe_serialisation.fb1[2]   = &alx_noeud_zone_texte_sdl_opengl::Lisser; f_deseri[6] = &(classe_serialisation.fb1[2]);
+ classe_serialisation.fsd_b1[2]= &alx_noeud_zone_texte_sdl_opengl::Lisser; f_diff[6]   = &(classe_serialisation.fsd_b1[2]);
+
+ classe_serialisation.fi1[0]   = &alx_noeud_zone_texte_sdl_opengl::Position_curseur;f_deseri[7] = &(classe_serialisation.fi1[0]);
+ classe_serialisation.fsd_i1[0]= &alx_noeud_zone_texte_sdl_opengl::Position_curseur;f_diff[7] = &(classe_serialisation.fsd_i1[0]);
+ classe_serialisation.fi1[1]   = &alx_noeud_zone_texte_sdl_opengl::Position_curseur;f_deseri[8] = &(classe_serialisation.fi1[1]);
+ classe_serialisation.fsd_i1[1]= &alx_noeud_zone_texte_sdl_opengl::Position_curseur;f_diff[8] = &(classe_serialisation.fsd_i1[1]);
+
+ classe_serialisation.fd4[0]   = &alx_noeud_zone_texte_sdl_opengl::Couleur_texte; f_deseri[9] = &(classe_serialisation.fd4[0]);
+ classe_serialisation.fsd_d4[0]= &alx_noeud_zone_texte_sdl_opengl::Couleur_texte; f_diff[9]   = &(classe_serialisation.fsd_d4[0]);
+ classe_serialisation.fd4[1]   = &alx_noeud_zone_texte_sdl_opengl::Couleur_curseur; f_deseri[10] = &(classe_serialisation.fd4[1]);
+ classe_serialisation.fsd_d4[1]= &alx_noeud_zone_texte_sdl_opengl::Couleur_curseur; f_diff[10]   = &(classe_serialisation.fsd_d4[1]);
 }
 //______________________________________________________________________________
 //_____________________________ La différence __________________________________
@@ -232,8 +234,9 @@ const alx_chaine_char& alx_noeud_zone_texte_sdl_opengl::Serialiser_contenu() con
 //______________________________________________________________________________
 //__________________________ La désérialisation ________________________________
 void alx_noeud_zone_texte_sdl_opengl::Deserialiser_type(const alx_chaine_char &txt, unsigned int &pos)
-{unsigned int num_f, num_a;
+{//unsigned int num_f, num_a;
  const char *texte = txt.Texte();
+
 
  classe_serialisation.chaine_cour = &txt;
  if(texte[pos] == '<') pos+= Nom_classe().Taille()+2; // on passe "<alx_noeud_fenetre_sdl_opengl "

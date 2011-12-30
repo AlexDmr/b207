@@ -117,7 +117,7 @@ bool alx_simulateur_couche::Zone_pointee(alx_noeud_scene *ns, void *info_sup)
 {alx_noeud_scene *noeud              = ns;
  alx_evennement_pointeur *evt_ptr    = ((alx_evennement_pointeur*)info_sup);
  alx_point2D     *pt                 = evt_ptr->ptr->P_Point();
- alx_model_simulation_physique1 *mp;
+// alx_model_simulation_physique1 *mp;
  info_du_contenant *info = (info_du_contenant*)NULL;
 
  // On recalle le pointeur pour tenir compte que ses coordonnées sont exprimées dans noeud
@@ -235,7 +235,7 @@ bool Mise_a_appartenance_non_testee(alx_noeud_scene **e, void *info_comp)
 
 void alx_simulateur_couche::rationnaliser(int num)
 {alx_element_liste<alx_evennement_pointeur> *it     = sim_pointeur->L_evt.Premier();
- alx_point2D *pt;
+// alx_point2D *pt; 
  alx_evennement_pointeur *evt_ptr;
 
  switch(num)

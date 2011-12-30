@@ -1,5 +1,5 @@
-#ifndef __ALX_VISU_IMAGE_CAMNOTE_CPP_H__*
-#define __ALX_VISU_IMAGE_CAMNOTE_CPP_H__*
+#ifndef __ALX_VISU_IMAGE_CAMNOTE_CPP_H__
+#define __ALX_VISU_IMAGE_CAMNOTE_CPP_H__
 
 // Evennements :
 // Changement d'état d'activation des pixels mirroirs

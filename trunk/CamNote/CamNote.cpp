@@ -314,11 +314,11 @@ void CamNote::PreRendre()
   {telecommande->Numero_transparent( nouveau_num_transparent[1] );
    Rationnaliser_num_trans( nouveau_num_transparent ); }
  if(info_pix_mirroirs)
-  {if(nouvelle_translucidite != visualisateur->Activation_pix_mirroir())
+ {if(nouvelle_translucidite != visualisateur->Intensite_pixels_miroirs())
     {telecommande->Intensite_pixels_miroirs( nouvelle_translucidite );
      telecommande->Mettre_a_jour();
      Rationnaliser_intensite_pix_mirroir(&nouvelle_translucidite); }
-   if(nouvelle_activation_pix_mirroirs != visualisateur->Intensite_pixels_miroirs())
+ if(nouvelle_activation_pix_mirroirs != visualisateur->Activation_pix_mirroir())
     {telecommande->Activation_pix_mirroir( nouvelle_activation_pix_mirroirs );
      Rationnaliser_activation_pix_mirroir( &nouvelle_activation_pix_mirroirs ); }
   }
@@ -406,7 +406,7 @@ void CamNote::Rationnaliser_num_trans(void *param)
  char c_tmp[256];
  s_message += nouveau_num_transparent[1];
  s_message.Ajouter("\"/>",0,3);
- strcpy(c_tmp, s_message.Texte());
+ strcpy_s(c_tmp, s_message.Texte());
  Emission_66(c_tmp);
  //static char c_tmp[16];
  alx_chaine_char s_tmp( Nom_presentation() );

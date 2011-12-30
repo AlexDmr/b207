@@ -85,7 +85,7 @@ void alx_zone_texte_opengl::afficher_curseur(int deb)
  c_texte[Position_curseur()] = 0;
  lg = fonte->longueur_effective( nbcar
                                , largeur_equivalente //- decalage_x
-                               , (unsigned char *)&(c_texte[deb]) );
+                               , (char *)&(c_texte[deb]) );
  c_texte[Position_curseur()] = c;
  glPushAttrib(GL_CURRENT_BIT);
  glPushAttrib(GL_COLOR_BUFFER_BIT);
@@ -96,10 +96,10 @@ void alx_zone_texte_opengl::afficher_curseur(int deb)
  glPushMatrix();
    glTranslated(lg-decalage_x, -h/4, 0.00000f);
    glBegin(GL_QUADS);
-    glVertex3f(0, 0, 0);
-    glVertex3f(l, 0, 0);
-    glVertex3f(l, h, 0);
-    glVertex3f(0, h, 0);
+    glVertex3d(0, 0, 0);
+    glVertex3d(l, 0, 0);
+    glVertex3d(l, h, 0);
+    glVertex3d(0, h, 0);
    glEnd();
    //glDisable(GL_BLEND);
  glPopMatrix();
@@ -168,7 +168,7 @@ void alx_zone_texte_opengl::afficher_ligne(int deb)
 
    decalage_x += fonte->ecrire( NbCarEcrits
                               , largeur_equivalente - decalage_x
-                              , (unsigned char *)&(c_texte[deb]) );
+                              , (char *)&(c_texte[deb]) );
    if(x_max<decalage_x) {x_max = decalage_x;}
 
    char car = c_texte[Position_curseur()];
@@ -201,7 +201,7 @@ void alx_zone_texte_opengl::afficher_ligne(int deb)
 // But : Annalyser la zone de texte pour détecter les retour à la ligne.
 void alx_zone_texte_opengl::afficher()
 {// Copie préliminaire ddu texte:
- strcpy(c_texte, texte.Texte());
+ strcpy_s(c_texte, texte.Texte());
  x_max = y_max = 0;
 
 // On passe aux choses sérieuses:
@@ -219,10 +219,10 @@ void alx_zone_texte_opengl::afficher()
     {glPushAttrib(GL_ENABLE_BIT);
      glEnable(GL_BLEND);}
    glBegin(GL_QUADS);
-     glVertex2f(       -dt,        -dt);
-     glVertex2f(largeur+dt,        -dt);
-     glVertex2f(largeur+dt, hauteur);
-     glVertex2f(       -dt, hauteur);
+     glVertex2d(       -dt,        -dt);
+     glVertex2d(largeur+dt,        -dt);
+     glVertex2d(largeur+dt, hauteur);
+     glVertex2d(       -dt, hauteur);
    glEnd();
    if(couleur_fond[3]<1)
      glPopAttrib ();
@@ -243,10 +243,10 @@ void alx_zone_texte_opengl::afficher()
  decalage_x = 0;
  decalage_y = fonte->HAUTEUR();
  glTranslated(0, hauteur - decalage_y*zoom, 0); // On multiplie par le zoom pour tenir compte du changement
- glScalef(zoom, zoom, 1);                      // d'échelle du glScalef!
+ glScaled(zoom, zoom, 1);                      // d'échelle du glScalef!
 
  nb_ligne_cour = 0;
- nb_ligne_max  = hauteur / (zoom*fonte->HAUTEUR());
+ nb_ligne_max  = (int)(hauteur / (zoom*fonte->HAUTEUR()));
  while( (c_texte[pos]!=0)
       &&(nb_ligne_cour < nb_ligne_max) )
   {
@@ -572,7 +572,7 @@ char* alx_zone_texte_opengl::Derniere_phrase()
  car_pos++;
 
  tmp = new char [2*taille];
- strcpy(tmp, car_pos);
+ strcpy_s(tmp, 2*taille, car_pos);
  tmp[taille-1] = 0;
 
  return tmp;

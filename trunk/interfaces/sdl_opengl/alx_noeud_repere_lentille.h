@@ -44,5 +44,5 @@ class alx_noeud_repere_lentille : public alx_noeud_scene
   virtual void Changer_coordonnees        (double *T, const unsigned int nb) const;
 };
 
-alx_noeud_repere_lentille* Void_vers_rep_lentille(void *p) {return (alx_noeud_repere_lentille*)p;}
+inline alx_noeud_repere_lentille* Void_vers_rep_lentille(void *p) {return (alx_noeud_repere_lentille*)p;}
 #endif

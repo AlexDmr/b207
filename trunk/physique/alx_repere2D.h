@@ -117,8 +117,8 @@ class alx_repere2D : public alx_primitive2D
 
 //_____________________________________________________________________________
   virtual void maj_etirement_courant() const;
-  inline void Etirement_courant(const double x, const double y) {etirement_courant.maj(x, y);}
-  inline void Etirement_courant(const alx_vecteur2D &e) {etirement_courant.maj(e);}
+  inline void Etirement_courant(const double x, const double y) const {etirement_courant.maj(x, y);}
+  inline void Etirement_courant(const alx_vecteur2D &e) const {etirement_courant.maj(e);}
   inline const alx_vecteur2D& Etirement_courant() const {return etirement_courant;}
  //_____________________________________________________________________________
   inline const bool Prendre_en_compte_repere() const {return prendre_en_compte_repere;}

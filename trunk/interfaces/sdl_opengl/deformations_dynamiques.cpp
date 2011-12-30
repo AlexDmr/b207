@@ -1,5 +1,5 @@
 #include "deformations_dynamiques.h"
-#include <mem.h>
+//#include <mem.h>
 
 //______________________________________________________________________________
 deformation_dynamique::~deformation_dynamique()

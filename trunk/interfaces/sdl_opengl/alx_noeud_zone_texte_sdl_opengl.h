@@ -45,7 +45,8 @@ class alx_noeud_zone_texte_sdl_opengl : public alx_noeud_scene
 
   //____________________________________________________________________________
    inline virtual void A_changer(const bool b) {zone_gl->A_changer(b); alx_noeud_scene::A_changer(b);}
-   inline virtual const bool A_changer() const {alx_noeud_scene::A_changer( zone_gl->A_changer() );
+   inline virtual const bool A_changer()       {
+												alx_noeud_scene::A_changer( zone_gl->A_changer() );
                                                 return alx_noeud_scene::A_changer();
                                                }
 
@@ -136,7 +137,7 @@ class alx_noeud_zone_texte_sdl_opengl : public alx_noeud_scene
 };
 
 typedef alx_noeud_zone_texte_sdl_opengl* P_alx_noeud_zone_texte_sdl_opengl;
-alx_noeud_zone_texte_sdl_opengl* Void_vers_zone_texte(void *p) {return (alx_noeud_zone_texte_sdl_opengl*)p;}
+inline alx_noeud_zone_texte_sdl_opengl* Void_vers_zone_texte(void *p) {return (alx_noeud_zone_texte_sdl_opengl*)p;}
 
 #endif
 

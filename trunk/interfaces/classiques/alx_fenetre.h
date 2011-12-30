@@ -58,7 +58,7 @@ class alx_fenetre : public alx_classe_base_liant
    inline const double Rayon_zone_rotation() const {return rayon_zone_rot;}
    inline const double Epaisseur_bordure()   const {return epaisseur_bordure;}
 
-   inline virtual void Nom(const char *n)                  {strcpy(nom, n);}
+   inline virtual void Nom(const char *n)                  {strcpy_s(nom, n);/*strcpy(nom, n);*/}
    inline virtual void Longueur_corp(const double v)
     {double tmp = lg;
      lg = v;

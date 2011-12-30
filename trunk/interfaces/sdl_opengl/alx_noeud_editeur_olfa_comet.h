@@ -48,6 +48,6 @@ class alx_noeud_editeur_olfa_comet : public alx_noeud_scene
 };
 
 typedef alx_noeud_editeur_olfa_comet* P_alx_noeud_editeur_olfa_comet;
-alx_noeud_editeur_olfa_comet* Void_vers_editeur_olfa_comet(void *p) {return (alx_noeud_editeur_olfa_comet*)p;}
+inline alx_noeud_editeur_olfa_comet* Void_vers_editeur_olfa_comet(void *p) {return (alx_noeud_editeur_olfa_comet*)p;}
 
 #endif

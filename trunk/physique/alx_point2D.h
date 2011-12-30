@@ -3,7 +3,7 @@
 
 #include "alx_droite2D.h"
 #include "alx_vecteur2D.h"
-#include "alx_primitive2D.h"m
+#include "alx_primitive2D.h"
 #include "..\utilitaires\alx_chaine_char.h"
 
 class alx_droite2D;

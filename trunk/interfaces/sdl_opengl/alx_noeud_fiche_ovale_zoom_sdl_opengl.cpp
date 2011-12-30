@@ -10,6 +10,7 @@ void fct_ajust(alx_point2D &pt, void *param)
  pt.y -= nfo->Hauteur_corp() / 2;
 }
 
+
 //______________________________________________________________________________
 void alx_noeud_fiche_ovale_zoom_sdl_opengl::Rationnaliser_buffer_reperes(void *param)
 {Maj_buffer_reperes();

@@ -116,7 +116,7 @@ class info_du_contenant
    const double Y_au_contact() const {return pt_au_contact.Y();}
 };
 
-info_du_contenant* Void_vers_info(void *p) {return (info_du_contenant*)p;}
+inline info_du_contenant* Void_vers_info(void *p) {return (info_du_contenant*)p;}
 
 void IP_locale(const alx_chaine_char &a);
 void IP_locale(const char *a);
@@ -236,7 +236,7 @@ class info_si_noeud_contient
    alx_liste<alx_repere2D*>&  L_rep() {return L_reperes;}
 };
 
-info_si_noeud_contient* Void_vers_info_si_noeud_contient(void *p) {return (info_si_noeud_contient*)p;}
+inline info_si_noeud_contient* Void_vers_info_si_noeud_contient(void *p) {return (info_si_noeud_contient*)p;}
 
 //______________________________________________________________________________
 //______________________________________________________________________________
@@ -445,7 +445,7 @@ class alx_noeud_scene : public alx_arbre<alx_noeud_scene*>, public alx_repere2D
    virtual const bool Retirer_du_contexte(const char *var)                                 {return M_contexte_local.Retirer(var);}
    const char* CC_Val(const alx_chaine_char &var)                                    const;
    const char* Val(const char *var)                                                  const;
-   virtual bool Evaluer_dans_contexte(const alx_chaine_char &var)                          {return M_contexte_local.Val_CC(var);}
+   virtual bool Evaluer_dans_contexte(const alx_chaine_char &var)                          {return M_contexte_local.Val_CC(var) != (const char*)NULL;}
 
 //_____________________________________________________________________________
    inline virtual alx_liste<alx_arbre<alx_noeud_scene*>*>& Liste_fils()  {return L_fils;}
@@ -455,7 +455,7 @@ class alx_noeud_scene : public alx_arbre<alx_noeud_scene*>, public alx_repere2D
    inline const alx_noeud_scene* Pere_const() const {if(pere) {return pere->E();} else {return (alx_noeud_scene*)NULL;}}
 
 //   virtual void Vider_peres() {alx_arbre<alx_noeud_scene*>::Vider_peres();}
-   inline virtual alx_noeud_scene* Fils_numero (const unsigned int num) const                {return (alx_noeud_scene*)(alx_arbre<alx_noeud_scene*>::Fils_numero(num));}
+   inline virtual alx_noeud_scene* Fils_numero (const unsigned int num)                      {return alx_arbre<alx_noeud_scene*>::Fils_numero(num)->E();}//return (alx_noeud_scene*)(alx_arbre<alx_noeud_scene*>::Fils_numero(num));}
    virtual void Vider_peres();
    inline virtual void Vider_fils()                                                          {alx_arbre<alx_noeud_scene*>::Vider_fils();}
    inline virtual bool A_pour_fils(alx_noeud_scene *e)                                       {return alx_arbre<alx_noeud_scene*>::A_pour_fils(e);}
@@ -511,14 +511,14 @@ class alx_noeud_scene : public alx_arbre<alx_noeud_scene*>, public alx_repere2D
    inline const alx_noeud_zone_rendu_sdl_opengl& ZDR() const {return *zdr;}
    //const INFOS_TEXTURE& Infos_texture(const unsigned int i = 0) const;
    inline void Mode_texture(const bool b)        {Marqueur_attributs(M_mode_texture, b); Maj_texture(b);}
-   inline const bool Mode_texture() const        {return M_mode_texture&Marqueur_attributs();}
+   inline const bool Mode_texture() const        {return (M_mode_texture&Marqueur_attributs()) != 0;}
    inline void Mode_texture_fils(const bool b)   {Marqueur_attributs(M_mode_texture_fils, b); Maj_texture(true);}
-   inline const bool Mode_texture_fils() const   {return M_mode_texture_fils&Marqueur_attributs();}
+   inline const bool Mode_texture_fils() const   {return (M_mode_texture_fils&Marqueur_attributs()) != 0;}
    inline void Texture_translucide(const bool b) {Marqueur_attributs(M_texture_translucide, b);}
-   inline const bool Texture_translucide() const {return M_texture_translucide&Marqueur_attributs();}
+   inline const bool Texture_translucide() const {return (M_texture_translucide&Marqueur_attributs()) != 0;}
    inline void Lisser_texture(const bool b)      {Marqueur_attributs(M_lisser_texture, b); A_changer(true);}
-   inline const bool Lisser_texture() const      {return M_lisser_texture&Marqueur_attributs();}
-   inline const bool Boite_noeud_pour_texture() const {return M_Boite_noeud_pour_texture&Marqueur_attributs();}
+   inline const bool Lisser_texture() const      {return (M_lisser_texture&Marqueur_attributs()) != 0;}
+   inline const bool Boite_noeud_pour_texture() const {return (M_Boite_noeud_pour_texture&Marqueur_attributs()) != 0;}
    inline void Boite_noeud_pour_texture(const bool b) {Marqueur_attributs(M_Boite_noeud_pour_texture, b);}
 
    void Nb_pixels_par_unite(const double n);
@@ -552,7 +552,7 @@ class alx_noeud_scene : public alx_arbre<alx_noeud_scene*>, public alx_repere2D
                                                  }*/
                                                }
 
-   inline const bool Est_verouille() const {return M_verouiller&Marqueur_attributs();}
+   inline const bool Est_verouille() const {return (M_verouiller&Marqueur_attributs()) != 0;}
    inline void Verouiller  () {while(Est_verouille()); Marqueur_attributs(M_verouiller, true);}
    inline void Deverouiller() {Marqueur_attributs(M_verouiller, false);}
 
@@ -601,9 +601,9 @@ class alx_noeud_scene : public alx_arbre<alx_noeud_scene*>, public alx_repere2D
 
    inline virtual void Afficher_boites(const bool b) {Afficher_boite_noeud(b); Afficher_boites_fils(b);}
    inline virtual void Afficher_boite_noeud(const bool b) {Marqueur_attributs(M_afficher_boite_noeud, b);}
-   inline virtual const bool Afficher_boite_noeud() const {return M_afficher_boite_noeud&Marqueur_attributs();}
+   inline virtual const bool Afficher_boite_noeud() const {return (M_afficher_boite_noeud&Marqueur_attributs()) != 0;}
    inline virtual void Afficher_boites_fils(const bool b) {Marqueur_attributs(M_afficher_boites_fils, b);}
-   inline virtual const bool Afficher_boites_fils() const {return M_afficher_boites_fils&Marqueur_attributs();}
+   inline virtual const bool Afficher_boites_fils() const {return (M_afficher_boites_fils&Marqueur_attributs()) != 0;}
    inline virtual void Calculer_boites() {alx_noeud_scene::Calculer_boite_fils(); alx_noeud_scene::Calculer_boite_noeud();}
    virtual void Calculer_boite_noeud();
    virtual void Calculer_boite_fils();
@@ -666,13 +666,13 @@ class alx_noeud_scene : public alx_arbre<alx_noeud_scene*>, public alx_repere2D
    inline const bool Rationnalisation_en_cours() const {return rationnalisation_en_cours;}
 
    inline void Forcer_a_ne_plus_empiler_contenant(const bool b) {Marqueur_attributs(M_forcer_a_ne_plus_empiler_contenant, b);}
-   inline const bool Forcer_a_ne_plus_empiler_contenant() const {return M_forcer_a_ne_plus_empiler_contenant&Marqueur_attributs();}
+   inline const bool Forcer_a_ne_plus_empiler_contenant() const {return (M_forcer_a_ne_plus_empiler_contenant&Marqueur_attributs()) != 0;}
 
    inline void Empiler_contenant(const bool b) {Marqueur_attributs(M_empiler_contenant, b);}
-   inline const bool Empiler_contenant() const {return M_empiler_contenant&Marqueur_attributs();}
+   inline const bool Empiler_contenant() const {return (M_empiler_contenant&Marqueur_attributs()) != 0;}
 
    inline void Toujours_au_premier_plan(const bool b) {Marqueur_attributs(M_toujours_au_premier_plan, b);}
-   inline const bool Toujours_au_premier_plan() const {return M_toujours_au_premier_plan&Marqueur_attributs();}
+   inline const bool Toujours_au_premier_plan() const {return (M_toujours_au_premier_plan&Marqueur_attributs()) != 0;}
 
    inline void Noeud_touchable(const bool b) {noeud_touchable = b;}
    inline const bool Noeud_touchable() const {return noeud_touchable;}
@@ -721,18 +721,18 @@ class alx_noeud_scene : public alx_arbre<alx_noeud_scene*>, public alx_repere2D
    virtual void PreRendre();
 
   // Renvoi un pointeur sur le modèle physique qui contient la primitive, NULL si aucun.
-   inline const bool Est_modifier_action_type() const {return M_modif_action_transmise&Marqueur_attributs();}
+   inline const bool Est_modifier_action_type() const {return (M_modif_action_transmise&Marqueur_attributs()) != 0;}
    inline const int  Modification_action_type() const {return action_transmise;}
    inline void Modifier_action_click(const bool m, const int action=0) {Marqueur_attributs(M_modif_action_transmise, m);
                                                                         action_transmise      = action;}
-   virtual info_du_contenant* Contenu_dans_fils(alx_point2D &pt, int action);
+   virtual info_du_contenant* Contenu_dans_fils(const alx_point2D &pt, int action);
    virtual info_du_contenant* Contient(const alx_point2D &pt, int action);
    virtual info_du_contenant* Resultat_contient(info_du_contenant *rep);
    virtual info_du_contenant* Noeud_contient(const alx_point2D &pt, int action);
    inline void Contenu_dans_fils_ssi_contenu_dans_noeud(const bool b)        {Marqueur_attributs(M_contenu_dans_fils_ssi_contenu_dans_noeud, b);}
-   inline const bool Contenu_dans_fils_ssi_contenu_dans_noeud()        const {return M_contenu_dans_fils_ssi_contenu_dans_noeud&Marqueur_attributs();}
+   inline const bool Contenu_dans_fils_ssi_contenu_dans_noeud()        const {return (M_contenu_dans_fils_ssi_contenu_dans_noeud&Marqueur_attributs()) != 0;}
    inline void Contenu_dans_fils_ssi_pas_contenu_dans_noeud(const bool b) {Marqueur_attributs(M_contenu_dans_fils_ssi_ne_contenu_dans_pas_noeud, b);}
-   inline const bool Contenu_dans_fils_ssi_pas_contenu_dans_noeud() const {return M_contenu_dans_fils_ssi_ne_contenu_dans_pas_noeud&Marqueur_attributs();}
+   inline const bool Contenu_dans_fils_ssi_pas_contenu_dans_noeud() const {return (M_contenu_dans_fils_ssi_ne_contenu_dans_pas_noeud&Marqueur_attributs()) != 0;}
 
   // Intercalage et compagnie
    void Intercaler_noeud(alx_noeud_scene *noeud);
@@ -750,25 +750,25 @@ class alx_noeud_scene : public alx_arbre<alx_noeud_scene*>, public alx_repere2D
    void Maj_etirement_absolu();
   //__________________________________________________________________
    inline void Ne_pas_pre_rendre(const bool b) {Marqueur_attributs(M_ne_pas_pre_rendre, b);}
-   inline const bool Ne_pas_pre_rendre() const {return M_ne_pas_pre_rendre&Marqueur_attributs();}
+   inline const bool Ne_pas_pre_rendre() const {return (M_ne_pas_pre_rendre&Marqueur_attributs()) != 0;}
 
    inline void Position_des_fils_changeable(const bool b) {Marqueur_attributs(M_position_des_fils_changeable, b);}
-   inline const bool Position_des_fils_changeable() const {return M_position_des_fils_changeable&Marqueur_attributs();}
+   inline const bool Position_des_fils_changeable() const {return (M_position_des_fils_changeable&Marqueur_attributs()) != 0;}
    inline void Position_dans_liste_des_fils_changeable(const bool b) {Marqueur_attributs(M_position_dans_liste_des_fils_changeable, b);}
-   inline const bool Position_dans_liste_des_fils_changeable() const {return M_position_dans_liste_des_fils_changeable&Marqueur_attributs();}
+   inline const bool Position_dans_liste_des_fils_changeable() const {return (M_position_dans_liste_des_fils_changeable&Marqueur_attributs()) != 0;}
 
    inline void Appartenance_deja_testee(const bool b) {Marqueur_attributs(M_appartenance_deja_testee, b);}
-   inline const bool Appartenance_deja_testee() const {return M_appartenance_deja_testee&Marqueur_attributs();}
+   inline const bool Appartenance_deja_testee() const {return (M_appartenance_deja_testee&Marqueur_attributs()) != 0;}
 
    inline void Ne_pas_pre_rendre_fils(const bool b) {Marqueur_attributs(M_ne_pas_pre_rendre_fils, b);}
-   inline const bool Ne_pas_pre_rendre_fils() const {return M_ne_pas_pre_rendre_fils&Marqueur_attributs();}
+   inline const bool Ne_pas_pre_rendre_fils() const {return (M_ne_pas_pre_rendre_fils&Marqueur_attributs()) != 0;}
    inline void Ne_pas_afficher_fils(const bool b)   {Marqueur_attributs(M_ne_pas_afficher_fils, b);}
-   inline const bool Ne_pas_afficher_fils() const   {return M_ne_pas_afficher_fils&Marqueur_attributs();}
+   inline const bool Ne_pas_afficher_fils() const   {return (M_ne_pas_afficher_fils&Marqueur_attributs()) != 0;}
 
    inline void Compter_affichage(const bool b) {Marqueur_attributs(M_compter_affichage, b);}
-   inline const bool Compter_affichage() const {return M_compter_affichage&Marqueur_attributs();}
+   inline const bool Compter_affichage() const {return (M_compter_affichage&Marqueur_attributs()) != 0;}
    inline void Compter_pre_rendu(const bool b) {Marqueur_attributs(M_compter_pre_rendu, b);}
-   inline const bool Compter_pre_rendu() const {return M_compter_pre_rendu&Marqueur_attributs();}
+   inline const bool Compter_pre_rendu() const {return (M_compter_pre_rendu&Marqueur_attributs()) != 0;}
 
    inline void Nb_max_pre_rendu(const unsigned int n) {nb_max_pre_rendu = n;}
    inline const unsigned int Nb_max_pre_rendu() const {return nb_max_pre_rendu;}
@@ -784,9 +784,9 @@ class alx_noeud_scene : public alx_arbre<alx_noeud_scene*>, public alx_repere2D
                                                      A_changer(true);
                                                     }
                                                   }
-   inline const bool Afficher_noeud() const       {return M_afficher&Marqueur_attributs();}
+   inline const bool Afficher_noeud() const       {return (M_afficher&Marqueur_attributs()) != 0;}
    inline void Gerer_contacts(const bool b) {Marqueur_attributs(M_gerer_contacts, b);}
-   inline const bool Gerer_contacts() const {return M_gerer_contacts&Marqueur_attributs();}
+   inline const bool Gerer_contacts() const {return (M_gerer_contacts&Marqueur_attributs()) != 0;}
 
    inline void Apparaitre(const bool b)
     {Afficher_noeud(b);
@@ -801,10 +801,10 @@ class alx_noeud_scene : public alx_arbre<alx_noeud_scene*>, public alx_repere2D
 
 typedef alx_noeud_scene* P_alx_noeud_scene;
 
-alx_noeud_scene* Repere_vers_noeud(alx_repere2D *r) {return (alx_noeud_scene*)r;}
-alx_noeud_scene* Void_vers_noeud  (void *p)         {return (alx_noeud_scene*)p;}
+inline alx_noeud_scene* Repere_vers_noeud(alx_repere2D *r) {return (alx_noeud_scene*)r;}
+inline alx_noeud_scene* Void_vers_noeud  (void *p)         {return (alx_noeud_scene*)p;}
 
-alx_liste<alx_noeud_scene*>* L_repere_vers_L_noeud_scene(const alx_liste<alx_repere2D*> &L_reperes)
+inline alx_liste<alx_noeud_scene*>* L_repere_vers_L_noeud_scene(const alx_liste<alx_repere2D*> &L_reperes)
 {alx_liste<alx_noeud_scene*> *L_noeuds = new alx_liste<alx_noeud_scene*>();
  alx_element_liste<alx_repere2D*> *it     = L_reperes.Premier()
                                 , *it_fin = L_reperes.Fin();

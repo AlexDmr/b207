@@ -29,7 +29,7 @@ class alx_noeud_zone_texte_interpreteur_tcl_sdl_opengl : public alx_noeud_zone_t
    {L_rappel_car_tape.Rappeler(&c);}
 };
 typedef alx_noeud_zone_texte_interpreteur_tcl_sdl_opengl* P_alx_noeud_zone_texte_interpreteur_tcl_sdl_opengl;
-alx_noeud_zone_texte_interpreteur_tcl_sdl_opengl* Void_vers_zone_txt_interp_tcl(void *p) {return (alx_noeud_zone_texte_interpreteur_tcl_sdl_opengl*)p;}
+inline alx_noeud_zone_texte_interpreteur_tcl_sdl_opengl* Void_vers_zone_txt_interp_tcl(void *p) {return (alx_noeud_zone_texte_interpreteur_tcl_sdl_opengl*)p;}
 
 #endif
 

@@ -13,6 +13,7 @@ class alx_simulateur_points_contact;
 #include "alx_noeud_entete_sdl_opengl.h"
 #include "alx_noeud_transformations_sdl_opengl.h"
 
+//___________________________________________________________________________________________
 // Définission des masques bianires pour l'accès aux attributs binaires de la fenêtre
 const unsigned int M_fen_gerer_corps          = 1;
 const unsigned int M_fen_afficher_corps       = 2;
@@ -31,6 +32,21 @@ const unsigned int M_fen_navigation_interne   = 16384;
 const unsigned int M_fen_voir_si_pt_dans_fils = 32768;
 const unsigned int M_fen_tout                 = 0xFFFFFFFF;
 
+//___________________________________________________________________________________________
+// Renvoi un pointeur sur le modèle physique qui contient la primitive, NULL si aucun.
+inline bool Zone_pointee(alx_model_simulation_physique1 **e, void *info_sup)
+{alx_point2D                    *pt = (alx_point2D*)info_sup;
+ alx_model_simulation_physique1 *mp = *e;
+
+ if( mp->Contient(*pt) )
+   return true;
+
+ return false;
+}
+
+//___________________________________________________________________________________________
+//___________________________________________________________________________________________
+//___________________________________________________________________________________________
 class alx_noeud_fenetre_sdl_opengl : public alx_noeud_scene
 {private:
     alx_simulateur_points_contact *sim_contact;
@@ -337,53 +353,53 @@ class alx_noeud_fenetre_sdl_opengl : public alx_noeud_scene
    inline const unsigned int Marqueur_attributs_fen() const {return M_attrib_fen;}
 
   //__________________________________________________________________
-   inline const bool Voir_si_pt_dans_fils() const {return M_fen_voir_si_pt_dans_fils&Marqueur_attributs_fen();}
+   inline const bool Voir_si_pt_dans_fils() const {return (M_fen_voir_si_pt_dans_fils&Marqueur_attributs_fen()) != 0;}
    inline void Voir_si_pt_dans_fils(bool b)       {Marqueur_attributs_fen(M_fen_voir_si_pt_dans_fils, b);}
   //__________________________________________________________________
-   inline const bool Fond_touchable() const {return M_fen_fond_touchable&Marqueur_attributs_fen();}
+   inline const bool Fond_touchable() const {return (M_fen_fond_touchable&Marqueur_attributs_fen()) != 0;}
    inline void Fond_touchable(bool b)       {Marqueur_attributs_fen(M_fen_fond_touchable, b);}
   //__________________________________________________________________
-   inline const bool Rendu_ecran_direct() const {return M_fen_rendu_ecran_direct&Marqueur_attributs_fen();}
+   inline const bool Rendu_ecran_direct() const {return (M_fen_rendu_ecran_direct&Marqueur_attributs_fen()) != 0;}
    inline void Rendu_ecran_direct(bool b)       {Marqueur_attributs_fen(M_fen_rendu_ecran_direct, b);}
   //__________________________________________________________________
-   inline const bool Navigation_interne() const {return M_fen_navigation_interne&Marqueur_attributs_fen();}
+   inline const bool Navigation_interne() const {return (M_fen_navigation_interne&Marqueur_attributs_fen()) != 0;}
    inline void Navigation_interne(const bool b) {Marqueur_attributs_fen(M_fen_navigation_interne, b);}
   //__________________________________________________________________
    inline void Lisser(const bool b) {Marqueur_attributs_fen(M_fen_lisser, b);}
-   inline const bool Lisser()       {return M_fen_lisser&Marqueur_attributs_fen();}
+   inline const bool Lisser()       {return (M_fen_lisser&Marqueur_attributs_fen()) != 0;}
   //__________________________________________________________________
    inline void Texture_tempon_prete(const bool b) {fen_texture_tempon_prete = b;}
    inline const bool Texture_tempon_prete() const {return fen_texture_tempon_prete;}
   //__________________________________________________________________
    inline void Gerer_corps(const bool b) {Marqueur_attributs_fen(M_fen_gerer_corps, b);}
-   inline const bool Gerer_corps() const {return M_fen_gerer_corps&Marqueur_attributs_fen();}
+   inline const bool Gerer_corps() const {return (M_fen_gerer_corps&Marqueur_attributs_fen()) != 0;}
   //__________________________________________________________________
    inline void Gerer_entete(const bool b) {Marqueur_attributs_fen(M_fen_gerer_entete, b);}
-   inline const bool Gerer_entete() const {return M_fen_gerer_entete&Marqueur_attributs_fen();}
+   inline const bool Gerer_entete() const {return (M_fen_gerer_entete&Marqueur_attributs_fen()) != 0;}
   //__________________________________________________________________
    inline void Gerer_bordure(const bool b) {Marqueur_attributs_fen(M_fen_gerer_bordure, b);}
-   inline const bool Gerer_bordure() const {return M_fen_gerer_bordure&Marqueur_attributs_fen();}
+   inline const bool Gerer_bordure() const {return (M_fen_gerer_bordure&Marqueur_attributs_fen()) != 0;}
   //__________________________________________________________________
    inline void Gerer_zone_rot(const bool b) {Marqueur_attributs_fen(M_fen_gerer_zone_rot, b);}
-   inline const bool Gerer_zone_rot() const {return M_fen_gerer_zone_rot&Marqueur_attributs_fen();}
+   inline const bool Gerer_zone_rot() const {return (M_fen_gerer_zone_rot&Marqueur_attributs_fen()) != 0;}
   //__________________________________________________________________
    inline void Afficher_corps(const bool b) {Marqueur_attributs_fen(M_fen_afficher_corps, b);}
-   inline const bool Afficher_corps() const {return M_fen_afficher_corps&Marqueur_attributs_fen();}
+   inline const bool Afficher_corps() const {return (M_fen_afficher_corps&Marqueur_attributs_fen()) != 0;}
   //__________________________________________________________________
    inline void Afficher_entete(const bool b) {Marqueur_attributs_fen(M_fen_afficher_entete, b);}
-   inline const bool Afficher_entete() const {return M_fen_afficher_entete&Marqueur_attributs_fen();}
+   inline const bool Afficher_entete() const {return (M_fen_afficher_entete&Marqueur_attributs_fen()) != 0;}
   //__________________________________________________________________
    inline void Afficher_bordure(const bool b) {Marqueur_attributs_fen(M_fen_afficher_bordure, b);}
-   inline const bool Afficher_bordure() const {return M_fen_afficher_bordure&Marqueur_attributs_fen();}
+   inline const bool Afficher_bordure() const {return (M_fen_afficher_bordure&Marqueur_attributs_fen()) != 0;}
   //__________________________________________________________________
    inline void Afficher_zone_rot(const bool b) {Marqueur_attributs_fen(M_fen_afficher_zone_rot, b);}
-   inline const bool Afficher_zone_rot() const {return M_fen_afficher_zone_rot&Marqueur_attributs_fen();}
+   inline const bool Afficher_zone_rot() const {return (M_fen_afficher_zone_rot&Marqueur_attributs_fen()) != 0;}
   //__________________________________________________________________
    inline void Bord_translucide(const bool b) {Marqueur_attributs_fen(M_fen_bord_translucide, b);}
-   inline const bool Bord_translucide() const {return M_fen_bord_translucide&Marqueur_attributs_fen();}
+   inline const bool Bord_translucide() const {return (M_fen_bord_translucide&Marqueur_attributs_fen()) != 0;}
   //__________________________________________________________________
    inline void Corp_translucide(const bool b) {Marqueur_attributs_fen(M_fen_corp_translucide, b);}
-   inline const bool Corp_translucide() const {return M_fen_corp_translucide&Marqueur_attributs_fen();}
+   inline const bool Corp_translucide() const {return (M_fen_corp_translucide&Marqueur_attributs_fen()) != 0;}
   //__________________________________________________________________
    inline void Fenetre_translucide(const bool b)
     {Corp_translucide(b);
@@ -468,7 +484,7 @@ class alx_noeud_fenetre_sdl_opengl : public alx_noeud_scene
 };
 
 typedef alx_noeud_fenetre_sdl_opengl* P_alx_noeud_fenetre_sdl_opengl;
-alx_noeud_fenetre_sdl_opengl* Void_vers_fen(void *ptr) {return (alx_noeud_fenetre_sdl_opengl*)ptr;}
+inline alx_noeud_fenetre_sdl_opengl* Void_vers_fen(void *ptr) {return (alx_noeud_fenetre_sdl_opengl*)ptr;}
 
 #endif
 

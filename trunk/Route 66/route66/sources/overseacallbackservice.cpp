@@ -23,12 +23,12 @@ CallbackParam::CallbackParam(XmlNode *xml_node_to_match, const char *ip, unsigne
 	}
 	else
 	{
-		this->answer_to_send = new char[strlen(answer_to_send)+1]; strcpy(this->answer_to_send, answer_to_send);
+		this->answer_to_send = new char[strlen(answer_to_send)+1]; strcpy_s(this->answer_to_send, strlen(answer_to_send)+1, answer_to_send);
 	}
 
-	this->ip = new char[strlen(ip)+1]; strcpy(this->ip, ip);
+	this->ip = new char[strlen(ip)+1]; strcpy_s(this->ip, strlen(ip)+1, ip);
 	this->port = port;
-	this->method = new char[strlen(method)+1]; strcpy(this->method, method);
+	this->method = new char[strlen(method)+1]; strcpy_s(this->method, strlen(method)+1, method);
 }
 
 
@@ -330,7 +330,7 @@ void OverseaCallbackService::onSubscribe(unsigned int argc, char **argv)
    			return;
 		}
 
-		answer_data = new char[strlen(answer_to_send->getSimpleContent())+1]; strcpy(answer_data, answer_to_send->getSimpleContent());
+		answer_data = new char[strlen(answer_to_send->getSimpleContent())+1]; strcpy_s(answer_data, strlen(answer_to_send->getSimpleContent())+1, answer_to_send->getSimpleContent());
 	}
 
 	#ifdef __TRACE_ON

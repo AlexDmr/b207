@@ -5,8 +5,8 @@ void olfa_comet_fenetre_sdl_opengl::Enregistrer_fenetre_dans_TCL()
  s_tmp  = "set ";
  s_tmp += olfa_comet::Nom_usage();
  s_tmp += " ";
- s_tmp += itoa((int)(void*)this, c_tmp, 10);
- strcpy(c_tmp, s_tmp.Texte());
+ _itoa_s((int)(void*)this, c_tmp, 10);s_tmp += c_tmp;
+ strcpy_s(c_tmp, s_tmp.Texte());
  olfa_comet::Interpreteur()->Evaluer(c_tmp);
 }
 

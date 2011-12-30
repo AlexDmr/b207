@@ -42,7 +42,7 @@
 #include <stdlib.h>
 #include <string.h>
 #ifdef WIN32
-    #include <mem.h>
+    #include <memory>
 #else
     #include <memory.h>
 #endif

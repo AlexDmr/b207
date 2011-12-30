@@ -163,7 +163,7 @@ void alx_fiche_ovale_opengl::Transfo_commune()
 // Appliquer les transformations:
  alx_vecteur2D /*trans_retour
              , */trans2;
- double angle_radian;
+// double angle_radian;
 
  //Maj_sommets();
  maj_fact();

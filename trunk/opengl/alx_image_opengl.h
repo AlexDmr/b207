@@ -81,8 +81,8 @@ class alx_image_opengl : public alx_image_32
 
    inline const double Lg() const {return L();}
    inline const double Ht() const {return H();}
-   inline void Lg(const double v) {L(v);}
-   inline void Ht(const double v) {H(v);}
+   inline void Lg(const double v) {L((int)v);}
+   inline void Ht(const double v) {H((int)v);}
 
    inline void Translucidite(const bool b) {translucidite = b;}
    inline const bool Translucidite() const {return translucidite;}

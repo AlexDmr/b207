@@ -3,7 +3,7 @@
 
 #include "../alx_noeud_scene.h"
 #include "../fonctions_serialisations.cpp"
-#include "../../GPC/gpc.h"
+//#include "../../GPC/gpc.h"
 #include "../../opengl/config_opengl.h"
 
 #include "../fonctions_serialisations.cpp"
@@ -106,7 +106,7 @@ class alx_noeud_polygone_sdl_opengl : public alx_noeud_scene
    inline const int Marqueur_attributs_poly() const {return attributs_poly;}
    const double *coords_col, *coords_tex, *coords_tex2
               , *coords_col_perimetre, *coords_tex_perimetre;
-   const bool get_Mode_line() const {return POLY_mode_line()&Marqueur_attributs_poly();}
+   const bool get_Mode_line() const {return (POLY_mode_line()&Marqueur_attributs_poly()) != 0;}
    void set_Mode_line(const bool b) {Marqueur_attributs_poly(POLY_mode_line(), b);}
 
  public :
@@ -122,7 +122,7 @@ class alx_noeud_polygone_sdl_opengl : public alx_noeud_scene
    void Lignes_GL(const GLenum mode_ligne);
    const GLenum Lignes_GL();
 
-   inline const bool Mode_texture2() const {return POLY_mode_texture2()&Marqueur_attributs_poly();}
+   inline const bool Mode_texture2() const {return (POLY_mode_texture2()&Marqueur_attributs_poly()) != 0;}
           void Mode_texture2(const bool b) ;
 
    inline void Const_couleur(const float *col) {memcpy(const_couleur, col, sizeof(float)<<2);
@@ -145,9 +145,9 @@ class alx_noeud_polygone_sdl_opengl : public alx_noeud_scene
    inline void RGB_scale(const float f) {rgb_scale = f; A_changer(true);}
 
    inline const double Alpha_scale_d() const {return alpha_scale;}
-   inline void Alpha_scale_d(const double d) {alpha_scale = d; A_changer(true);}
+   inline void Alpha_scale_d(const double d) {alpha_scale = (float)d; A_changer(true);}
    inline const double RGB_scale_d() const {return rgb_scale;}
-   inline void RGB_scale_d(const double d) {rgb_scale = d; A_changer(true);}
+   inline void RGB_scale_d(const double d) {rgb_scale = (float)d; A_changer(true);}
 
    inline const float Constante_combinaison_couleurs() const {return constante_combinaison_couleurs;}
    inline void Constante_combinaison_couleurs(const float f) {constante_combinaison_couleurs = f; A_changer(true);}
@@ -155,9 +155,9 @@ class alx_noeud_polygone_sdl_opengl : public alx_noeud_scene
    inline void Constante_combinaison_textures(const float f) {constante_combinaison_textures = f; A_changer(true);}
 
    inline const double Constante_combinaison_couleurs_d() const {return constante_combinaison_couleurs;}
-   inline void Constante_combinaison_couleurs_d(const double f) {constante_combinaison_couleurs = f; A_changer(true);}
+   inline void Constante_combinaison_couleurs_d(const double f) {constante_combinaison_couleurs = (float)f; A_changer(true);}
    inline const double Constante_combinaison_textures_d() const {return constante_combinaison_textures;}
-   inline void Constante_combinaison_textures_d(const double f) {constante_combinaison_textures = f; A_changer(true);}
+   inline void Constante_combinaison_textures_d(const double f) {constante_combinaison_textures = (float)f; A_changer(true);}
 
  // Combinaisons des canaux RVB
    inline const int Combinaison_couleurs_source_arg0() const {return combinaison_couleurs_source_arg0;}
@@ -256,9 +256,9 @@ class alx_noeud_polygone_sdl_opengl : public alx_noeud_scene
    inline void Couleur_perimetre(const unsigned int i, const double v) {couleur_perimetre[i] = v; A_changer(true);}
   // Translucidité de la surface et du périmètre
    inline void Translucidite(const bool b) {Marqueur_attributs_poly(POLY_translucidite(), b); A_changer(true);}
-   inline const bool Translucidite() const {return POLY_translucidite()&Marqueur_attributs_poly();}
+   inline const bool Translucidite() const {return (POLY_translucidite()&Marqueur_attributs_poly()) != 0;}
    inline void Translucidite_perimetre(const bool b) {Marqueur_attributs_poly(POLY_translucidite_perimetre(), b); A_changer(true);}
-   inline const bool Translucidite_perimetre() const {return POLY_translucidite_perimetre()&Marqueur_attributs_poly();}
+   inline const bool Translucidite_perimetre() const {return (POLY_translucidite_perimetre()&Marqueur_attributs_poly()) != 0;}
 
   // Interpollation pour le corp du polygone
    inline void Coords_couleurs(const double *v) {coords_col = v;}
@@ -271,7 +271,7 @@ class alx_noeud_polygone_sdl_opengl : public alx_noeud_scene
    void Fct_interpollation(Fonction_interpolation_couleur_polygone f);
   // Interpollation pour le perimètre du polygone
    inline void Perimetre_texture(const bool b) {Marqueur_attributs_poly(POLY_perimetre_texture(), b); A_changer(true);}
-   inline const bool Perimetre_texture() const {return POLY_perimetre_texture()&Marqueur_attributs_poly();}
+   inline const bool Perimetre_texture() const {return (POLY_perimetre_texture()&Marqueur_attributs_poly()) != 0;}
    inline void Coords_couleurs_perimetre(const double *v) {coords_col_perimetre = v;}
    inline const double* Coords_couleurs_perimetre() const {return coords_col_perimetre;}
    inline void Coords_textures_perimetre(const double *v) {coords_tex_perimetre = v;}
@@ -315,7 +315,7 @@ class alx_noeud_polygone_sdl_opengl : public alx_noeud_scene
    inline void desabonner_de_maj_Info_texture_2(alx_methode_rappel *m) {L_rap_maj_Info_texture_2.Retirer_methode         (m);}
 
    inline void Lisser(const bool b) {Marqueur_attributs_poly(POLY_lisser(), b); A_changer(true);}
-   inline const bool Lisser() const {return POLY_lisser()&Marqueur_attributs_poly();}
+   inline const bool Lisser() const {return (POLY_lisser()&Marqueur_attributs_poly()) != 0;}
 
           //__________________________________________________________//
    const double* Tab_pt(const unsigned int num_contour)                    const;
@@ -354,9 +354,9 @@ class alx_noeud_polygone_sdl_opengl : public alx_noeud_scene
    void Afficher_polygone();
    void Afficher_perimetre();
    void Polygone_a_afficher(const bool b) {Marqueur_attributs_poly(POLY_polygone_a_afficher(), b);}
-   const bool Polygone_a_afficher() const {return POLY_polygone_a_afficher()&Marqueur_attributs_poly();}
+   const bool Polygone_a_afficher() const {return (POLY_polygone_a_afficher()&Marqueur_attributs_poly()) != 0;}
    void Perimetre_a_afficher(const bool b) {Marqueur_attributs_poly(POLY_perimetre_a_afficher(), b);}
-   const bool Perimetre_a_afficher() const {return POLY_perimetre_a_afficher()&Marqueur_attributs_poly();}
+   const bool Perimetre_a_afficher() const {return (POLY_perimetre_a_afficher()&Marqueur_attributs_poly()) != 0;}
 
    virtual info_du_contenant* Noeud_contient(const alx_point2D &pt, int action); // Renvoi un pointeur sur le modèle physique qui contient la primitive, NULL si aucun.
 
@@ -387,7 +387,7 @@ class alx_noeud_polygone_sdl_opengl : public alx_noeud_scene
 };
 
 typedef alx_noeud_polygone_sdl_opengl* P_alx_noeud_polygone_sdl_opengl;
-alx_noeud_polygone_sdl_opengl* Void_vers_poly (void *p) {return (alx_noeud_polygone_sdl_opengl*)p;}
+inline alx_noeud_polygone_sdl_opengl* Void_vers_poly (void *p) {return (alx_noeud_polygone_sdl_opengl*)p;}
 
 //_______________________________________________________________________________________________________________
 //__________________ Définition des procédures d'interpolations de couleur ou texture ___________________________
@@ -397,7 +397,7 @@ alx_noeud_polygone_sdl_opengl* Void_vers_poly (void *p) {return (alx_noeud_polyg
                                                    , const double *Tab_col, const double *Tab_tex, const double *Tab_tex2
                                                    , double *Col, double *Tex, double *Tex2
                                                    , void *params);
-  Fonction_interpolation_couleur_polygone get_Fonction_interpolation_poly_boite_englobante() {return Fonction_interpolation_poly_boite_englobante;}
+  inline Fonction_interpolation_couleur_polygone get_Fonction_interpolation_poly_boite_englobante() {return Fonction_interpolation_poly_boite_englobante;}
 
 class Interpollateur_couleur_polygone
 {private:

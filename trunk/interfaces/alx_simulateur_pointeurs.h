@@ -101,7 +101,7 @@ class alx_pointeur : public alx_classe_base_model
 };
 typedef alx_pointeur*        P_alx_pointeur;
 typedef const alx_pointeur* CP_alx_pointeur;
-alx_pointeur* Void_vers_alx_pointeur(void *p) {return (alx_pointeur*)p;}
+inline alx_pointeur* Void_vers_alx_pointeur(void *p) {return (alx_pointeur*)p;}
 
 //______________________________________________________________________________
 //______________________________________________________________________________

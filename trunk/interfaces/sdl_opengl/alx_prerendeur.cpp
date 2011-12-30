@@ -3,7 +3,7 @@
 #include "../../physique/math_alex.cpp"
 #include "../alx_noeud_scene.h"
 
-#include <extgl.h>
+#include <glew.h>
 #include <glu.h>
 
 //******************************************************************************

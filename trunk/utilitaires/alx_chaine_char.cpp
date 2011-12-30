@@ -1,6 +1,6 @@
 #include "alx_chaine_char.h"
 #include "..\physique\math_alex.cpp"
-#include <mem.h>
+//#include <mem.h>
 #include <stdio.h>
 
 alx_chaine_char chaine_vide;
@@ -10,14 +10,16 @@ unsigned int pos_chaine = 0;
 char tempon_char_256[256];
 
 void alx_chaine_char::Ecrire_dans(const char *nom, const unsigned int nb)
-{FILE *f = fopen(nom, "w");
+{FILE *f;
+ fopen_s(&f, nom, "w");
    fwrite(texte, nb, 1, f);
  fclose(f);
 }
 
 void alx_chaine_char::Lire_dans(const char *nom)
 {char tmp[65536];
- FILE *f = fopen(nom, "r");
+ FILE *f;
+ fopen_s(&f, nom, "r");
    fread(tmp, 65536, 1, f);
    *this = tmp;
  fclose(f);
@@ -102,7 +104,7 @@ const bool   alx_chaine_char::Lire_bool(unsigned int & pos) const
 //______________________________________________________________________________
 const double alx_chaine_char::Lire_double(unsigned int & pos) const
 {double rep;
- pos += sscanf(&(texte[pos]), "%lf", &rep);
+ pos += sscanf_s(&(texte[pos]), "%lf", &rep);
  while(( (texte[pos]>='0')
        &&(texte[pos]<='9'))
       ||(texte[pos]=='.') ) pos++;
@@ -269,19 +271,19 @@ const alx_chaine_char &alx_chaine_char::operator =(const bool b)
 
 //______________________________________________________________________________
 const alx_chaine_char &alx_chaine_char::operator =(const int i)
-{int nb = sprintf(tempon_char_256, "%d", i);
+{int nb = sprintf_s(tempon_char_256, 256, "%d", i);
  this->Maj(tempon_char_256,0,nb);
  return *this;}
 
 //______________________________________________________________________________
 const alx_chaine_char &alx_chaine_char::operator =(const unsigned long int i)
-{int nb = sprintf(tempon_char_256, "%lu", i);
+{int nb = sprintf_s(tempon_char_256, 256, "%lu", i);
  this->Maj(tempon_char_256,0,nb);
  return *this;}
 
 //______________________________________________________________________________
 const alx_chaine_char &alx_chaine_char::operator =(const unsigned int i)
-{int nb = sprintf(tempon_char_256, "%u", i);
+{int nb = sprintf_s(tempon_char_256, 256, "%u", i);
  this->Maj(tempon_char_256,0,nb);
  return *this;}
 
@@ -289,7 +291,7 @@ const alx_chaine_char &alx_chaine_char::operator =(const unsigned int i)
 const alx_chaine_char &alx_chaine_char::operator =(const double v)
 {double d;
  if(absd(v) < 0.000001) {d = 0;} else {d = v;}
- int nb = sprintf(tempon_char_256, "%lf", d);
+ int nb = sprintf_s(tempon_char_256, 256, "%lf", d);
  if(nb == 0) return *this;
  while(tempon_char_256[nb-1] == '0') nb--;
  if(tempon_char_256[nb-1] == '.') nb--;
@@ -307,19 +309,19 @@ const alx_chaine_char &alx_chaine_char::operator+=(const bool b)
 
 //______________________________________________________________________________
 const alx_chaine_char &alx_chaine_char::operator+=(const int i)
-{int nb = sprintf(tempon_char_256, "%d", i);
+{int nb = sprintf_s(tempon_char_256, 256, "%d", i);
  this->Ajouter(tempon_char_256, 0, nb);
  return *this;}
 
 //______________________________________________________________________________
 const alx_chaine_char &alx_chaine_char::operator+=(const unsigned long  i)
-{int nb = sprintf(tempon_char_256, "%lu", i);
+{int nb = sprintf_s(tempon_char_256, 256, "%lu", i);
  this->Ajouter(tempon_char_256, 0, nb);
  return *this;}
 
 //______________________________________________________________________________
 const alx_chaine_char &alx_chaine_char::operator+=(const unsigned int i)
-{int nb = sprintf(tempon_char_256, "%u", i);
+{int nb = sprintf_s(tempon_char_256, 256, "%u", i);
  this->Ajouter(tempon_char_256, 0, nb);
  return *this;}
 
@@ -327,7 +329,7 @@ const alx_chaine_char &alx_chaine_char::operator+=(const unsigned int i)
 const alx_chaine_char &alx_chaine_char::operator+=(const double v)
 {double d;
  if(absd(v) < 0.000001) {d = 0;} else {d = v;}
- int nb = sprintf(tempon_char_256, "%f", d);
+ int nb = sprintf_s(tempon_char_256, 256, "%f", d);
  if(nb == 0) return *this;
  while(tempon_char_256[nb-1] == '0') nb--;
  if(tempon_char_256[nb-1] == '.') nb--;

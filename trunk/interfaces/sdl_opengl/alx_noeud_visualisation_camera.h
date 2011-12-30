@@ -62,7 +62,7 @@ class alx_noeud_visualisation_camera : public alx_noeud_image_sdl_opengl
      Start();
     }
 
-   inline const char* get_description() const {gmlGetDescription(acquisiteur);}
+   inline const char* get_description() const {return gmlGetDescription(acquisiteur);}
    inline const int   Display_DialogFormat() {int rep = gmlDisplayDialogFormat(acquisiteur);
                                               if(rep == 2) {
                                                  Resize_camera_image_buffer();
@@ -80,6 +80,6 @@ class alx_noeud_visualisation_camera : public alx_noeud_image_sdl_opengl
 };
 
 typedef alx_noeud_visualisation_camera* P_alx_noeud_visualisation_camera;
-alx_noeud_visualisation_camera* Void_vers_camera(void *p) {return (alx_noeud_visualisation_camera*)p;}
+inline alx_noeud_visualisation_camera* Void_vers_camera(void *p) {return (alx_noeud_visualisation_camera*)p;}
 
 #endif

@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <extgl.h>
+#include <glew.h>
 #include <SDL.h>
 #include <string.h>
 //#include <SDL_image.h>
@@ -226,8 +226,7 @@ bool alx_image_32::fixer_alpha(char *nf, int seuil, int mode)
          , p_h = 0x16
          , p_t = 54;
 
-    f = fopen(nf, "rb");
-    if(f==NULL) return false;
+    if(fopen_s(&f, nf, "rb") != 0) return false;
 
      // c'est partie!
      fsetpos(f, &p_l); fread(&p, 1, 1, f); fread(&g, 1, 1, f); if(l != 256*g + p) return false;
@@ -290,7 +289,10 @@ const bool alx_image_32::Sauver_dans_fichier(const char *nf)
          }
 
  ilSetData( tempon );
- return ilSaveImage(nf);;
+ wchar_t WC_nf[1024]; size_t size_converted;
+ mbstowcs_s(&size_converted, WC_nf, nf, 1024);
+
+ return ilSaveImage(WC_nf) == 0;
 }
 
 //______________________________________________________________________________
@@ -302,8 +304,28 @@ bool alx_image_32::Charger_par_sdl(const char *nf)
    ilBindImage(num_il_img);
    alx_chaine_char f_name( nf );
      f_name.Remplacer_char_par('/', '\\');
-   if (!ilLoadImage( f_name.Texte() ))
-    {printf("ERREUR DE CHARGEMENT DE L'IMAGE %s", f_name.Texte());
+   wchar_t WC_nf[1024]; size_t size_converted;
+   mbstowcs_s(&size_converted, WC_nf, f_name.Texte(), 1024);
+   ilLoadImage( WC_nf );
+   ILenum il_b = ilGetError();
+   if ( il_b != IL_NO_ERROR )
+    {printf("ERREUR DE CHARGEMENT DE L'IMAGE %s\n", f_name.Texte());
+     switch(il_b) {
+		 case IL_COULD_NOT_OPEN_FILE:
+			 printf("- The file pointed to by FileName could not be opened. Either the file does not exist or is in use by another process.\n");
+			 break;
+		 case IL_ILLEGAL_OPERATION:
+			 printf("- There is currently no image bound. Use ilGenImages and ilBindImage before calling this function.\n");
+			 break;
+		 case IL_INVALID_EXTENSION:
+			 printf("- The file could not be loaded based on extension or header.\n");
+			 break;
+		 case IL_INVALID_PARAM:
+			 printf("- FileName was not valid. It was most likely NULL.\n");
+			 break;
+		 default:
+			 printf("Unknown error %c\n", il_b);
+		}
      tempon=NULL;
      l = h = nb_octets_par_pixel = taille_tempon = 0;
      mutex_tempon->unlock();
@@ -334,6 +356,7 @@ bool alx_image_32::Charger_par_sdl(const char *nf)
     }
    memcpy(tempon, ilGetData(), t);
 
+
  if( Mode_traitement_image_transparent() ) {Fixer_couleur_transparente();}
  mutex_tempon->unlock();
  return true;
@@ -348,18 +371,17 @@ bool alx_image_32::charger_bmp(const char *n)
          , p_h = 0x16
          , p_t = 54;
     //Uint32 r, v, b, a;
-    unsigned char intensite;
+//    unsigned char intensite;
 
-    f = fopen(n, "rb");
-    if(f==NULL) return false;
-    strcpy(nom_image, n);
+    if(fopen_s(&f, n, "rb") != 0) return false;
+    strcpy_s(nom_image, n);
     Inverser_y(false);
 
      // c'est partie!
      fsetpos(f, &p_l); fread(&p, 1, 1, f); fread(&g, 1, 1, f); l = 256*g + p;
      fsetpos(f, &p_h); fread(&p, 1, 1, f); fread(&g, 1, 1, f); h = 256*g + p;
      fsetpos(f, &p_t);
-     int i, t=l*h;
+     int /*i, */t=l*h;
 
      tempon = new char[4*t];
      taille_tempon = sizeof(unsigned int)*t;

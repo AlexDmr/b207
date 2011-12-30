@@ -30,6 +30,7 @@ class olfa_comet
 
  public :
   // Les constructeurs
+   olfa_comet() {interpreteur = (alx_interpreteur_tcl*)NULL;}
    olfa_comet( const char *nom
              //, cogitant::Environment *e
              , alx_interpreteur_tcl  *interp);
@@ -43,7 +44,8 @@ class olfa_comet
     s_cmd  = "set ";
     s_cmd += n; s_cmd += " ";
     s_cmd += Nom_interne();
-    strcpy(c_cmd, s_cmd.Texte());
+	strcpy_s(c_cmd, s_cmd.Texte());
+    //strcpy(c_cmd, s_cmd.Texte());
     Interpreteur()->Evaluer(c_cmd);
     nom_usage = n;
    }

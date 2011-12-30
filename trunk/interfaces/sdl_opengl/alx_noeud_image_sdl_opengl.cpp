@@ -110,7 +110,7 @@ void alx_noeud_image_sdl_opengl::Dessin_noeud()
 info_du_contenant* alx_noeud_image_sdl_opengl::Noeud_contient(const alx_point2D &pt, int action)
 {// Transformer les coordonnées
  info_du_contenant *rep;
- alx_model_simulation_physique1 **mp_rep;
+// alx_model_simulation_physique1 **mp_rep;
 
  // Vérifier que le point est bien dans le rectangle de l'image
  if( (pt.x < 0)
@@ -121,10 +121,10 @@ info_du_contenant* alx_noeud_image_sdl_opengl::Noeud_contient(const alx_point2D 
  // Si l'image à un tempon en mémoire centrale et que la translucidité est activée
  // , vérifier que le pixel sélectionner n'est pas transparent
  unsigned int x, y;
- if(Inverser_x()) x = Lg()-pt.x;
-  else x = pt.x;
- if(Inverser_y()) y = Ht()-pt.y;
-  else y = pt.y;
+ if(Inverser_x()) x = (unsigned int)(Lg()-pt.x);
+  else x = (unsigned int)pt.x;
+ if(Inverser_y()) y = (unsigned int)(Ht()-pt.y);
+  else y = (unsigned int)pt.y;
 
  if( (Translucidite()) // Cas où on peut cliquer au travers de l'image, dans la zone translucide
    &&(TEMPON())
@@ -146,44 +146,44 @@ void alx_noeud_image_sdl_opengl::init_ptr()
 {P_void *f_diff   = classe_serialisation.f_diff
       , *f_deseri = classe_serialisation.f_deseri;
 
- classe_serialisation.fd1[0]   = &(alx_noeud_image_sdl_opengl::Etirement_x);    f_deseri[0] = &(classe_serialisation.fd1[0]);
- classe_serialisation.fsd_d1[0]= &(alx_noeud_image_sdl_opengl::Etirement_x);    f_diff[0]   = &(classe_serialisation.fsd_d1[0]);
- classe_serialisation.fd1[1]   = &(alx_noeud_image_sdl_opengl::Etirement_y);    f_deseri[1] = &(classe_serialisation.fd1[1]);
- classe_serialisation.fsd_d1[1]= &(alx_noeud_image_sdl_opengl::Etirement_y);    f_diff[1]   = &(classe_serialisation.fsd_d1[1]);
- classe_serialisation.fd1[2]   = &(alx_noeud_image_sdl_opengl::Lg);       f_deseri[2] = &(classe_serialisation.fd1[2]);
- classe_serialisation.fsd_d1[2]= &(alx_noeud_image_sdl_opengl::Lg);       f_diff[2]   = &(classe_serialisation.fsd_d1[2]);
- classe_serialisation.fd1[3]   = &(alx_noeud_image_sdl_opengl::Ht);       f_deseri[3] = &(classe_serialisation.fd1[3]);
- classe_serialisation.fsd_d1[3]= &(alx_noeud_image_sdl_opengl::Ht);       f_diff[3]   = &(classe_serialisation.fsd_d1[3]);
+ classe_serialisation.fd1[0]   = &alx_noeud_image_sdl_opengl::Etirement_x;    f_deseri[0] = &(classe_serialisation.fd1[0]);
+ classe_serialisation.fsd_d1[0]= &alx_noeud_image_sdl_opengl::Etirement_x;    f_diff[0]   = &(classe_serialisation.fsd_d1[0]);
+ classe_serialisation.fd1[1]   = &alx_noeud_image_sdl_opengl::Etirement_y;    f_deseri[1] = &(classe_serialisation.fd1[1]);
+ classe_serialisation.fsd_d1[1]= &alx_noeud_image_sdl_opengl::Etirement_y;    f_diff[1]   = &(classe_serialisation.fsd_d1[1]);
+ classe_serialisation.fd1[2]   = &alx_noeud_image_sdl_opengl::Lg;       f_deseri[2] = &(classe_serialisation.fd1[2]);
+ classe_serialisation.fsd_d1[2]= &alx_noeud_image_sdl_opengl::Lg;       f_diff[2]   = &(classe_serialisation.fsd_d1[2]);
+ classe_serialisation.fd1[3]   = &alx_noeud_image_sdl_opengl::Ht;       f_deseri[3] = &(classe_serialisation.fd1[3]);
+ classe_serialisation.fsd_d1[3]= &alx_noeud_image_sdl_opengl::Ht;       f_diff[3]   = &(classe_serialisation.fsd_d1[3]);
 
- classe_serialisation.fb1   [0] = &(alx_noeud_image_sdl_opengl::Image_creer_en_interne); f_deseri[4] = &(classe_serialisation.fb1[0]);
- classe_serialisation.fsd_b1[0] = &(alx_noeud_image_sdl_opengl::Image_creer_en_interne); f_diff  [4] = &(classe_serialisation.fsd_b1[0]);
- classe_serialisation.fb1   [1] = &(alx_noeud_image_sdl_opengl::Couleur_def)           ; f_deseri[5] = &(classe_serialisation.fb1[1]);
- classe_serialisation.fsd_b1[1] = &(alx_noeud_image_sdl_opengl::Couleur_def)           ; f_diff  [5] = &(classe_serialisation.fsd_b1[1]);
- classe_serialisation.fb1   [2] = &(alx_noeud_image_sdl_opengl::Lisser)                ; f_deseri[6] = &(classe_serialisation.fb1[2]);
- classe_serialisation.fsd_b1[2] = &(alx_noeud_image_sdl_opengl::Lisser)                ; f_diff  [6] = &(classe_serialisation.fsd_b1[2]);
+ classe_serialisation.fb1   [0] = &alx_noeud_image_sdl_opengl::Image_creer_en_interne; f_deseri[4] = &(classe_serialisation.fb1[0]);
+ classe_serialisation.fsd_b1[0] = &alx_noeud_image_sdl_opengl::Image_creer_en_interne; f_diff  [4] = &(classe_serialisation.fsd_b1[0]);
+ classe_serialisation.fb1   [1] = &alx_noeud_image_sdl_opengl::Couleur_def           ; f_deseri[5] = &(classe_serialisation.fb1[1]);
+ classe_serialisation.fsd_b1[1] = &alx_noeud_image_sdl_opengl::Couleur_def           ; f_diff  [5] = &(classe_serialisation.fsd_b1[1]);
+ classe_serialisation.fb1   [2] = &alx_noeud_image_sdl_opengl::Lisser                ; f_deseri[6] = &(classe_serialisation.fb1[2]);
+ classe_serialisation.fsd_b1[2] = &alx_noeud_image_sdl_opengl::Lisser                ; f_diff  [6] = &(classe_serialisation.fsd_b1[2]);
 
- classe_serialisation.fd4[0]   = &(alx_noeud_image_sdl_opengl::Couleur); f_deseri[7] = &(classe_serialisation.fd4[0]);
- classe_serialisation.fsd_d4[0]= &(alx_noeud_image_sdl_opengl::Couleur); f_diff[7]   = &(classe_serialisation.fsd_d4[0]);
+ classe_serialisation.fd4[0]   = &alx_noeud_image_sdl_opengl::Couleur; f_deseri[7] = &(classe_serialisation.fd4[0]);
+ classe_serialisation.fsd_d4[0]= &alx_noeud_image_sdl_opengl::Couleur; f_diff[7]   = &(classe_serialisation.fsd_d4[0]);
 
- classe_serialisation.fcc[0]   = &(alx_noeud_image_sdl_opengl::Deseri_info_texture);               ; f_deseri[8] = &(classe_serialisation.fcc[0]);
- classe_serialisation.fsd_cc[0]= &(alx_noeud_image_sdl_opengl::Seri_diff_info_texture_a_ete_change); f_diff[8]   = &(classe_serialisation.fsd_cc[0]);
+ classe_serialisation.fcc[0]   = &alx_noeud_image_sdl_opengl::Deseri_info_texture;               ; f_deseri[8] = &(classe_serialisation.fcc[0]);
+ classe_serialisation.fsd_cc[0]= &alx_noeud_image_sdl_opengl::Seri_diff_info_texture_a_ete_change; f_diff[8]   = &(classe_serialisation.fsd_cc[0]);
 
- classe_serialisation.fi1   [0] = &(alx_noeud_image_sdl_opengl::Ordonnancement_couleurs); f_deseri[9] = &(classe_serialisation.fi1[0]);
- classe_serialisation.fsd_i1[0] = &(alx_noeud_image_sdl_opengl::Ordonnancement_couleurs); f_diff  [9] = &(classe_serialisation.fsd_i1[0]);
- classe_serialisation.fi1   [1] = &(alx_noeud_image_sdl_opengl::Nb_octets_par_pixel)    ; f_deseri[10] = &(classe_serialisation.fi1[1]);
- classe_serialisation.fsd_i1[1] = &(alx_noeud_image_sdl_opengl::Nb_octets_par_pixel)    ; f_diff  [10] = &(classe_serialisation.fsd_i1[1]);
+ classe_serialisation.fi1   [0] = &alx_noeud_image_sdl_opengl::Ordonnancement_couleurs; f_deseri[9] = &(classe_serialisation.fi1[0]);
+ classe_serialisation.fsd_i1[0] = &alx_noeud_image_sdl_opengl::Ordonnancement_couleurs; f_diff  [9] = &(classe_serialisation.fsd_i1[0]);
+ classe_serialisation.fi1   [1] = &alx_noeud_image_sdl_opengl::Nb_octets_par_pixel    ; f_deseri[10] = &(classe_serialisation.fi1[1]);
+ classe_serialisation.fsd_i1[1] = &alx_noeud_image_sdl_opengl::Nb_octets_par_pixel    ; f_diff  [10] = &(classe_serialisation.fsd_i1[1]);
 
- classe_serialisation.fb1   [3] = &(alx_noeud_image_sdl_opengl::Translucidite)         ; f_deseri[11] = &(classe_serialisation.fb1[3]);
- classe_serialisation.fsd_b1[3] = &(alx_noeud_image_sdl_opengl::Translucidite)         ; f_diff  [11] = &(classe_serialisation.fsd_b1[3]);
- classe_serialisation.fb1   [4] = &(alx_noeud_image_sdl_opengl::Inverser_x)            ; f_deseri[12] = &(classe_serialisation.fb1[4]);
- classe_serialisation.fsd_b1[4] = &(alx_noeud_image_sdl_opengl::Inverser_x)            ; f_diff  [12] = &(classe_serialisation.fsd_b1[4]);
- classe_serialisation.fb1   [5] = &(alx_noeud_image_sdl_opengl::Inverser_y)            ; f_deseri[13] = &(classe_serialisation.fb1[5]);
- classe_serialisation.fsd_b1[5] = &(alx_noeud_image_sdl_opengl::Inverser_y)            ; f_diff  [13] = &(classe_serialisation.fsd_b1[5]);
+ classe_serialisation.fb1   [3] = &alx_noeud_image_sdl_opengl::Translucidite         ; f_deseri[11] = &(classe_serialisation.fb1[3]);
+ classe_serialisation.fsd_b1[3] = &alx_noeud_image_sdl_opengl::Translucidite         ; f_diff  [11] = &(classe_serialisation.fsd_b1[3]);
+ classe_serialisation.fb1   [4] = &alx_noeud_image_sdl_opengl::Inverser_x            ; f_deseri[12] = &(classe_serialisation.fb1[4]);
+ classe_serialisation.fsd_b1[4] = &alx_noeud_image_sdl_opengl::Inverser_x            ; f_diff  [12] = &(classe_serialisation.fsd_b1[4]);
+ classe_serialisation.fb1   [5] = &alx_noeud_image_sdl_opengl::Inverser_y            ; f_deseri[13] = &(classe_serialisation.fb1[5]);
+ classe_serialisation.fsd_b1[5] = &alx_noeud_image_sdl_opengl::Inverser_y            ; f_diff  [13] = &(classe_serialisation.fsd_b1[5]);
 
- classe_serialisation.fi1   [2] = &(alx_noeud_image_sdl_opengl::Nb_octets_par_pixels_texture); f_deseri[14] = &(classe_serialisation.fi1[2]);
- classe_serialisation.fsd_i1[2] = &(alx_noeud_image_sdl_opengl::Nb_octets_par_pixels_texture); f_diff  [14] = &(classe_serialisation.fsd_i1[2]);
- classe_serialisation.fi1   [3] = &(alx_noeud_image_sdl_opengl::Ordre_couleur_texture)    ; f_deseri[15] = &(classe_serialisation.fi1[3]);
- classe_serialisation.fsd_i1[3] = &(alx_noeud_image_sdl_opengl::Ordre_couleur_texture)    ; f_diff  [15] = &(classe_serialisation.fsd_i1[3]);
+ classe_serialisation.fi1   [2] = &alx_noeud_image_sdl_opengl::Nb_octets_par_pixels_texture; f_deseri[14] = &(classe_serialisation.fi1[2]);
+ classe_serialisation.fsd_i1[2] = &alx_noeud_image_sdl_opengl::Nb_octets_par_pixels_texture; f_diff  [14] = &(classe_serialisation.fsd_i1[2]);
+ classe_serialisation.fi1   [3] = &alx_noeud_image_sdl_opengl::Ordre_couleur_texture    ; f_deseri[15] = &(classe_serialisation.fi1[3]);
+ classe_serialisation.fsd_i1[3] = &alx_noeud_image_sdl_opengl::Ordre_couleur_texture    ; f_diff  [15] = &(classe_serialisation.fsd_i1[3]);
 }
 
 //______________________________________________________________________________
@@ -282,8 +282,8 @@ const alx_chaine_char& alx_noeud_image_sdl_opengl::Serialiser_contenu() const
 {return alx_noeud_scene::Serialiser_type();}
 //______________________________________________________________________________
 //__________________________ La désérialisation ________________________________
-void alx_noeud_image_sdl_opengl::Deserialiser_type(const alx_chaine_char &txt, unsigned int &pos)
-{unsigned int num_f, num_a;
+void alx_noeud_image_sdl_opengl::Deserialiser_type(const alx_chaine_char &txt, unsigned int &pos) 
+{//unsigned int num_f, num_a;
  const char *texte = txt.Texte();
 
  classe_serialisation.chaine_cour = &txt;

@@ -10,9 +10,10 @@
 #include "..\interfaces\classiques\alx_fiche_ovale_opengl.h"
 #include "..\interfaces\classiques\alx_fiche_ovale.h"
 #include "..\interfaces\sdl_opengl\alx_noeud_visualisation_camera.h"
-#include "..\utilitaires\MetaData.h""
+#include "..\utilitaires\MetaData.h"
 #include "..\interfaces\alx_simulateur_pointeurs_TCL.h"
 #include "..\SWIG_TCL\alx_noeud_sdl_opengl_wrap.cxx"
+
 
 static bool initialisation_faite = false;
 alx_interpreteur_tcl *alx_interpreteur_cache;
