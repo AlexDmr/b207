@@ -79,7 +79,7 @@ void alx_simulateur_dispositif_saisie::simuler()
  alx_element_liste<lien_interet>                     *it, *it_fin = L_interessees.Fin();
  alx_evennement_dispositif_saisie *eds;
  lien_interet *lien;
- int i, taille = L_rappels.Taille();
+ int /*i,*/ taille = L_rappels.Taille();
 
  alx_element_liste<Liste_de_rappel> *it_rappel;
 

@@ -29,8 +29,8 @@ alx_image_opengl::alx_image_opengl(const INFOS_TEXTURE info_text, const double t
  texture_cree = true;
  image_creer  = false;
  info_texture.Copier( info_text );
- info_texture.taille_reelle[0] = taille_x;
- info_texture.taille_reelle[1] = taille_y;
+ info_texture.taille_reelle[0] = (int)taille_x;
+ info_texture.taille_reelle[1] = (int)taille_y;
  Etirement_x( taille_x );
  Etirement_y( taille_y );
 }

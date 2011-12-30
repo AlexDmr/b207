@@ -6,10 +6,10 @@
 
 typedef double (*Fonction_interpolation) (const double valeur_depart, const double valeur_arrive, const double t);
 
-double Fonction_interpolation_lineaire(const double valeur_depart, const double valeur_arrive, const double t)
+inline double Fonction_interpolation_lineaire(const double valeur_depart, const double valeur_arrive, const double t)
 {return valeur_depart + (valeur_arrive-valeur_depart)*t;}
 
-double Fonction_interpolation_cosinusoidale(const double valeur_depart, const double valeur_arrive, const double t)
+inline double Fonction_interpolation_cosinusoidale(const double valeur_depart, const double valeur_arrive, const double t)
 {return valeur_depart + (valeur_arrive-valeur_depart)*(cos(PI*(1-t))+1)/2;}
 
 class deformation_dynamique
@@ -28,7 +28,7 @@ class deformation_dynamique
 
    deformation_dynamique(const int duree)
     {this->duree = duree; fonction_interpolation = Fonction_interpolation_cosinusoidale;
-     this->delai_amorce = t_courant = 0;
+     this->delai_amorce = 0; t_courant = 0;
      amorce_traitee = false;}
    deformation_dynamique(const int amorce, const int duree)
     {this->duree = duree; fonction_interpolation = Fonction_interpolation_cosinusoidale;
@@ -78,7 +78,7 @@ class deformation_dynamique
    void abonner_a_rappel_fin_amorce   (alx_methode_rappel *mr);
    void desabonner_a_rappel_fin_amorce(alx_methode_rappel *mr);
 };
-deformation_dynamique* Void_vers_deformation_dynamique(void *p) {return (deformation_dynamique*)p;}
+inline deformation_dynamique* Void_vers_deformation_dynamique(void *p) {return (deformation_dynamique*)p;}
 
 template<class T> class deformation_dynamique_scalaire : public deformation_dynamique
 {
@@ -101,7 +101,7 @@ template<class T> class deformation_dynamique_scalaire : public deformation_dyna
     {deformation_dynamique::Demarrer();
      scal_initial = *scalaire;}
    virtual void Simuler(const double t)
-    {*scalaire = fonction_interpolation(scal_initial, *scal_dest, t);}
+    {*scalaire = (T)fonction_interpolation(scal_initial, *scal_dest, t);}
    inline virtual void Simuler()
     {Simuler( Position_temporelle_relative() ); }
 };
@@ -121,7 +121,7 @@ class deformation_dynamique_repere : public deformation_dynamique
    inline void Rep_dep(alx_repere2D *r) {rep_depart      = r;}
    inline void Rep_fin(alx_repere2D *r) {rep_destination = r;}
 };
-deformation_dynamique* Void_vers_deformation_dynamique_repere(void *p) {return (deformation_dynamique_repere*)p;}
+inline deformation_dynamique* Void_vers_deformation_dynamique_repere(void *p) {return (deformation_dynamique_repere*)p;}
 //______________________________________________________________________________
 class deformation_dynamique_repere_et_dim : public deformation_dynamique_repere
 {
@@ -148,7 +148,7 @@ class deformation_dynamique_repere_et_dim : public deformation_dynamique_repere
 
    inline deformation_dynamique_repere* Deformation_dynamique_repere() {return (deformation_dynamique_repere*)this;}
 };
-deformation_dynamique* Void_vers_deformation_dynamique_repere_et_dim(void *p) {return (deformation_dynamique_repere_et_dim*)p;}
+inline deformation_dynamique* Void_vers_deformation_dynamique_repere_et_dim(void *p) {return (deformation_dynamique_repere_et_dim*)p;}
 //______________________________________________________________________________
 class deformation_dynamique_etirement_fenetre : public deformation_dynamique_repere_et_dim
 {
@@ -176,7 +176,7 @@ class deformation_dynamique_etirement_fenetre : public deformation_dynamique_rep
   // Méthodes pour notre ami SWIG qui tue
    inline deformation_dynamique_repere* Deformation_dynamique_repere() {return (deformation_dynamique_repere*)this;}
 };
-deformation_dynamique* Void_vers_deformation_dynamique_etirement_fenetre(void *p) {return (deformation_dynamique_etirement_fenetre*)p;}
+inline deformation_dynamique* Void_vers_deformation_dynamique_etirement_fenetre(void *p) {return (deformation_dynamique_etirement_fenetre*)p;}
 //______________________________________________________________________________
 class deformation_dynamique_fenetre : public deformation_dynamique_repere
 {
@@ -193,6 +193,6 @@ class deformation_dynamique_fenetre : public deformation_dynamique_repere
    inline virtual void Simuler()
     {Simuler( Position_temporelle_relative() ); }
 };
-deformation_dynamique* Void_vers_deformation_dynamique_fenetre(void *p) {return (deformation_dynamique_fenetre*)p;}
+inline deformation_dynamique* Void_vers_deformation_dynamique_fenetre(void *p) {return (deformation_dynamique_fenetre*)p;}
 
 #endif

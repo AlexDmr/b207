@@ -78,8 +78,8 @@ void alx_simulateur_pointeur_souris_USB_raw::simuler()
          A_ic_tmp.coord.y = pt_tmp.y;
          A_ic_tmp.dep.x = A_ic_tmp.coord.x - tab_etats[event_mm.device][0];
          A_ic_tmp.dep.y = A_ic_tmp.coord.y - tab_etats[event_mm.device][1];
-         tab_etats[event_mm.device][0] = *ecran_x/2.0;
-         tab_etats[event_mm.device][1] = *ecran_y/2.0;
+         tab_etats[event_mm.device][0] = (int)(*ecran_x/2.0);
+         tab_etats[event_mm.device][1] = (int)(*ecran_y/2.0);
         // Balancer la sauce
          A_ep_tmp.maj(event_mm.device, alx_pointeur_mouvement, A_ic_tmp, Noeud_pere());
          distribuer_evennement( A_ep_tmp );

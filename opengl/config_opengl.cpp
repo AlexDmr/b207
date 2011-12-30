@@ -1,9 +1,10 @@
+
 #include "config_opengl.h"
 #include "../physique/math_alex.h"
 //#include <windows.h>
-#include <extgl.h>
+#include <glew.h>
 
-#include "../physique/alx_methode_rappel.h""
+#include "../physique/alx_methode_rappel.h"
 
 //______________________________________________________________________________
 //______________________________________________________________________________
@@ -183,8 +184,8 @@ void Changement_repere(const alx_repere2D &rep)
                      ,0,1,0,0
                      ,0,0,1,0
                      ,0,0,0,1};
-   mat[4] = rep.glissement.dx;
-   mat[1] = rep.glissement.dy;
+   mat[4] = (GLfloat)rep.glissement.dx;
+   mat[1] = (GLfloat)rep.glissement.dy;
    glMultMatrixf( mat );
   }
 }
@@ -200,8 +201,8 @@ void Changement_repere_ordre_inverse(const alx_repere2D &rep)
                      ,0,1,0,0
                      ,0,0,1,0
                      ,0,0,0,1};
-   mat[4] = rep.glissement.dx;
-   mat[1] = rep.glissement.dy;
+   mat[4] = (GLfloat)rep.glissement.dx;
+   mat[1] = (GLfloat)rep.glissement.dy;
    glMultMatrixf( mat );
   }
  if ( rep.etirement.dx != 1

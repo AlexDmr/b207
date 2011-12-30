@@ -6,7 +6,7 @@
 
 #include "../fonctions_serialisations.cpp"
 
-void* AlphaNum_vers_Void(const char *ad) {return (void*)strtol(ad, (char **)NULL, 16);}
+inline void* AlphaNum_vers_Void(const char *ad) {return (void*)strtol(ad, (char **)NULL, 16);}
 
 class alx_noeud_image_sdl_opengl : public alx_noeud_scene, public alx_image_opengl
 {private:
@@ -85,7 +85,7 @@ class alx_noeud_image_sdl_opengl : public alx_noeud_scene, public alx_image_open
    inline alx_image_opengl& Img() {return *((alx_image_opengl*)this);}
    inline INFOS_TEXTURE* Ptr_Info_texture() {return alx_image_opengl::Ptr_Info_texture();}
    inline INFOS_TEXTURE& Info_texture() {return alx_image_opengl::Info_texture();}
-   inline const INFOS_TEXTURE& Info_texture_const() const {return alx_image_opengl::Info_texture();}
+   inline const INFOS_TEXTURE& Info_texture_const() const {return alx_image_opengl::Info_texture_const();}
    inline const void* Tempon_const() const {return TEMPON_const();}
    inline void* Tempon() {return TEMPON();}
    inline const unsigned int Taille_Tempon() {return alx_image_opengl::Taille_Tempon();}
@@ -95,8 +95,8 @@ class alx_noeud_image_sdl_opengl : public alx_noeud_scene, public alx_image_open
    inline void Ordonnancement_couleurs(const int o) {alx_image_opengl::Ordonnancement_couleurs(o);}
    inline const double Lg() const {return alx_image_opengl::L();}
    inline const double Ht() const {return alx_image_opengl::H();}
-   inline void Lg(const double v) {alx_image_opengl::L(v);}
-   inline void Ht(const double v) {alx_image_opengl::H(v);}
+   inline void Lg(const double v) {alx_image_opengl::L((int)v);}
+   inline void Ht(const double v) {alx_image_opengl::H((int)v);}
 
  // Les surcharges pour la sérialisation
   // La différence _____________________________________________________________
@@ -122,6 +122,6 @@ class alx_noeud_image_sdl_opengl : public alx_noeud_scene, public alx_image_open
 };
 
 typedef alx_noeud_image_sdl_opengl* P_alx_noeud_image_sdl_opengl;
-alx_noeud_image_sdl_opengl* Void_vers_image(void *p) {return (alx_noeud_image_sdl_opengl*)p;}
+inline alx_noeud_image_sdl_opengl* Void_vers_image(void *p) {return (alx_noeud_image_sdl_opengl*)p;}
 
 #endif

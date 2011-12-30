@@ -2,7 +2,7 @@
 
 #include "../classiques/alx_fiche_opengl.h"
 #include "../../opengl/config_opengl.h"
-#include "..\choses_communes.h"
+#include "../choses_communes.h"
 
 //------------------------------------------------------------------------------
 void alx_noeud_fiche_sdl_opengl::init()
@@ -182,16 +182,6 @@ void alx_noeud_fiche_sdl_opengl::Dessin_noeud()
 }
 
 //------------------------------------------------------------------------------
-// Renvoi un pointeur sur le modèle physique qui contient la primitive, NULL si aucun.
-bool Zone_pointee(alx_model_simulation_physique1 **e, void *info_sup)
-{alx_point2D                    *pt = (alx_point2D*)info_sup;
- alx_model_simulation_physique1 *mp = *e;
-
- if( mp->Contient(*pt) )
-   return true;
-
- return false;
-}
 
 //------------------------------------------------------------------------------
 info_du_contenant* alx_noeud_fiche_sdl_opengl::Noeud_contient(const alx_point2D &pt, int action)

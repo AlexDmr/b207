@@ -15,12 +15,12 @@
 
 typedef unsigned int alx_pointeur_type_evennement;
 
-const alx_pointeur_type_evennement ALX_pointeur_enfonce    () {return alx_pointeur_enfonce;}
-const alx_pointeur_type_evennement ALX_pointeur_relache    () {return alx_pointeur_relache;}
-const alx_pointeur_type_evennement ALX_pointeur_apparition () {return alx_pointeur_apparition;}
-const alx_pointeur_type_evennement ALX_pointeur_disparition() {return alx_pointeur_disparition;}
-const alx_pointeur_type_evennement ALX_pointeur_mouvement  () {return alx_pointeur_mouvement;}
-const alx_pointeur_type_evennement ALX_pointeur_ALL        () {return 255;}
+inline const alx_pointeur_type_evennement ALX_pointeur_enfonce    () {return alx_pointeur_enfonce;}
+inline const alx_pointeur_type_evennement ALX_pointeur_relache    () {return alx_pointeur_relache;}
+inline const alx_pointeur_type_evennement ALX_pointeur_apparition () {return alx_pointeur_apparition;}
+inline const alx_pointeur_type_evennement ALX_pointeur_disparition() {return alx_pointeur_disparition;}
+inline const alx_pointeur_type_evennement ALX_pointeur_mouvement  () {return alx_pointeur_mouvement;}
+inline const alx_pointeur_type_evennement ALX_pointeur_ALL        () {return 255;}
 
 class alx_evennement_info_point_et_vect
 {public:

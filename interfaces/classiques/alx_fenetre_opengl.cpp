@@ -1,7 +1,7 @@
 #include "alx_fenetre_opengl.h"
 #include "..\..\opengl\config_opengl.h"
 #include "..\..\opengl\texte.h"
-#include <extgl.h>
+#include <glew.h>
 
 alx_fenetre_opengl::alx_fenetre_opengl(alx_fenetre *f, gl_fonte *fonte)
 {

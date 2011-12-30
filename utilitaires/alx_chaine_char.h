@@ -70,6 +70,7 @@ class alx_chaine_char
                                                      return texte[index];}
 
  // Les surcharges d'opérateurs unaires.
+   size_t operator()(const alx_chaine_char &) const {return (size_t)texte;}; // For hash_map 
    const bool operator!=(const alx_chaine_char &) const;  // Surcharge du  !=
    const bool operator==(const alx_chaine_char &) const;  // Surcharge du  ==
    const bool operator!=(const char *) const;  // Surcharge du  ==

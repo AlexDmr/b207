@@ -179,11 +179,12 @@ template <class T> class alx_liste
    T  Copie_de_E(const unsigned int pos) const {return It(pos)->E();}
    T& E(const unsigned int pos) {return It(pos)->E();}
    T& E(alx_element_liste<T> *it) {return it->E();}
+   const T& Const_E(alx_element_liste<T> *it) const {return it->Const_E();}
    T& Premier_E() {return E(Premier());}
    T& Dernier_E() {return E(Dernier());}
 
-   const T& Premier_E_const() const {return E(Premier());}
-   const T& Dernier_E_const() const {return E(Dernier());}
+   const T& Premier_E_const() const {return Const_E(Premier());}
+   const T& Dernier_E_const() const {return Const_E(Dernier());}
 
 //____________________________________________________________________________
    inline const bool Vide() const {return nb==0;}
@@ -267,7 +268,7 @@ template <class T> class alx_liste
   void Ajouter_avant(const alx_liste<T> &l, alx_element_liste<T> *p, const alx_element_liste<T> *it_deb, const alx_element_liste<T> *it_fin)
    {const alx_element_liste<T> *it = it_deb;
     for(;it!=it_fin && it!=l.Fin(); it=it->svt)
-      Ajouter_avant(it->E(), p);
+		Ajouter_avant(it->Const_E(), p);
    }
    //____________________________________________________________________________
   void Ajouter_apres(const alx_liste<T> &l, alx_element_liste<T> *p, const alx_element_liste<T> *it_deb, const alx_element_liste<T> *it_fin)

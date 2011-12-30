@@ -2,7 +2,7 @@
 #include "../physique/alx_model_simulation_physique1.h"
 #include "sdl_opengl/alx_prerendeur.h"
 
-#include <extgl.h>
+#include <glew.h>
 #include "..\physique\math_alex.cpp"
 #include "acces_interface.h"
 
@@ -25,10 +25,10 @@ void boite_englobante::Afficher() const
   if(Alpha() < 1) {glEnable(GL_BLEND);}
    glColor4fv( Tab_couleur() );
    glBegin(GL_LINE_LOOP);
-     glVertex2f(p1.X(), p1.Y());
-     glVertex2f(p2.X(), p1.Y());
-     glVertex2f(p2.X(), p2.Y());
-     glVertex2f(p1.X(), p2.Y());
+     glVertex2d(p1.X(), p1.Y());
+     glVertex2d(p2.X(), p1.Y());
+     glVertex2d(p2.X(), p2.Y());
+     glVertex2d(p1.X(), p2.Y());
    glEnd();
  glPopAttrib();
 }
@@ -48,7 +48,7 @@ const alx_chaine_char& IP_locale()
 char tmp[16];
 
 void alx_noeud_scene::Suffixer_nom(const char *t)
-{nom = alx_chaine_char("n_") + itoa(nb, tmp, 10) + "_" + IP_locale() + "_" + t;}
+{nom = alx_chaine_char("n_") + nb/*itoa_s(nb, tmp, 10)*/ + "_" + IP_locale() + "_" + t;}
 
 //______________________________________________________________________________
 //______________________________________________________________________________
@@ -57,7 +57,7 @@ alx_noeud_scene::alx_noeud_scene(const bool est_texture_optimisable) : alx_arbre
 {// Generate names
  nb = nb_noeud++;
  nom = "n_";
- nom+= itoa(nb, tmp, 10);
+ nom+= nb; //_itoa_s(nb, tmp, 10);
  nom.Ajouter("_", 0, 1);
  nom+= IP_locale();
 
@@ -771,7 +771,7 @@ void alx_noeud_scene::Ajouter_appels(info_du_contenant *rep, const unsigned int 
 }
 
 //______________________________________________________________________________
-info_du_contenant* alx_noeud_scene::Contenu_dans_fils(alx_point2D &pt, int action)
+info_du_contenant* alx_noeud_scene::Contenu_dans_fils(const alx_point2D &pt, int action)
     {if( !LR_Avant_contenu_dans_fils.Vide() ) {LR_Avant_contenu_dans_fils.Rappeler( this );}
 
      if(!Noeud_touchable()

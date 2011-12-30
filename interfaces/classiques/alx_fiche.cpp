@@ -212,15 +212,15 @@ void alx_fiche::rationnaliser(int num)
  if( (mp->nb_infos_comp != 4)
    ||(mp->infos_comp[0] != 5) ) return; // on ne traite que les changements de position
 
- alx_element_liste<alx_point2D> *it_pt1, *it_pt3;
+// alx_element_liste<alx_point2D> *it_pt1, *it_pt3;
  alx_point2D centre_redim;//, *coin_bg, *coin_bd, *coin_hd, *coin_hg;
  alx_vecteur2D vect, trans_point;
- double h_base_tmp, h_corp_prcdt, lg_corp_prcdt;
+ double /*h_base_tmp,*/ h_corp_prcdt, lg_corp_prcdt;
  alx_element_liste<alx_point2D> *it_pt;
- double info_angle, tmp1, tmp2;
+ double /*info_angle,*/ tmp1, tmp2;
  alx_point2D   info_point;
  alx_vecteur2D info_vecteur, correction;
- alx_model_simulation_physique1 *zr;
+// alx_model_simulation_physique1 *zr;
 
  switch(num)
   {case 1: // De l'entête

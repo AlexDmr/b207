@@ -2,7 +2,7 @@
 #include "..\physique\math_alex.cpp"
 #include <stdio.h>
 #include <stdlib.h>
-#include <extgl.h>
+#include <glew.h>
 #include <glu.h>										// Header File For The GLu32 Library
 
 ///////////////////////////////// CREATE OPENGL FONT \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
@@ -11,9 +11,9 @@
 /////
 ///////////////////////////////// CREATE OPENGL FONT \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
 
-UINT gl_fonte::CreerFonteOpenGL(LPSTR NomFonte, float profondeur)
+UINT gl_fonte::CreerFonteOpenGL(LPCWSTR NomFonte, float profondeur)
 {
- HFONT	hFont;
+ HFONT	hFont = NULL;
 
 	// Here we generate the lists for each character we want to use.
 	// This function then returns the base pointer, which will be 1 because
@@ -46,6 +46,7 @@ UINT gl_fonte::CreerFonteOpenGL(LPSTR NomFonte, float profondeur)
 
 	// Now that we have created a new font, we need to select that font into our global HDC.
 	// We store the old font so we can select it back in when we are done to avoid memory leaks.
+	hOldFont  = NULL;
 	hOldFont = (HFONT)SelectObject(hdc, hFont);
 
 	// This is the function that creates all the magic.  This will actually output the
@@ -72,13 +73,13 @@ UINT gl_fonte::CreerFonteOpenGL(LPSTR NomFonte, float profondeur)
  return 0;
 }
 
-float gl_fonte::Calculer_hauteur()
+double gl_fonte::Calculer_hauteur()
 {
- float rep = 0;
+ double rep = 0;
 
  for(int i=0;i<nb_char;i++)
   {
-   rep = Amax(rep, g_GlyphInfo[i].gmfBlackBoxY);
+   rep = Amax(rep, (double)g_GlyphInfo[i].gmfBlackBoxY);
   }
 
  return 1.2*rep;
@@ -100,7 +101,7 @@ unsigned int gl_fonte::Position_lettre(float dec, unsigned char *strText)
  return Amax(0, (int)rep-1);
 }
 
-float gl_fonte::longueur_effective(int &NbCarEcrits, const float taille_max, unsigned char *strText)
+double gl_fonte::longueur_effective(int &NbCarEcrits, const float taille_max, char *strText)
 {
  // Below we find out the total length of the characters in 3D units, then center them.
  float unitLength=0.0000f;
@@ -126,32 +127,25 @@ float gl_fonte::longueur_effective(int &NbCarEcrits, const float taille_max, uns
  return unitLength;
 }
 
-float gl_fonte::ecrire(int &NbCarEcrits, const float taille_max, unsigned char *strString, ...)
+double gl_fonte::ecrire(int &NbCarEcrits, const float taille_max, char *strString, ...)
 {
 	// First we need to check if there was even a string given
 	if (strString == NULL)								// Check if a string was given
 		return 0.0;											// Don't render anything then
 
 
-	unsigned char  *strText;							// This will hold our text to display
-        unsigned char   tab_texte[65536];
+	char  *strText;							// This will hold our text to display
+    char   tab_texte[65536];
 	va_list		argumentPtr;							// This will hold the pointer to the argument list
-	float		unitLength;						// This will store the length of the 3D Font in unit length
+	double		unitLength;						// This will store the length of the 3D Font in unit length
 
 
         if(mode == 1)
          {
-          strText = tab_texte;
-   	  // First we need to parse the string for arguments given
-	  // To do this we pass in a va_list variable that is a pointer to the list of arguments.
-	  // Then we pass in the string that holds all of those arguments.
-	  va_start(argumentPtr, strString);					// Parse the arguments out of the string
-
-	  // Then we use a special version of sprintf() that takes a pointer to the argument list.
-	  // This then does the normal sprintf() functionality.
-	  vsprintf(strText, strString, argumentPtr);			// Now add the arguments into the full string
-
-	  va_end(argumentPtr);								// This resets and frees the pointer to the argument list.
+		  va_start(argumentPtr, strString);					// Parse the arguments out of the string
+		  vsprintf_s(tab_texte, 65536, strString, argumentPtr);			// Now add the arguments into the full string
+		  strText = tab_texte;
+		  va_end(argumentPtr);								// This resets and frees the pointer to the argument list.
          }
          else strText = strString;
 
@@ -169,7 +163,7 @@ float gl_fonte::ecrire(int &NbCarEcrits, const float taille_max, unsigned char *
 	//glTranslatef(0.0f - (unitLength / 2), 0.0f, 0.0f);
 
 /////// * /////////// * /////////// * NEW * /////// * /////////// * /////////// *
-        unitLength = longueur_effective(NbCarEcrits, taille_max, strText);
+    unitLength = longueur_effective(NbCarEcrits, taille_max, strText);
 
 	// Now, before we set the list base, we need to save off the current one.
 	glPushAttrib(GL_LIST_BIT);							// This saves the list base information
@@ -185,7 +179,7 @@ float gl_fonte::ecrire(int &NbCarEcrits, const float taille_max, unsigned char *
 
 	glPopAttrib();										// Return the display list back to it's previous state
 
-        return unitLength;
+    return unitLength;
     //glTranslatef(0.0f - (unitLength / 2), 0.0f, 0.0f);
 
 /*
@@ -303,5 +297,10 @@ gl_fonte::gl_fonte(char *nom_fonte, float p)
  mode = 1; // Annalyse des %
  g_GlyphInfo = new GLYPHMETRICSFLOAT[nb_char];
 
- id_fonte = CreerFonteOpenGL(nom_fonte, p);
+ WCHAR LPCW_nom_fonte[256];
+ size_t nbchar_converted;
+ //MultiByteToWideChar(CP_UTF8, MB_PRECOMPOSED, nom_fonte, -1, LPCW_nom_fonte, 256);
+ //char *localeInfo = setlocale(LC_ALL, "Japanese_Japan.932");
+ mbstowcs_s(&nbchar_converted, LPCW_nom_fonte, nom_fonte, 256);
+ id_fonte = CreerFonteOpenGL(LPCW_nom_fonte, p);
 }

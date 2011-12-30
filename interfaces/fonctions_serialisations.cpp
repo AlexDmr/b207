@@ -70,9 +70,8 @@ template<class C> void CFSD<C>::Serialiser_diff_1_bool   (unsigned int &pos, voi
 // 1) taille de la sérialisation (moins elle même et le séparateur nécessaire, ex 4_coco
 // 2) nbcontours_(trou_nbvertexs_(x'y_)*|)*
 template<class C> void CFSD<C>::Serialiser_diff_polygone(unsigned int &pos, void *fptr) const
-{unsigned int pos_fin_amorce = pos
-            , taille_tab;
- double val_d_tmp;
+{unsigned int pos_fin_amorce = pos;
+// double val_d_tmp;
  gpc_polygon *poly = (gpc_polygon *)NULL;
  f_consultation_polygone fct = *((f_consultation_polygone*)fptr);
  const bool poly_a_change = (instanceC->*fct)( &poly );
@@ -110,8 +109,7 @@ template<class C> void CFSD<C>::Serialiser_diff_polygone(unsigned int &pos, void
 
 //______________________________________________________________________________
 template<class C> void CFSD<C>::Serialiser_diff_chaine_char   (unsigned int &pos, void *fptr) const
-{bool difference;
- unsigned int pos_fin_amorce = pos, taille;
+{unsigned int pos_fin_amorce = pos;
   // Calcul de la chaine déja sérialisée:
    //unsigned int dep_cc1 = pos;
    const alx_chaine_char *cc = (alx_chaine_char*)NULL;
@@ -318,14 +316,14 @@ template<class C> void CFSD<C>::Deserialiser_type(const alx_chaine_char &txt, un
  chaine_cour = &txt;
 
 // On refixe les fonctions de rappel, pour assurer la désérialisation:
- f_ptr[7] = &(CFSD<C>::Deserialiser_polygone);
- f_ptr[6] = &(CFSD<C>::Deserialiser_1_int);
- f_ptr[5] = &(CFSD<C>::Deserialiser_4_doubles_i);
- f_ptr[4] = &(CFSD<C>::Deserialiser_chaine_char);
- f_ptr[3] = &(CFSD<C>::Deserialiser_4_doubles);
- f_ptr[2] = &(CFSD<C>::Deserialiser_2_doubles);
- f_ptr[1] = &(CFSD<C>::Deserialiser_1_double);
- f_ptr[0] = &(CFSD<C>::Deserialiser_1_bool);
+ f_ptr[7] = &CFSD<C>::Deserialiser_polygone;
+ f_ptr[6] = &CFSD<C>::Deserialiser_1_int;
+ f_ptr[5] = &CFSD<C>::Deserialiser_4_doubles_i;
+ f_ptr[4] = &CFSD<C>::Deserialiser_chaine_char;
+ f_ptr[3] = &CFSD<C>::Deserialiser_4_doubles;
+ f_ptr[2] = &CFSD<C>::Deserialiser_2_doubles;
+ f_ptr[1] = &CFSD<C>::Deserialiser_1_double;
+ f_ptr[0] = &CFSD<C>::Deserialiser_1_bool;
 
  poly_reshaped = false;
 // Puis on désérialise la partie spécifique à la fenêtre
@@ -353,14 +351,14 @@ template<class C> const alx_chaine_char& CFSD<C>::Serialiser_difference_type(uns
 // chaine_cour_ecriture_seri = &seri_tmp;
 
 // On refixe les fonctions de rappel, pour assurer la désérialisation:
- f_ptr_seri_diff[7] = &(CFSD<C>::Serialiser_diff_polygone);
- f_ptr_seri_diff[6] = &(CFSD<C>::Serialiser_diff_1_int);
- f_ptr_seri_diff[5] = &(CFSD<C>::Serialiser_diff_4_doubles_i);
- f_ptr_seri_diff[4] = &(CFSD<C>::Serialiser_diff_chaine_char);
- f_ptr_seri_diff[3] = &(CFSD<C>::Serialiser_diff_4_doubles);
- f_ptr_seri_diff[2] = &(CFSD<C>::Serialiser_diff_2_doubles);
- f_ptr_seri_diff[1] = &(CFSD<C>::Serialiser_diff_1_double);
- f_ptr_seri_diff[0] = &(CFSD<C>::Serialiser_diff_1_bool);
+ f_ptr_seri_diff[7] = &CFSD<C>::Serialiser_diff_polygone;
+ f_ptr_seri_diff[6] = &CFSD<C>::Serialiser_diff_1_int;
+ f_ptr_seri_diff[5] = &CFSD<C>::Serialiser_diff_4_doubles_i;
+ f_ptr_seri_diff[4] = &CFSD<C>::Serialiser_diff_chaine_char;
+ f_ptr_seri_diff[3] = &CFSD<C>::Serialiser_diff_4_doubles;
+ f_ptr_seri_diff[2] = &CFSD<C>::Serialiser_diff_2_doubles;
+ f_ptr_seri_diff[1] = &CFSD<C>::Serialiser_diff_1_double;
+ f_ptr_seri_diff[0] = &CFSD<C>::Serialiser_diff_1_bool;
 
 // Puis on désérialise la partie spécifique à la fenêtre
  const char *texte = chaine_cour_diff_seri->Texte();

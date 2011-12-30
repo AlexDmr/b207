@@ -37,7 +37,7 @@ void Enregistrer_visualisation_camera(alx_interpreteur_tcl *interp, const alx_no
 //______________________________________________________________________________
 void Initialisation_commandes_tcl_interfaces(alx_interpreteur_tcl *interp);
 void Enregistrer(alx_interpreteur_tcl *interp, const char *nom_classe, const char *nom_var, const char *var_interne, const char *methode_acces);
-void Enregistrer(alx_interpreteur_tcl *interp, olfa_comet &c, const char *methode_acces)
+inline void Enregistrer(alx_interpreteur_tcl *interp, olfa_comet &c, const char *methode_acces)
  {Enregistrer(interp, c.Classe_comet().Texte(), c.Nom_usage().Texte(), c.Nom_interne().Texte(), methode_acces);}
 
 void Enregistrer_accesseur( alx_interpreteur_tcl *interp

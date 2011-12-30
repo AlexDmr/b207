@@ -88,7 +88,7 @@ alx_telec_camnote_cpp_bigre::alx_telec_camnote_cpp_bigre( char *nom
  char tmp[16];
  z_texte_numero = new alx_zone_texte_opengl(90, 30, fonte_Arial(), interface_mere->Sim_dispo_saisi());
  z_texte_numero->Zoom(25);
- z_texte_numero->Maj_texte( itoa(alx_telec_cpp::Numero_transparent(), tmp, 10) );
+ _itoa_s(alx_telec_cpp::Numero_transparent(), tmp, 10); z_texte_numero->Maj_texte( tmp );
  zone_texte_numero = new alx_noeud_zone_texte_sdl_opengl(z_texte_numero);
    zone_texte_numero->Nom_IU("Numéro de\ndiapositive");
  zone_texte_numero->Origine(115, 211);
@@ -151,8 +151,8 @@ void alx_telec_camnote_cpp_bigre::Rationnaliser_activation_pixels_mirroirs(void 
 {Activation_pix_mirroir( !Activation_pix_mirroir() );}
 
 void alx_telec_camnote_cpp_bigre::Rationnaliser_translucidite_pixels_mirroirs(void *param)
-{alx_telec_camnote_cpp::Intensite_pixels_miroirs( ( (double)(potentiometre_translucidite->Valeur())
-                                                / (double)(potentiometre_translucidite->Valeur_max()) ) );}
+{alx_telec_camnote_cpp::Intensite_pixels_miroirs( ( (float)(potentiometre_translucidite->Valeur())
+                                                / (float)(potentiometre_translucidite->Valeur_max()) ) );}
 
 void alx_telec_camnote_cpp_bigre::Rationnaliser_bouton_prcdt(void *param)
 {Numero_transparent( Amax(alx_telec_cpp::Numero_transparent()-1, (unsigned int)1) );}
@@ -174,7 +174,7 @@ void alx_telec_camnote_cpp_bigre::Numero_transparent(const unsigned int num)
  z_texte->Maj_texte( alx_telec_cpp::Commentaire(alx_telec_cpp::Numero_transparent()) );
  z_texte->Position_curseur(0);
  // Mise à jour de l'affichage du numéro de transparent
- z_texte_numero->Maj_texte( itoa(alx_telec_cpp::Numero_transparent(), nom_diapo, 10) );
+ _itoa_s(alx_telec_cpp::Numero_transparent(), nom_diapo, 10); z_texte_numero->Maj_texte( nom_diapo );
 }
 
 // Version clavier

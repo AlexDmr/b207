@@ -1,9 +1,9 @@
 
 #include "alx_noeud_polygone_sdl_opengl.h"
-#include "../../GPC/gpc.c"
+//#include "../../GPC/gpc.cpp"
 #include "../../opengl/config_opengl.h"
 //#include <glut.h>
-#include <extgl.h>
+#include <glew.h>
 #include "../../physique/math_alex.cpp"
 extern "C" {
  #include <glu.h>
@@ -181,99 +181,99 @@ void alx_noeud_polygone_sdl_opengl::init_ptr()
  classe_seri_poly.fb1[4]   = &(alx_noeud_polygone_sdl_opengl::Perimetre_a_afficher); f_deseri[8] = &(classe_seri_poly.fb1[4]);
  classe_seri_poly.fsd_b1[4]= &(alx_noeud_polygone_sdl_opengl::Perimetre_a_afficher); f_diff[8]   = &(classe_seri_poly.fsd_b1[4]);
 */
- classe_seri_poly.fcc[0]   = &(alx_noeud_polygone_sdl_opengl::Deseri_info_texture_1);               ; f_deseri[6] = &(classe_seri_poly.fcc[0]);
- classe_seri_poly.fsd_cc[0]= &(alx_noeud_polygone_sdl_opengl::Seri_diff_info_texture_1_a_ete_change); f_diff[6]   = &(classe_seri_poly.fsd_cc[0]);
- classe_seri_poly.fcc[1]   = &(alx_noeud_polygone_sdl_opengl::Deseri_info_texture_2);               ; f_deseri[7] = &(classe_seri_poly.fcc[1]);
- classe_seri_poly.fsd_cc[1]= &(alx_noeud_polygone_sdl_opengl::Seri_diff_info_texture_2_a_ete_change); f_diff[7]   = &(classe_seri_poly.fsd_cc[1]);
+ classe_seri_poly.fcc[0]   = &alx_noeud_polygone_sdl_opengl::Deseri_info_texture_1;               ; f_deseri[6] = &(classe_seri_poly.fcc[0]);
+ classe_seri_poly.fsd_cc[0]= &alx_noeud_polygone_sdl_opengl::Seri_diff_info_texture_1_a_ete_change; f_diff[6]   = &(classe_seri_poly.fsd_cc[0]);
+ classe_seri_poly.fcc[1]   = &alx_noeud_polygone_sdl_opengl::Deseri_info_texture_2;               ; f_deseri[7] = &(classe_seri_poly.fcc[1]);
+ classe_seri_poly.fsd_cc[1]= &alx_noeud_polygone_sdl_opengl::Seri_diff_info_texture_2_a_ete_change; f_diff[7]   = &(classe_seri_poly.fsd_cc[1]);
 
- classe_seri_poly.fi1[0]    = &(alx_noeud_polygone_sdl_opengl::Marqueur_attributs_poly); f_deseri[8] = &(classe_seri_poly.fi1[0]);
- classe_seri_poly.fsd_i1[0] = &(alx_noeud_polygone_sdl_opengl::Marqueur_attributs_poly); f_diff[8]   = &(classe_seri_poly.fsd_i1[0]);
+ classe_seri_poly.fi1[0]    = &alx_noeud_polygone_sdl_opengl::Marqueur_attributs_poly; f_deseri[8] = &(classe_seri_poly.fi1[0]);
+ classe_seri_poly.fsd_i1[0] = &alx_noeud_polygone_sdl_opengl::Marqueur_attributs_poly; f_diff[8]   = &(classe_seri_poly.fsd_i1[0]);
 
- classe_seri_poly.fd4[0]   = &(alx_noeud_polygone_sdl_opengl::Couleur);           f_deseri[9] = &(classe_seri_poly.fd4[0]);
- classe_seri_poly.fsd_d4[0]= &(alx_noeud_polygone_sdl_opengl::Couleur);           f_diff[9]   = &(classe_seri_poly.fsd_d4[0]);
- classe_seri_poly.fd4[1]   = &(alx_noeud_polygone_sdl_opengl::Couleur_perimetre); f_deseri[10] = &(classe_seri_poly.fd4[1]);
- classe_seri_poly.fsd_d4[1]= &(alx_noeud_polygone_sdl_opengl::Couleur_perimetre); f_diff[10]   = &(classe_seri_poly.fsd_d4[1]);
+ classe_seri_poly.fd4[0]   = &alx_noeud_polygone_sdl_opengl::Couleur;           f_deseri[9] = &(classe_seri_poly.fd4[0]);
+ classe_seri_poly.fsd_d4[0]= &alx_noeud_polygone_sdl_opengl::Couleur;           f_diff[9]   = &(classe_seri_poly.fsd_d4[0]);
+ classe_seri_poly.fd4[1]   = &alx_noeud_polygone_sdl_opengl::Couleur_perimetre; f_deseri[10] = &(classe_seri_poly.fd4[1]);
+ classe_seri_poly.fsd_d4[1]= &alx_noeud_polygone_sdl_opengl::Couleur_perimetre; f_diff[10]   = &(classe_seri_poly.fsd_d4[1]);
 
- classe_seri_poly.fd_poly [0] = &(alx_noeud_polygone_sdl_opengl::Maj_poly_gpc);          f_deseri[11] = &(classe_seri_poly.fd_poly [0]);
- classe_seri_poly.fsd_poly[0] = &(alx_noeud_polygone_sdl_opengl::A_ete_modifie);         f_diff  [11] = &(classe_seri_poly.fsd_poly[0]);
+ classe_seri_poly.fd_poly [0] = &alx_noeud_polygone_sdl_opengl::Maj_poly_gpc;          f_deseri[11] = &(classe_seri_poly.fd_poly [0]);
+ classe_seri_poly.fsd_poly[0] = &alx_noeud_polygone_sdl_opengl::A_ete_modifie;         f_diff  [11] = &(classe_seri_poly.fsd_poly[0]);
 
- classe_seri_poly.fd4[2]   = &(alx_noeud_polygone_sdl_opengl::Const_couleur_d); f_deseri[12] = &(classe_seri_poly.fd4[2]);
- classe_seri_poly.fsd_d4[2]= &(alx_noeud_polygone_sdl_opengl::Const_couleur_d); f_diff[12]   = &(classe_seri_poly.fsd_d4[2]);
+ classe_seri_poly.fd4[2]   = &alx_noeud_polygone_sdl_opengl::Const_couleur_d; f_deseri[12] = &(classe_seri_poly.fd4[2]);
+ classe_seri_poly.fsd_d4[2]= &alx_noeud_polygone_sdl_opengl::Const_couleur_d; f_diff[12]   = &(classe_seri_poly.fsd_d4[2]);
 
- classe_seri_poly.fd1[0]   = &(alx_noeud_polygone_sdl_opengl::Alpha_scale_d); f_deseri[13] = &(classe_seri_poly.fd1[0]);
- classe_seri_poly.fsd_d1[0]= &(alx_noeud_polygone_sdl_opengl::Alpha_scale_d); f_diff[13]   = &(classe_seri_poly.fsd_d1[0]);
- classe_seri_poly.fd1[1]   = &(alx_noeud_polygone_sdl_opengl::RGB_scale_d)  ; f_deseri[14] = &(classe_seri_poly.fd1[1]);
- classe_seri_poly.fsd_d1[1]= &(alx_noeud_polygone_sdl_opengl::RGB_scale_d)  ; f_diff[14]   = &(classe_seri_poly.fsd_d1[1]);
- classe_seri_poly.fd1[2]   = &(alx_noeud_polygone_sdl_opengl::Constante_combinaison_couleurs_d)  ; f_deseri[15] = &(classe_seri_poly.fd1[2]);
- classe_seri_poly.fsd_d1[2]= &(alx_noeud_polygone_sdl_opengl::Constante_combinaison_couleurs_d)  ; f_diff[15]   = &(classe_seri_poly.fsd_d1[2]);
- classe_seri_poly.fd1[3]   = &(alx_noeud_polygone_sdl_opengl::Constante_combinaison_textures_d)  ; f_deseri[16] = &(classe_seri_poly.fd1[3]);
- classe_seri_poly.fsd_d1[3]= &(alx_noeud_polygone_sdl_opengl::Constante_combinaison_textures_d)  ; f_diff[16]   = &(classe_seri_poly.fsd_d1[3]);
+ classe_seri_poly.fd1[0]   = &alx_noeud_polygone_sdl_opengl::Alpha_scale_d; f_deseri[13] = &(classe_seri_poly.fd1[0]);
+ classe_seri_poly.fsd_d1[0]= &alx_noeud_polygone_sdl_opengl::Alpha_scale_d; f_diff[13]   = &(classe_seri_poly.fsd_d1[0]);
+ classe_seri_poly.fd1[1]   = &alx_noeud_polygone_sdl_opengl::RGB_scale_d  ; f_deseri[14] = &(classe_seri_poly.fd1[1]);
+ classe_seri_poly.fsd_d1[1]= &alx_noeud_polygone_sdl_opengl::RGB_scale_d  ; f_diff[14]   = &(classe_seri_poly.fsd_d1[1]);
+ classe_seri_poly.fd1[2]   = &alx_noeud_polygone_sdl_opengl::Constante_combinaison_couleurs_d  ; f_deseri[15] = &(classe_seri_poly.fd1[2]);
+ classe_seri_poly.fsd_d1[2]= &alx_noeud_polygone_sdl_opengl::Constante_combinaison_couleurs_d  ; f_diff[15]   = &(classe_seri_poly.fsd_d1[2]);
+ classe_seri_poly.fd1[3]   = &alx_noeud_polygone_sdl_opengl::Constante_combinaison_textures_d  ; f_deseri[16] = &(classe_seri_poly.fd1[3]);
+ classe_seri_poly.fsd_d1[3]= &alx_noeud_polygone_sdl_opengl::Constante_combinaison_textures_d  ; f_diff[16]   = &(classe_seri_poly.fsd_d1[3]);
 
- classe_seri_poly.fi1[1]    = &(alx_noeud_polygone_sdl_opengl::Combinaison_couleurs_source_arg2) ; f_deseri[17] = &(classe_seri_poly.fi1[1]);
- classe_seri_poly.fsd_i1[1] = &(alx_noeud_polygone_sdl_opengl::Combinaison_couleurs_source_arg2) ; f_diff[17]   = &(classe_seri_poly.fsd_i1[1]);
- classe_seri_poly.fi1[2]    = &(alx_noeud_polygone_sdl_opengl::Combinaison_couleurs_operande2)   ; f_deseri[18] = &(classe_seri_poly.fi1[2]);
- classe_seri_poly.fsd_i1[2] = &(alx_noeud_polygone_sdl_opengl::Combinaison_couleurs_operande2)   ; f_diff[18]   = &(classe_seri_poly.fsd_i1[2]);
- classe_seri_poly.fi1[3]    = &(alx_noeud_polygone_sdl_opengl::Combinaison_textures_source_arg2) ; f_deseri[19] = &(classe_seri_poly.fi1[3]);
- classe_seri_poly.fsd_i1[3] = &(alx_noeud_polygone_sdl_opengl::Combinaison_textures_source_arg2) ; f_diff[19]   = &(classe_seri_poly.fsd_i1[3]);
- classe_seri_poly.fi1[4]    = &(alx_noeud_polygone_sdl_opengl::Combinaison_textures_operande2)   ; f_deseri[20] = &(classe_seri_poly.fi1[4]);
- classe_seri_poly.fsd_i1[4] = &(alx_noeud_polygone_sdl_opengl::Combinaison_textures_operande2)   ; f_diff[20]   = &(classe_seri_poly.fsd_i1[4]);
- classe_seri_poly.fi1[5]    = &(alx_noeud_polygone_sdl_opengl::Ordre_application_textures_rgb)   ; f_deseri[21] = &(classe_seri_poly.fi1[5]);
- classe_seri_poly.fsd_i1[5] = &(alx_noeud_polygone_sdl_opengl::Ordre_application_textures_rgb)   ; f_diff[21] = &(classe_seri_poly.fsd_i1[5]);
- classe_seri_poly.fi1[6]    = &(alx_noeud_polygone_sdl_opengl::Ordre_application_textures_alpha) ; f_deseri[22] = &(classe_seri_poly.fi1[6]);
- classe_seri_poly.fsd_i1[6] = &(alx_noeud_polygone_sdl_opengl::Ordre_application_textures_alpha) ; f_diff[22] = &(classe_seri_poly.fsd_i1[6]);
- classe_seri_poly.fi1[7]    = &(alx_noeud_polygone_sdl_opengl::Combinaison_textures_rgb)         ; f_deseri[23] = &(classe_seri_poly.fi1[7]);
- classe_seri_poly.fsd_i1[7] = &(alx_noeud_polygone_sdl_opengl::Combinaison_textures_rgb)         ; f_diff[23] = &(classe_seri_poly.fsd_i1[7]);
- classe_seri_poly.fi1[8]    = &(alx_noeud_polygone_sdl_opengl::Combinaison_textures_alpha)       ; f_deseri[24] = &(classe_seri_poly.fi1[8]);
- classe_seri_poly.fsd_i1[8] = &(alx_noeud_polygone_sdl_opengl::Combinaison_textures_alpha)       ; f_diff[24] = &(classe_seri_poly.fsd_i1[8]);
- classe_seri_poly.fi1[9]    = &(alx_noeud_polygone_sdl_opengl::Ordre_application_couleurs_rgb)   ; f_deseri[25] = &(classe_seri_poly.fi1[9]);
- classe_seri_poly.fsd_i1[9] = &(alx_noeud_polygone_sdl_opengl::Ordre_application_couleurs_rgb)   ; f_diff[25] = &(classe_seri_poly.fsd_i1[9]);
- classe_seri_poly.fi1[10]    = &(alx_noeud_polygone_sdl_opengl::Ordre_application_couleurs_alpha); f_deseri[26] = &(classe_seri_poly.fi1[10]);
- classe_seri_poly.fsd_i1[10] = &(alx_noeud_polygone_sdl_opengl::Ordre_application_couleurs_alpha); f_diff[26] = &(classe_seri_poly.fsd_i1[10]);
- classe_seri_poly.fi1[11]    = &(alx_noeud_polygone_sdl_opengl::Combinaison_couleurs_rgb)        ; f_deseri[27] = &(classe_seri_poly.fi1[11]);
- classe_seri_poly.fsd_i1[11] = &(alx_noeud_polygone_sdl_opengl::Combinaison_couleurs_rgb)        ; f_diff[27] = &(classe_seri_poly.fsd_i1[11]);
- classe_seri_poly.fi1[12]    = &(alx_noeud_polygone_sdl_opengl::Combinaison_couleurs_alpha)      ; f_deseri[28] = &(classe_seri_poly.fi1[12]);
- classe_seri_poly.fsd_i1[12] = &(alx_noeud_polygone_sdl_opengl::Combinaison_couleurs_alpha)      ; f_diff[28] = &(classe_seri_poly.fsd_i1[12]);
+ classe_seri_poly.fi1[1]    = &alx_noeud_polygone_sdl_opengl::Combinaison_couleurs_source_arg2 ; f_deseri[17] = &(classe_seri_poly.fi1[1]);
+ classe_seri_poly.fsd_i1[1] = &alx_noeud_polygone_sdl_opengl::Combinaison_couleurs_source_arg2 ; f_diff[17]   = &(classe_seri_poly.fsd_i1[1]);
+ classe_seri_poly.fi1[2]    = &alx_noeud_polygone_sdl_opengl::Combinaison_couleurs_operande2   ; f_deseri[18] = &(classe_seri_poly.fi1[2]);
+ classe_seri_poly.fsd_i1[2] = &alx_noeud_polygone_sdl_opengl::Combinaison_couleurs_operande2   ; f_diff[18]   = &(classe_seri_poly.fsd_i1[2]);
+ classe_seri_poly.fi1[3]    = &alx_noeud_polygone_sdl_opengl::Combinaison_textures_source_arg2 ; f_deseri[19] = &(classe_seri_poly.fi1[3]);
+ classe_seri_poly.fsd_i1[3] = &alx_noeud_polygone_sdl_opengl::Combinaison_textures_source_arg2 ; f_diff[19]   = &(classe_seri_poly.fsd_i1[3]);
+ classe_seri_poly.fi1[4]    = &alx_noeud_polygone_sdl_opengl::Combinaison_textures_operande2   ; f_deseri[20] = &(classe_seri_poly.fi1[4]);
+ classe_seri_poly.fsd_i1[4] = &alx_noeud_polygone_sdl_opengl::Combinaison_textures_operande2   ; f_diff[20]   = &(classe_seri_poly.fsd_i1[4]);
+ classe_seri_poly.fi1[5]    = &alx_noeud_polygone_sdl_opengl::Ordre_application_textures_rgb   ; f_deseri[21] = &(classe_seri_poly.fi1[5]);
+ classe_seri_poly.fsd_i1[5] = &alx_noeud_polygone_sdl_opengl::Ordre_application_textures_rgb   ; f_diff[21] = &(classe_seri_poly.fsd_i1[5]);
+ classe_seri_poly.fi1[6]    = &alx_noeud_polygone_sdl_opengl::Ordre_application_textures_alpha ; f_deseri[22] = &(classe_seri_poly.fi1[6]);
+ classe_seri_poly.fsd_i1[6] = &alx_noeud_polygone_sdl_opengl::Ordre_application_textures_alpha ; f_diff[22] = &(classe_seri_poly.fsd_i1[6]);
+ classe_seri_poly.fi1[7]    = &alx_noeud_polygone_sdl_opengl::Combinaison_textures_rgb         ; f_deseri[23] = &(classe_seri_poly.fi1[7]);
+ classe_seri_poly.fsd_i1[7] = &alx_noeud_polygone_sdl_opengl::Combinaison_textures_rgb         ; f_diff[23] = &(classe_seri_poly.fsd_i1[7]);
+ classe_seri_poly.fi1[8]    = &alx_noeud_polygone_sdl_opengl::Combinaison_textures_alpha       ; f_deseri[24] = &(classe_seri_poly.fi1[8]);
+ classe_seri_poly.fsd_i1[8] = &alx_noeud_polygone_sdl_opengl::Combinaison_textures_alpha       ; f_diff[24] = &(classe_seri_poly.fsd_i1[8]);
+ classe_seri_poly.fi1[9]    = &alx_noeud_polygone_sdl_opengl::Ordre_application_couleurs_rgb   ; f_deseri[25] = &(classe_seri_poly.fi1[9]);
+ classe_seri_poly.fsd_i1[9] = &alx_noeud_polygone_sdl_opengl::Ordre_application_couleurs_rgb   ; f_diff[25] = &(classe_seri_poly.fsd_i1[9]);
+ classe_seri_poly.fi1[10]    = &alx_noeud_polygone_sdl_opengl::Ordre_application_couleurs_alpha; f_deseri[26] = &(classe_seri_poly.fi1[10]);
+ classe_seri_poly.fsd_i1[10] = &alx_noeud_polygone_sdl_opengl::Ordre_application_couleurs_alpha; f_diff[26] = &(classe_seri_poly.fsd_i1[10]);
+ classe_seri_poly.fi1[11]    = &alx_noeud_polygone_sdl_opengl::Combinaison_couleurs_rgb        ; f_deseri[27] = &(classe_seri_poly.fi1[11]);
+ classe_seri_poly.fsd_i1[11] = &alx_noeud_polygone_sdl_opengl::Combinaison_couleurs_rgb        ; f_diff[27] = &(classe_seri_poly.fsd_i1[11]);
+ classe_seri_poly.fi1[12]    = &alx_noeud_polygone_sdl_opengl::Combinaison_couleurs_alpha      ; f_deseri[28] = &(classe_seri_poly.fi1[12]);
+ classe_seri_poly.fsd_i1[12] = &alx_noeud_polygone_sdl_opengl::Combinaison_couleurs_alpha      ; f_diff[28] = &(classe_seri_poly.fsd_i1[12]);
 
- classe_seri_poly.fi1[13]    = &(alx_noeud_polygone_sdl_opengl::Combinaison_couleurs_source_arg0); f_deseri[29] = &(classe_seri_poly.fi1[13]);
- classe_seri_poly.fsd_i1[13] = &(alx_noeud_polygone_sdl_opengl::Combinaison_couleurs_source_arg0); f_diff[29]   = &(classe_seri_poly.fsd_i1[13]);
- classe_seri_poly.fi1[14]    = &(alx_noeud_polygone_sdl_opengl::Combinaison_couleurs_operande0); f_deseri[30] = &(classe_seri_poly.fi1[14]);
- classe_seri_poly.fsd_i1[14] = &(alx_noeud_polygone_sdl_opengl::Combinaison_couleurs_operande0); f_diff[30]   = &(classe_seri_poly.fsd_i1[14]);
- classe_seri_poly.fi1[15]    = &(alx_noeud_polygone_sdl_opengl::Combinaison_couleurs_source_arg1); f_deseri[31] = &(classe_seri_poly.fi1[15]);
- classe_seri_poly.fsd_i1[15] = &(alx_noeud_polygone_sdl_opengl::Combinaison_couleurs_source_arg1); f_diff[31]   = &(classe_seri_poly.fsd_i1[15]);
- classe_seri_poly.fi1[16]    = &(alx_noeud_polygone_sdl_opengl::Combinaison_couleurs_operande1); f_deseri[32] = &(classe_seri_poly.fi1[16]);
- classe_seri_poly.fsd_i1[16] = &(alx_noeud_polygone_sdl_opengl::Combinaison_couleurs_operande1); f_diff[32]   = &(classe_seri_poly.fsd_i1[16]);
- classe_seri_poly.fi1[17]    = &(alx_noeud_polygone_sdl_opengl::Combinaison_couleurs_source_arg2); f_deseri[33] = &(classe_seri_poly.fi1[17]);
- classe_seri_poly.fsd_i1[17] = &(alx_noeud_polygone_sdl_opengl::Combinaison_couleurs_source_arg2); f_diff[33]   = &(classe_seri_poly.fsd_i1[17]);
- classe_seri_poly.fi1[18]    = &(alx_noeud_polygone_sdl_opengl::Combinaison_couleurs_operande2); f_deseri[34] = &(classe_seri_poly.fi1[18]);
- classe_seri_poly.fsd_i1[18] = &(alx_noeud_polygone_sdl_opengl::Combinaison_couleurs_operande2); f_diff[34]   = &(classe_seri_poly.fsd_i1[18]);
- classe_seri_poly.fi1[19]    = &(alx_noeud_polygone_sdl_opengl::Combinaison_couleurs_source_arg0_Alpha); f_deseri[35] = &(classe_seri_poly.fi1[19]);
- classe_seri_poly.fsd_i1[19] = &(alx_noeud_polygone_sdl_opengl::Combinaison_couleurs_source_arg0_Alpha); f_diff[35]   = &(classe_seri_poly.fsd_i1[19]);
- classe_seri_poly.fi1[20]    = &(alx_noeud_polygone_sdl_opengl::Combinaison_couleurs_operande0_Alpha); f_deseri[36] = &(classe_seri_poly.fi1[20]);
- classe_seri_poly.fsd_i1[20] = &(alx_noeud_polygone_sdl_opengl::Combinaison_couleurs_operande0_Alpha); f_diff[36]   = &(classe_seri_poly.fsd_i1[20]);
- classe_seri_poly.fi1[21]    = &(alx_noeud_polygone_sdl_opengl::Combinaison_couleurs_source_arg1_Alpha); f_deseri[37] = &(classe_seri_poly.fi1[21]);
- classe_seri_poly.fsd_i1[21] = &(alx_noeud_polygone_sdl_opengl::Combinaison_couleurs_source_arg1_Alpha); f_diff[37]   = &(classe_seri_poly.fsd_i1[21]);
- classe_seri_poly.fi1[22]    = &(alx_noeud_polygone_sdl_opengl::Combinaison_couleurs_operande1_Alpha); f_deseri[38] = &(classe_seri_poly.fi1[22]);
- classe_seri_poly.fsd_i1[22] = &(alx_noeud_polygone_sdl_opengl::Combinaison_couleurs_operande1_Alpha); f_diff[38]   = &(classe_seri_poly.fsd_i1[22]);
- classe_seri_poly.fi1[23]    = &(alx_noeud_polygone_sdl_opengl::Combinaison_textures_source_arg0); f_deseri[39] = &(classe_seri_poly.fi1[23]);
- classe_seri_poly.fsd_i1[23] = &(alx_noeud_polygone_sdl_opengl::Combinaison_textures_source_arg0); f_diff[39]   = &(classe_seri_poly.fsd_i1[23]);
- classe_seri_poly.fi1[24]    = &(alx_noeud_polygone_sdl_opengl::Combinaison_textures_operande0); f_deseri[40] = &(classe_seri_poly.fi1[24]);
- classe_seri_poly.fsd_i1[24] = &(alx_noeud_polygone_sdl_opengl::Combinaison_textures_operande0); f_diff[40]   = &(classe_seri_poly.fsd_i1[24]);
- classe_seri_poly.fi1[25]    = &(alx_noeud_polygone_sdl_opengl::Combinaison_textures_source_arg1); f_deseri[41] = &(classe_seri_poly.fi1[25]);
- classe_seri_poly.fsd_i1[25] = &(alx_noeud_polygone_sdl_opengl::Combinaison_textures_source_arg1); f_diff[41]   = &(classe_seri_poly.fsd_i1[25]);
- classe_seri_poly.fi1[26]    = &(alx_noeud_polygone_sdl_opengl::Combinaison_textures_operande1); f_deseri[42] = &(classe_seri_poly.fi1[26]);
- classe_seri_poly.fsd_i1[26] = &(alx_noeud_polygone_sdl_opengl::Combinaison_textures_operande1); f_diff[42]   = &(classe_seri_poly.fsd_i1[26]);
- classe_seri_poly.fi1[27]    = &(alx_noeud_polygone_sdl_opengl::Combinaison_textures_source_arg2); f_deseri[43] = &(classe_seri_poly.fi1[27]);
- classe_seri_poly.fsd_i1[27] = &(alx_noeud_polygone_sdl_opengl::Combinaison_textures_source_arg2); f_diff[43]   = &(classe_seri_poly.fsd_i1[27]);
- classe_seri_poly.fi1[28]    = &(alx_noeud_polygone_sdl_opengl::Combinaison_textures_operande2); f_deseri[44] = &(classe_seri_poly.fi1[28]);
- classe_seri_poly.fsd_i1[28] = &(alx_noeud_polygone_sdl_opengl::Combinaison_textures_operande2); f_diff[44]   = &(classe_seri_poly.fsd_i1[28]);
- classe_seri_poly.fi1[29]    = &(alx_noeud_polygone_sdl_opengl::Combinaison_textures_source_arg0_Alpha); f_deseri[45] = &(classe_seri_poly.fi1[29]);
- classe_seri_poly.fsd_i1[29] = &(alx_noeud_polygone_sdl_opengl::Combinaison_textures_source_arg0_Alpha); f_diff[45]   = &(classe_seri_poly.fsd_i1[29]);
- classe_seri_poly.fi1[30]    = &(alx_noeud_polygone_sdl_opengl::Combinaison_textures_operande0_Alpha); f_deseri[46] = &(classe_seri_poly.fi1[30]);
- classe_seri_poly.fsd_i1[30] = &(alx_noeud_polygone_sdl_opengl::Combinaison_textures_operande0_Alpha); f_diff[46]   = &(classe_seri_poly.fsd_i1[30]);
- classe_seri_poly.fi1[31]    = &(alx_noeud_polygone_sdl_opengl::Combinaison_textures_source_arg1_Alpha); f_deseri[47] = &(classe_seri_poly.fi1[31]);
- classe_seri_poly.fsd_i1[31] = &(alx_noeud_polygone_sdl_opengl::Combinaison_textures_source_arg1_Alpha); f_diff[47]   = &(classe_seri_poly.fsd_i1[31]);
- classe_seri_poly.fi1[32]    = &(alx_noeud_polygone_sdl_opengl::Combinaison_textures_operande1_Alpha); f_deseri[48] = &(classe_seri_poly.fi1[32]);
- classe_seri_poly.fsd_i1[32] = &(alx_noeud_polygone_sdl_opengl::Combinaison_textures_operande1_Alpha); f_diff[48]   = &(classe_seri_poly.fsd_i1[32]);
+ classe_seri_poly.fi1[13]    = &alx_noeud_polygone_sdl_opengl::Combinaison_couleurs_source_arg0; f_deseri[29] = &(classe_seri_poly.fi1[13]);
+ classe_seri_poly.fsd_i1[13] = &alx_noeud_polygone_sdl_opengl::Combinaison_couleurs_source_arg0; f_diff[29]   = &(classe_seri_poly.fsd_i1[13]);
+ classe_seri_poly.fi1[14]    = &alx_noeud_polygone_sdl_opengl::Combinaison_couleurs_operande0; f_deseri[30] = &(classe_seri_poly.fi1[14]);
+ classe_seri_poly.fsd_i1[14] = &alx_noeud_polygone_sdl_opengl::Combinaison_couleurs_operande0; f_diff[30]   = &(classe_seri_poly.fsd_i1[14]);
+ classe_seri_poly.fi1[15]    = &alx_noeud_polygone_sdl_opengl::Combinaison_couleurs_source_arg1; f_deseri[31] = &(classe_seri_poly.fi1[15]);
+ classe_seri_poly.fsd_i1[15] = &alx_noeud_polygone_sdl_opengl::Combinaison_couleurs_source_arg1; f_diff[31]   = &(classe_seri_poly.fsd_i1[15]);
+ classe_seri_poly.fi1[16]    = &alx_noeud_polygone_sdl_opengl::Combinaison_couleurs_operande1; f_deseri[32] = &(classe_seri_poly.fi1[16]);
+ classe_seri_poly.fsd_i1[16] = &alx_noeud_polygone_sdl_opengl::Combinaison_couleurs_operande1; f_diff[32]   = &(classe_seri_poly.fsd_i1[16]);
+ classe_seri_poly.fi1[17]    = &alx_noeud_polygone_sdl_opengl::Combinaison_couleurs_source_arg2; f_deseri[33] = &(classe_seri_poly.fi1[17]);
+ classe_seri_poly.fsd_i1[17] = &alx_noeud_polygone_sdl_opengl::Combinaison_couleurs_source_arg2; f_diff[33]   = &(classe_seri_poly.fsd_i1[17]);
+ classe_seri_poly.fi1[18]    = &alx_noeud_polygone_sdl_opengl::Combinaison_couleurs_operande2; f_deseri[34] = &(classe_seri_poly.fi1[18]);
+ classe_seri_poly.fsd_i1[18] = &alx_noeud_polygone_sdl_opengl::Combinaison_couleurs_operande2; f_diff[34]   = &(classe_seri_poly.fsd_i1[18]);
+ classe_seri_poly.fi1[19]    = &alx_noeud_polygone_sdl_opengl::Combinaison_couleurs_source_arg0_Alpha; f_deseri[35] = &(classe_seri_poly.fi1[19]);
+ classe_seri_poly.fsd_i1[19] = &alx_noeud_polygone_sdl_opengl::Combinaison_couleurs_source_arg0_Alpha; f_diff[35]   = &(classe_seri_poly.fsd_i1[19]);
+ classe_seri_poly.fi1[20]    = &alx_noeud_polygone_sdl_opengl::Combinaison_couleurs_operande0_Alpha; f_deseri[36] = &(classe_seri_poly.fi1[20]);
+ classe_seri_poly.fsd_i1[20] = &alx_noeud_polygone_sdl_opengl::Combinaison_couleurs_operande0_Alpha; f_diff[36]   = &(classe_seri_poly.fsd_i1[20]);
+ classe_seri_poly.fi1[21]    = &alx_noeud_polygone_sdl_opengl::Combinaison_couleurs_source_arg1_Alpha; f_deseri[37] = &(classe_seri_poly.fi1[21]);
+ classe_seri_poly.fsd_i1[21] = &alx_noeud_polygone_sdl_opengl::Combinaison_couleurs_source_arg1_Alpha; f_diff[37]   = &(classe_seri_poly.fsd_i1[21]);
+ classe_seri_poly.fi1[22]    = &alx_noeud_polygone_sdl_opengl::Combinaison_couleurs_operande1_Alpha; f_deseri[38] = &(classe_seri_poly.fi1[22]);
+ classe_seri_poly.fsd_i1[22] = &alx_noeud_polygone_sdl_opengl::Combinaison_couleurs_operande1_Alpha; f_diff[38]   = &(classe_seri_poly.fsd_i1[22]);
+ classe_seri_poly.fi1[23]    = &alx_noeud_polygone_sdl_opengl::Combinaison_textures_source_arg0; f_deseri[39] = &(classe_seri_poly.fi1[23]);
+ classe_seri_poly.fsd_i1[23] = &alx_noeud_polygone_sdl_opengl::Combinaison_textures_source_arg0; f_diff[39]   = &(classe_seri_poly.fsd_i1[23]);
+ classe_seri_poly.fi1[24]    = &alx_noeud_polygone_sdl_opengl::Combinaison_textures_operande0; f_deseri[40] = &(classe_seri_poly.fi1[24]);
+ classe_seri_poly.fsd_i1[24] = &alx_noeud_polygone_sdl_opengl::Combinaison_textures_operande0; f_diff[40]   = &(classe_seri_poly.fsd_i1[24]);
+ classe_seri_poly.fi1[25]    = &alx_noeud_polygone_sdl_opengl::Combinaison_textures_source_arg1; f_deseri[41] = &(classe_seri_poly.fi1[25]);
+ classe_seri_poly.fsd_i1[25] = &alx_noeud_polygone_sdl_opengl::Combinaison_textures_source_arg1; f_diff[41]   = &(classe_seri_poly.fsd_i1[25]);
+ classe_seri_poly.fi1[26]    = &alx_noeud_polygone_sdl_opengl::Combinaison_textures_operande1; f_deseri[42] = &(classe_seri_poly.fi1[26]);
+ classe_seri_poly.fsd_i1[26] = &alx_noeud_polygone_sdl_opengl::Combinaison_textures_operande1; f_diff[42]   = &(classe_seri_poly.fsd_i1[26]);
+ classe_seri_poly.fi1[27]    = &alx_noeud_polygone_sdl_opengl::Combinaison_textures_source_arg2; f_deseri[43] = &(classe_seri_poly.fi1[27]);
+ classe_seri_poly.fsd_i1[27] = &alx_noeud_polygone_sdl_opengl::Combinaison_textures_source_arg2; f_diff[43]   = &(classe_seri_poly.fsd_i1[27]);
+ classe_seri_poly.fi1[28]    = &alx_noeud_polygone_sdl_opengl::Combinaison_textures_operande2; f_deseri[44] = &(classe_seri_poly.fi1[28]);
+ classe_seri_poly.fsd_i1[28] = &alx_noeud_polygone_sdl_opengl::Combinaison_textures_operande2; f_diff[44]   = &(classe_seri_poly.fsd_i1[28]);
+ classe_seri_poly.fi1[29]    = &alx_noeud_polygone_sdl_opengl::Combinaison_textures_source_arg0_Alpha; f_deseri[45] = &(classe_seri_poly.fi1[29]);
+ classe_seri_poly.fsd_i1[29] = &alx_noeud_polygone_sdl_opengl::Combinaison_textures_source_arg0_Alpha; f_diff[45]   = &(classe_seri_poly.fsd_i1[29]);
+ classe_seri_poly.fi1[30]    = &alx_noeud_polygone_sdl_opengl::Combinaison_textures_operande0_Alpha; f_deseri[46] = &(classe_seri_poly.fi1[30]);
+ classe_seri_poly.fsd_i1[30] = &alx_noeud_polygone_sdl_opengl::Combinaison_textures_operande0_Alpha; f_diff[46]   = &(classe_seri_poly.fsd_i1[30]);
+ classe_seri_poly.fi1[31]    = &alx_noeud_polygone_sdl_opengl::Combinaison_textures_source_arg1_Alpha; f_deseri[47] = &(classe_seri_poly.fi1[31]);
+ classe_seri_poly.fsd_i1[31] = &alx_noeud_polygone_sdl_opengl::Combinaison_textures_source_arg1_Alpha; f_diff[47]   = &(classe_seri_poly.fsd_i1[31]);
+ classe_seri_poly.fi1[32]    = &alx_noeud_polygone_sdl_opengl::Combinaison_textures_operande1_Alpha; f_deseri[48] = &(classe_seri_poly.fi1[32]);
+ classe_seri_poly.fsd_i1[32] = &alx_noeud_polygone_sdl_opengl::Combinaison_textures_operande1_Alpha; f_diff[48]   = &(classe_seri_poly.fsd_i1[32]);
 
 }
 
@@ -578,7 +578,7 @@ void alx_noeud_polygone_sdl_opengl::Stop_textures()
 //______________________________________________________________________________
 void alx_noeud_polygone_sdl_opengl::Trianguler()
 {if(get_Mode_line()) {return;}
- const NBE = 64000;
+ const int NBE = 64000;
  GLdouble T[ NBE ];
 
  a_ete_modifie = true;
@@ -861,11 +861,11 @@ void alx_noeud_polygone_sdl_opengl::Vider()
 {gpc_free_polygon(poly_ok);
    poly_ok->num_contours = 0;
    poly_ok->contour = (gpc_vertex_list *)NULL;
-   poly_ok->hole    = (gpc_vertex_list *)NULL;
+   poly_ok->hole    = (int *)NULL;
  gpc_free_polygon(poly_calcul);
    poly_calcul->num_contours = 0;
    poly_calcul->contour = (gpc_vertex_list *)NULL;
-   poly_calcul->hole    = (gpc_vertex_list *)NULL;
+   poly_calcul->hole    = (int *)NULL;
  maj();
 }
 //______________________________________________________________________________
@@ -1173,7 +1173,7 @@ const unsigned int alx_noeud_polygone_sdl_opengl::Intersection(const alx_point2D
 //______________________________________________________________________________
 info_du_contenant* alx_noeud_polygone_sdl_opengl::Noeud_contient(const alx_point2D &pt, int action)
 {info_du_contenant *rep;
- alx_model_simulation_physique1 **mp_rep;
+// alx_model_simulation_physique1 **mp_rep;
 
  // Vérifier que le point est bien dans le rectangle de l'image
  if( (pt.x < pt_min[0])
@@ -1440,7 +1440,7 @@ const alx_chaine_char& alx_noeud_polygone_sdl_opengl::Serialiser_contenu() const
 //___________________________________________________________________________________________________________________________________
 // La désérialisation ________________________________________________________
 void alx_noeud_polygone_sdl_opengl::Deserialiser_type(const alx_chaine_char &txt, unsigned int &pos)
-{unsigned int num_f, num_a;
+{//unsigned int num_f, num_a;
  const char *texte = txt.Texte();
 
  classe_seri_poly.chaine_cour = &txt;

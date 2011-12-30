@@ -29,7 +29,7 @@ char *slimGetHostIp(const char *hostname)
 
     if((phe = gethostbyname(hostname)) == NULL) return NULL;
 
-    sprintf(ip, "%d.%d.%d.%d", (unsigned char)phe->h_addr[0], (unsigned char)phe->h_addr[1], (unsigned char)phe->h_addr[2], (unsigned char)phe->h_addr[3]);
+    sprintf_s(ip, strlen(ip)+1, "%d.%d.%d.%d", (unsigned char)phe->h_addr[0], (unsigned char)phe->h_addr[1], (unsigned char)phe->h_addr[2], (unsigned char)phe->h_addr[3]);
 
     return ip;
 }
@@ -64,7 +64,7 @@ char *slimGetLocalIp(void)
 
     if((phe = gethostbyname(localname)) == NULL) return NULL;
 
-    sprintf(ip, "%d.%d.%d.%d", (unsigned char)phe->h_addr[0], (unsigned char)phe->h_addr[1], (unsigned char)phe->h_addr[2], (unsigned char)phe->h_addr[3]);
+    sprintf_s(ip, strlen(ip)+1, "%d.%d.%d.%d", (unsigned char)phe->h_addr[0], (unsigned char)phe->h_addr[1], (unsigned char)phe->h_addr[2], (unsigned char)phe->h_addr[3]);
 
     return ip;
 }

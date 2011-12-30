@@ -7,6 +7,7 @@
 #include "../classiques/alx_fiche_opengl.h"
 
 
+
 void alx_noeud_bouton_sdl_opengl::Creer_fenetre( const double tx, const double ty
                                           , alx_interface_sdl_opengl_1 *interface_m
                                           , int type_de_fenetre )

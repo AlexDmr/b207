@@ -94,6 +94,6 @@ class alx_noeud_zone_rendu_sdl_opengl : public alx_noeud_scene
 };
 
 typedef alx_noeud_zone_rendu_sdl_opengl* P_alx_noeud_zone_rendu_sdl_opengl;
-alx_noeud_zone_rendu_sdl_opengl* Void_vers_zone_rendu(void *p) {return (alx_noeud_zone_rendu_sdl_opengl*)p;}
+inline alx_noeud_zone_rendu_sdl_opengl* Void_vers_zone_rendu(void *p) {return (alx_noeud_zone_rendu_sdl_opengl*)p;}
 
 #endif

@@ -21,6 +21,6 @@ class alx_noeud_pointeur : public alx_noeud_scene
    virtual void Dessin_noeud();
    virtual info_du_contenant* Contient(alx_point2D &pt, int action) {return (info_du_contenant*)NULL;}
 };
-alx_noeud_pointeur* VoidVersPointeur(void *p) {return (alx_noeud_pointeur*)p;}
+inline alx_noeud_pointeur* VoidVersPointeur(void *p) {return (alx_noeud_pointeur*)p;}
 
 #endif

@@ -44,7 +44,7 @@ class Threaded_TCP_client : public SlimThread, SlimTcpClientSocket
    int waitingForData_fromVoid(void *tempon, const unsigned int taille_buffer, const unsigned int pos, const bool add_zero) {return SlimTcpClientSocket::waitingForData(static_cast<char*>(tempon), taille_buffer, pos, add_zero);}
    int waitingForData_fromChar(char *tempon, const unsigned int taille_buffer, const unsigned int pos)                      {return SlimTcpClientSocket::waitingForData(                   tempon , taille_buffer, pos, true );}
 };
-Threaded_TCP_client* Void_vers_Threaded_TCP_client (void *p) {return (Threaded_TCP_client*)p;}
+inline Threaded_TCP_client* Void_vers_Threaded_TCP_client (void *p) {return (Threaded_TCP_client*)p;}
 
 //______________________________________________________________________________
 //______________________________________________________________________________
@@ -70,9 +70,9 @@ class SlimTcpConnectionHandler_TCL : public SlimTcpConnectionHandler
 
    void               closeSocket      ()                          {SlimTcpConnectionHandler::closeSocket();}
 };
-SlimTcpConnectionHandler_TCL* Void_vers_SlimTcpConnectionHandler_TCL (void *p) {return (SlimTcpConnectionHandler_TCL*)p;}
+inline SlimTcpConnectionHandler_TCL* Void_vers_SlimTcpConnectionHandler_TCL (void *p) {return (SlimTcpConnectionHandler_TCL*)p;}
 
-char* Void_vers_string(void *p) {return (char*)p;}
+inline char* Void_vers_string(void *p) {return (char*)p;}
 
 /*
 //______________________________________________________________________________
@@ -152,7 +152,7 @@ class Image_net_loader : public SlimThread
 //______________________________________________________________________________
 //______________________________________________________________________________
 //______________________________________________________________________________
-#include <map.h>
+#include <hash_map>
 
 class alx_noeud_scene;
 
@@ -171,6 +171,19 @@ class Envoie_Object {
  };
 
 //______________________________________________________________________________
+struct Hash_config_for_alx_chaine_char
+{	enum {bucket_size = 4,
+		  min_buckets = 8};
+	
+	size_t operator()(const alx_chaine_char &key) const {
+		return (size_t)key.Texte();// .operator();
+		}
+    bool operator()(const alx_chaine_char & x, const alx_chaine_char & y) const {
+        return x > y;
+    }
+};
+
+//______________________________________________________________________________
 class Texture_Server_TCP : public SlimThread
 {private:
    alx_liste<Envoie_Object *> L_Envoie_Objects;
@@ -179,9 +192,10 @@ class Texture_Server_TCP : public SlimThread
      void Rappel_end_texture_loading(void *p);
    unsigned int        port, delay_wait_for_retry_connection;
    alx_interface_sdl_opengl_1 *Interface_mere_of_image;
-   mutable map<alx_chaine_char, alx_noeud_scene*> Table_replicated_nodes, Table_local_nodes;
-   mutable map<alx_noeud_image_sdl_opengl*, alx_liste<alx_noeud_polygone_sdl_opengl*> *> Table_dependances_img_polys;
-   mutable map<alx_chaine_char, int>              Table_ports;
+   mutable stdext::hash_map<alx_chaine_char, alx_noeud_scene*, Hash_config_for_alx_chaine_char > Table_replicated_nodes, Table_local_nodes;
+   mutable stdext::hash_map<alx_noeud_image_sdl_opengl*, alx_liste<alx_noeud_polygone_sdl_opengl*> *> Table_dependances_img_polys;
+   mutable stdext::hash_map<alx_chaine_char, int, Hash_config_for_alx_chaine_char >              Table_ports;
+   //stdext::hash_map<int, int> Bobo;
    SlimTcpServerSocket *Serveur_TCP;
      SlimTcpConnectionHandler_TCL *connection_handler_TCL;
    Mutex *mutex_acces_tables;

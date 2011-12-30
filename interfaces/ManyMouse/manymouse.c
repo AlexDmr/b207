@@ -13,10 +13,10 @@
 static const char *manymouse_copyright =
     "ManyMouse " MANYMOUSE_VERSION " (c) 2005 Ryan C. Gordon.";
 
-extern const ManyMouseDriver ManyMouseDriver_windows;
-extern const ManyMouseDriver ManyMouseDriver_evdev;
-extern const ManyMouseDriver ManyMouseDriver_hidmanager;
-extern const ManyMouseDriver ManyMouseDriver_xinput;
+/*extern*/ const ManyMouseDriver ManyMouseDriver_windows;
+/*extern*/ const ManyMouseDriver ManyMouseDriver_evdev;
+/*extern*/ const ManyMouseDriver ManyMouseDriver_hidmanager;
+/*extern*/ const ManyMouseDriver ManyMouseDriver_xinput;
 
 static const ManyMouseDriver *mice_drivers[] =
 {

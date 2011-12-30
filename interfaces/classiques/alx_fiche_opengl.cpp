@@ -112,7 +112,7 @@ void alx_fiche_opengl::afficher_corp()
 }
 
 void alx_fiche_opengl::Transfo_commune()
-{double angle_radian;
+{//double angle_radian;
 // alx_vecteur2D trans_retour
 //             , trans2;
  glPushMatrix();

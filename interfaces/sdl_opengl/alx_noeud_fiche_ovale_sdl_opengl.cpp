@@ -9,7 +9,7 @@
 
 //------------------------------------------------------------------------------
 void alx_noeud_fiche_ovale_sdl_opengl::init()
-{int i;
+{//int i;
 
  rationnalise_fo = false;
 
@@ -202,18 +202,6 @@ void alx_noeud_fiche_ovale_sdl_opengl::Dessin_noeud()
 
  glPopAttrib();
  glPopMatrix();
-}
-
-//------------------------------------------------------------------------------
-// Renvoi un pointeur sur le modèle physique qui contient la primitive, NULL si aucun.
-bool Zone_pointee(alx_model_simulation_physique1 **e, void *info_sup)
-{alx_point2D                    *pt = (alx_point2D*)info_sup;
- alx_model_simulation_physique1 *mp = *e;
-
- if( mp->Contient(*pt) )
-   return true;
-
- return false;
 }
 
 //------------------------------------------------------------------------------

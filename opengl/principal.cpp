@@ -1,7 +1,7 @@
 #include "principal.h"
 #include "../interfaces/acces_interface.h"
 
-#include <extgl.h>
+#include <glew.h>
 #include <gl.h>
 #include <glu.h>
 
@@ -24,7 +24,7 @@ principal::~principal()
 {
 // delete sim_pointeurs;
 // delete sim_souris;
-
+	
 // interpreteur_tcl = Tcl_CreateInterp();
 }
 
@@ -98,13 +98,18 @@ int principal::demarrer( Uint32 propriete
                              , SDL_OPENGL | SDL_GL_ACCELERATED_VISUAL | propriete /*| SDL_FULLSCREEN*/)) == NULL )
   return -2;
 
+/*XXX DEBUG Still necessary?
  if(extgl_Initialize() != 0)
   {exit(0);}
+*/
  SDL_WM_SetCaption("The future desktop for Model Driven Plasticity", "The future desktop for Model Driven Plasticity");
 
 // initialiser les éléments
  Initialiser_fontes();
  Initialisation();
+
+ // GLEW
+ glewInit();
 
 // Def de la caméra:
  glMatrixMode(GL_PROJECTION); // on rend active la matrice de projection
@@ -132,10 +137,10 @@ int principal::demarrer( Uint32 propriete
 //------------------------------------------------------------------------------
 
  bool fin = false;
- int pointeur_x, pointeur_y;
+ //int pointeur_x, pointeur_y;
 
  glClearStencil(0);
- Uint8 *etat_clavier;
+// Uint8 *etat_clavier;
 
 
  glEnable(GL_SCISSOR_TEST);
@@ -178,17 +183,20 @@ int principal::demarrer( Uint32 propriete
  //printf("Nombre de souris : %i", SDL_GetNumMice());x
 
 //___________________________________________________
- #include <config_opengl.h>
+ //#include <config_opengl.h>
  glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE2_ALPHA_ARB , GL_texture());
 
 // interface_1->Translation( alx_vecteur2D(0, 200) );
- int nb_car_ecrit;
+// int nb_car_ecrit;
 
  bool bascule = true
     , enfonce = false;
  //HDC hdc = wglGetCurrentDC();
  //TCHAR text[ ] = "Defenestration can be hazardous";
- int nb_car;
+// int nb_car;
+ if(glClientActiveTextureARB == NULL) {
+	 printf("\n!ERROR! glClientActiveTextureARB is NULL !\n");
+	}
  while(!fin)
   {//etat_clavier = SDL_GetKeyState(NULL);
    #ifdef ALX_DEBUG_PRINCIPAL

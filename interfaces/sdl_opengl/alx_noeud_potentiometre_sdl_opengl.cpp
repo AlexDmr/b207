@@ -165,7 +165,7 @@ void alx_noeud_potentiometre_sdl_opengl::Dessin_noeud()
 
  glBegin(GL_TRIANGLE_STRIP);
    glColor4dv( bouton_reculer->Couleur_bordure_ext() );
-   glVertex2d(lgb*0.5, 0);     glVertex2f(lgb*0.5, -epaisseur);
+   glVertex2d(lgb*0.5, 0);     glVertex2d(lgb*0.5, -epaisseur);
    glColor4dv( bouton_avancer->Couleur_bordure_ext() );
    glVertex2d(1.5*lgb+lg, 0); glVertex2d(1.5*lgb+lg, -epaisseur);
  glEnd();
@@ -270,7 +270,7 @@ void alx_noeud_potentiometre_sdl_opengl::Rationnaliser_zone_fond(const int *info
  Repere_transformation(pt, *L_rep);
  Changer_coordonnees(pt);
  pt.Translation(-Longueur_boutons_controles()-bouton_reculer->Epaisseur_bordure(), 0);
- int x = Valeur_min() + pt.x * NbDivisions() / (Longueur() - Longueur() / Amin(NbDivisions(), 20));
+ int x = (int)( Valeur_min() + pt.x * NbDivisions() / (Longueur() - Longueur() / Amin(NbDivisions(), 20)) );
  if(x<=Valeur()) Valeur( Amax(Valeur()-Valeur_saut(), Valeur_min()) );
   else Valeur( Amin(Valeur()+Valeur_saut(), Valeur_max()) );
  maj_interne();

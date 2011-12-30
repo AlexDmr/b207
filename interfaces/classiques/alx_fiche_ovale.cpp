@@ -10,7 +10,7 @@
 /*******************************************************************************/
 void alx_fiche_ovale::init()
 {
- int i, pos;
+// int i, pos;
 
  h_base = 0.0;
  mp_entete.abonner_a(this, 1);

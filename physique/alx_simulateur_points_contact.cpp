@@ -157,11 +157,13 @@ bool alx_simulateur_points_contact::Fixer_point_translation_defaut( alx_ensemble
 /******************************************************************************/
 bool alx_simulateur_points_contact::Activer_point_rotation_defaut   ( alx_ensemble_contact *ens, const bool b)
 {ens->pt_rot_defaut_actif = b;
+ return b;
 }
 
 /******************************************************************************/
 bool alx_simulateur_points_contact::Activer_point_translation_defaut( alx_ensemble_contact *ens, const bool b)
 {ens->pt_trans_defaut_actif = b;
+ return b;
 }
 
 /******************************************************************************/
@@ -397,7 +399,7 @@ bool alx_simulateur_points_contact::Trouver_model( alx_model_simulation_physique
 {alx_element_liste<alx_ensemble_contact*> *it_ec     = L_ens_contact.Premier()
                                         , *it_fin_ec = L_ens_contact.Fin();
  alx_element_liste<alx_modele_contact*> *it_mc, *it_fin_mc;
- alx_ensemble_contact *ec;
+// alx_ensemble_contact *ec;
  //bool possible = false;
  for(; it_ec!=it_fin_ec; it_ec=it_ec->svt)
   {it_mc     = (it_ec->E())->L_modele_contact.Premier();
@@ -447,7 +449,7 @@ bool alx_simulateur_points_contact::Trouver_model( alx_model_simulation_physique
 // Le numéro identifiant est ici l'adresse du modèle physique considéré.
 void alx_simulateur_points_contact::Changement_dans_le_modele(alx_model_simulation_physique1 *mp)
 {double        angle;
- alx_point2D   *pt, tmp;
+ alx_point2D   /**pt,*/ tmp;
  alx_vecteur2D vect;
  alx_modele_contact   *mc;
  alx_ensemble_contact *ec;

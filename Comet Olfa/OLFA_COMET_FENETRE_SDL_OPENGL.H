@@ -7,8 +7,8 @@
 class olfa_comet_fenetre_sdl_opengl : public alx_noeud_fenetre_sdl_opengl, public olfa_comet
 {
  private:
-   static char c_tmp[1024];
-   static alx_chaine_char s_tmp;
+   char c_tmp[1024];
+   alx_chaine_char s_tmp;
 
    void Enregistrer_fenetre_dans_TCL();
    

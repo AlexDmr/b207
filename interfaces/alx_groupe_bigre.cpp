@@ -8,7 +8,7 @@
    Cela afin de les classer entre eux selon leur adresse IP, de sorte que ce classement soit
    le même sur chaque ordinateur.
    On a un noeud en local qui est le père du graphe répliqué
-
+    
    Soit NP le noeud_ père,
    La sérialisation de l'interface se fait à partir du noeud père.
    On ne tiendra compte, pour le moment, que de sa liste de fils lors de la désérialisation.

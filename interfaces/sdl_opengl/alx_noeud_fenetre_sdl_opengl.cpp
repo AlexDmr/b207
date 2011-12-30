@@ -220,13 +220,13 @@ void alx_noeud_fenetre_sdl_opengl::Deserialiser_type(const alx_chaine_char &txt,
  Deserialiser(txt, pos_noeud);
 
 // On refixe les fonctions de rappel, pour assurer la désérialisation:
- f_ptr_fen[6] = &(alx_noeud_fenetre_sdl_opengl::Deserialiser_repere);
- f_ptr_fen[5] = &(alx_noeud_fenetre_sdl_opengl::Deserialiser_4_doubles_i);
- f_ptr_fen[4] = &(alx_noeud_fenetre_sdl_opengl::Deserialiser_chaine_char);
- f_ptr_fen[3] = &(alx_noeud_fenetre_sdl_opengl::Deserialiser_4_doubles);
- f_ptr_fen[2] = &(alx_noeud_fenetre_sdl_opengl::Deserialiser_2_doubles);
- f_ptr_fen[1] = &(alx_noeud_fenetre_sdl_opengl::Deserialiser_1_double);
- f_ptr_fen[0] = &(alx_noeud_fenetre_sdl_opengl::Deserialiser_1_bool);
+ f_ptr_fen[6] = &alx_noeud_fenetre_sdl_opengl::Deserialiser_repere;
+ f_ptr_fen[5] = &alx_noeud_fenetre_sdl_opengl::Deserialiser_4_doubles_i;
+ f_ptr_fen[4] = &alx_noeud_fenetre_sdl_opengl::Deserialiser_chaine_char;
+ f_ptr_fen[3] = &alx_noeud_fenetre_sdl_opengl::Deserialiser_4_doubles;
+ f_ptr_fen[2] = &alx_noeud_fenetre_sdl_opengl::Deserialiser_2_doubles;
+ f_ptr_fen[1] = &alx_noeud_fenetre_sdl_opengl::Deserialiser_1_double;
+ f_ptr_fen[0] = &alx_noeud_fenetre_sdl_opengl::Deserialiser_1_bool;
 
 // Puis on désérialise la partie spécifique à la fenêtre
  while( texte[pos] != '>' )
@@ -283,8 +283,8 @@ const alx_chaine_char& alx_noeud_fenetre_sdl_opengl::Serialiser_difference_conte
 
  serialisation_differences_contenu_fen.Maj("",0,0);
  // Variables temporaires pour la comparaison :
- double d_tmp;
- int    i_tmp;
+// double d_tmp;
+// int    i_tmp;
  // Parcours des attributs
  const char *txt = serialisation_contenu_fen.Texte();
  unsigned int pos = 4, dep = 0;
@@ -342,13 +342,13 @@ const alx_chaine_char& alx_noeud_fenetre_sdl_opengl::Serialiser_difference_type(
  pos = serialisation_type_fen.Position_du_prochain(';', pos); pos++; //On passe nom=...;
 
 // On refixe les fonctions de rappel, pour assurer la désérialisation:
- f_ptr_seri_diff_fen[6] = &(alx_noeud_fenetre_sdl_opengl::Serialiser_diff_repere);
- f_ptr_seri_diff_fen[5] = &(alx_noeud_fenetre_sdl_opengl::Serialiser_diff_4_doubles_i);
- f_ptr_seri_diff_fen[4] = &(alx_noeud_fenetre_sdl_opengl::Serialiser_diff_chaine_char);
- f_ptr_seri_diff_fen[3] = &(alx_noeud_fenetre_sdl_opengl::Serialiser_diff_4_doubles);
- f_ptr_seri_diff_fen[2] = &(alx_noeud_fenetre_sdl_opengl::Serialiser_diff_2_doubles);
- f_ptr_seri_diff_fen[1] = &(alx_noeud_fenetre_sdl_opengl::Serialiser_diff_1_double);
- f_ptr_seri_diff_fen[0] = &(alx_noeud_fenetre_sdl_opengl::Serialiser_diff_1_bool);
+ f_ptr_seri_diff_fen[6] = &alx_noeud_fenetre_sdl_opengl::Serialiser_diff_repere;
+ f_ptr_seri_diff_fen[5] = &alx_noeud_fenetre_sdl_opengl::Serialiser_diff_4_doubles_i;
+ f_ptr_seri_diff_fen[4] = &alx_noeud_fenetre_sdl_opengl::Serialiser_diff_chaine_char;
+ f_ptr_seri_diff_fen[3] = &alx_noeud_fenetre_sdl_opengl::Serialiser_diff_4_doubles;
+ f_ptr_seri_diff_fen[2] = &alx_noeud_fenetre_sdl_opengl::Serialiser_diff_2_doubles;
+ f_ptr_seri_diff_fen[1] = &alx_noeud_fenetre_sdl_opengl::Serialiser_diff_1_double;
+ f_ptr_seri_diff_fen[0] = &alx_noeud_fenetre_sdl_opengl::Serialiser_diff_1_bool;
 
 // Puis on désérialise la partie spécifique à la fenêtre
  while( texte[pos] != '>' )
@@ -516,60 +516,60 @@ void alx_noeud_fenetre_sdl_opengl::init_ptr()
  a_ptr_fen[41] = NULL; //&(entete_prcdt[1]);
 
 // Ce qui devra être modifié par appel de fonctions
- f_ptr_fen[6] = &(alx_noeud_fenetre_sdl_opengl::Deserialiser_repere);
- f_ptr_fen[5] = &(alx_noeud_fenetre_sdl_opengl::Deserialiser_4_doubles_i);
- f_ptr_fen[4] = &(alx_noeud_fenetre_sdl_opengl::Deserialiser_chaine_char);
- f_ptr_fen[3] = &(alx_noeud_fenetre_sdl_opengl::Deserialiser_4_doubles);
- f_ptr_fen[2] = &(alx_noeud_fenetre_sdl_opengl::Deserialiser_2_doubles);
- f_ptr_fen[1] = &(alx_noeud_fenetre_sdl_opengl::Deserialiser_1_double);
- f_ptr_fen[0] = &(alx_noeud_fenetre_sdl_opengl::Deserialiser_1_bool);
+ f_ptr_fen[6] = &alx_noeud_fenetre_sdl_opengl::Deserialiser_repere;
+ f_ptr_fen[5] = &alx_noeud_fenetre_sdl_opengl::Deserialiser_4_doubles_i;
+ f_ptr_fen[4] = &alx_noeud_fenetre_sdl_opengl::Deserialiser_chaine_char;
+ f_ptr_fen[3] = &alx_noeud_fenetre_sdl_opengl::Deserialiser_4_doubles;
+ f_ptr_fen[2] = &alx_noeud_fenetre_sdl_opengl::Deserialiser_2_doubles;
+ f_ptr_fen[1] = &alx_noeud_fenetre_sdl_opengl::Deserialiser_1_double;
+ f_ptr_fen[0] = &alx_noeud_fenetre_sdl_opengl::Deserialiser_1_bool;
 
- fd1[0]    = &(alx_noeud_fenetre_sdl_opengl::Epaisseur_bordure);    f_fen[1]       = &(fd1[0]);
- fsd_d1[0] = &(alx_noeud_fenetre_sdl_opengl::Epaisseur_bordure);    f_fen_diff[1]  = &(fsd_d1[0]);
- fd1[1]    = &(alx_noeud_fenetre_sdl_opengl::Hauteur_entete);       f_fen[2]       = &(fd1[1]);
- fsd_d1[1] = &(alx_noeud_fenetre_sdl_opengl::Hauteur_entete);       f_fen_diff[2]  = &(fsd_d1[1]);
- fd1[2]    = &(alx_noeud_fenetre_sdl_opengl::Hauteur_corp);         f_fen[3]       = &(fd1[2]);
- fsd_d1[2] = &(alx_noeud_fenetre_sdl_opengl::Hauteur_corp);         f_fen_diff[3]  = &(fsd_d1[2]);
- fd1[3]    = &(alx_noeud_fenetre_sdl_opengl::Longueur_entete);      f_fen[4]       = &(fd1[3]);
- fsd_d1[3] = &(alx_noeud_fenetre_sdl_opengl::Longueur_entete);      f_fen_diff[4]  = &(fsd_d1[3]);
- fd1[4]    = &(alx_noeud_fenetre_sdl_opengl::Longueur_corp);        f_fen[5]       = &(fd1[4]);
- fsd_d1[4] = &(alx_noeud_fenetre_sdl_opengl::Longueur_corp);        f_fen_diff[5]  = &(fsd_d1[4]);
- fd2[0]    = &(alx_noeud_fenetre_sdl_opengl::Dimension_navigation); f_fen[6]       = &(fd2[0]);
+ fd1[0]    = &alx_noeud_fenetre_sdl_opengl::Epaisseur_bordure;    f_fen[1]       = &(fd1[0]);
+ fsd_d1[0] = &alx_noeud_fenetre_sdl_opengl::Epaisseur_bordure;    f_fen_diff[1]  = &(fsd_d1[0]);
+ fd1[1]    = &alx_noeud_fenetre_sdl_opengl::Hauteur_entete;       f_fen[2]       = &(fd1[1]);
+ fsd_d1[1] = &alx_noeud_fenetre_sdl_opengl::Hauteur_entete;       f_fen_diff[2]  = &(fsd_d1[1]);
+ fd1[2]    = &alx_noeud_fenetre_sdl_opengl::Hauteur_corp;         f_fen[3]       = &(fd1[2]);
+ fsd_d1[2] = &alx_noeud_fenetre_sdl_opengl::Hauteur_corp;         f_fen_diff[3]  = &(fsd_d1[2]);
+ fd1[3]    = &alx_noeud_fenetre_sdl_opengl::Longueur_entete;      f_fen[4]       = &(fd1[3]);
+ fsd_d1[3] = &alx_noeud_fenetre_sdl_opengl::Longueur_entete;      f_fen_diff[4]  = &(fsd_d1[3]);
+ fd1[4]    = &alx_noeud_fenetre_sdl_opengl::Longueur_corp;        f_fen[5]       = &(fd1[4]);
+ fsd_d1[4] = &alx_noeud_fenetre_sdl_opengl::Longueur_corp;        f_fen_diff[5]  = &(fsd_d1[4]);
+ fd2[0]    = &alx_noeud_fenetre_sdl_opengl::Dimension_navigation; f_fen[6]       = &(fd2[0]);
 
- fb1[0]    = &(alx_noeud_fenetre_sdl_opengl::Triangle_control);     f_fen[7]       = &(fb1[0]);
- fsd_b1[0] = &(alx_noeud_fenetre_sdl_opengl::Triangle_control);     f_fen_diff[7]  = &(fsd_b1[0]);
- fb1[1]    = &(alx_noeud_fenetre_sdl_opengl::Rendre_fond);          f_fen[8]       = &(fb1[1]);
- fsd_b1[1] = &(alx_noeud_fenetre_sdl_opengl::Rendre_fond);          f_fen_diff[8]  = &(fsd_b1[1]);
- fb1[2]    = &(alx_noeud_fenetre_sdl_opengl::Top_classos);          f_fen[9]       = &(fb1[2]);
- fsd_b1[2] = &(alx_noeud_fenetre_sdl_opengl::Top_classos);          f_fen_diff[9]  = &(fsd_b1[2]);
- fd1[5]    = &(alx_noeud_fenetre_sdl_opengl::Nb_pixels_par_unite);  f_fen[10]      = &(fd1[5]);
- fsd_d1[5] = &(alx_noeud_fenetre_sdl_opengl::Nb_pixels_par_unite);  f_fen_diff[10] = &(fsd_d1[5]);
+ fb1[0]    = &alx_noeud_fenetre_sdl_opengl::Triangle_control;     f_fen[7]       = &(fb1[0]);
+ fsd_b1[0] = &alx_noeud_fenetre_sdl_opengl::Triangle_control;     f_fen_diff[7]  = &(fsd_b1[0]);
+ fb1[1]    = &alx_noeud_fenetre_sdl_opengl::Rendre_fond;          f_fen[8]       = &(fb1[1]);
+ fsd_b1[1] = &alx_noeud_fenetre_sdl_opengl::Rendre_fond;          f_fen_diff[8]  = &(fsd_b1[1]);
+ fb1[2]    = &alx_noeud_fenetre_sdl_opengl::Top_classos;          f_fen[9]       = &(fb1[2]);
+ fsd_b1[2] = &alx_noeud_fenetre_sdl_opengl::Top_classos;          f_fen_diff[9]  = &(fsd_b1[2]);
+ fd1[5]    = &alx_noeud_fenetre_sdl_opengl::Nb_pixels_par_unite;  f_fen[10]      = &(fd1[5]);
+ fsd_d1[5] = &alx_noeud_fenetre_sdl_opengl::Nb_pixels_par_unite;  f_fen_diff[10] = &(fsd_d1[5]);
 
- fcc[0]    = &(alx_noeud_fenetre_sdl_opengl::Titre);             ;  f_fen[13]      = &(fcc[0]);
- fsd_cc[0] = &(alx_noeud_fenetre_sdl_opengl::Titre);             ;  f_fen_diff[13] = &(fsd_cc[0]);
+ fcc[0]    = &alx_noeud_fenetre_sdl_opengl::Titre;             ;  f_fen[13]      = &(fcc[0]);
+ fsd_cc[0] = &alx_noeud_fenetre_sdl_opengl::Titre;             ;  f_fen_diff[13] = &(fsd_cc[0]);
 
- fd4[0]    = &(alx_noeud_fenetre_sdl_opengl::Couleur_fond);              f_fen[0]       = &(fd4[0]);
- fsd_d4[0] = &(alx_noeud_fenetre_sdl_opengl::Couleur_fond);              f_fen_diff[0]  = &(fsd_d4[0]);
- fd4[1]    = &(alx_noeud_fenetre_sdl_opengl::Couleur_masque_corp);       f_fen[11]      = &(fd4[1]);
- fsd_d4[1] = &(alx_noeud_fenetre_sdl_opengl::Couleur_masque_corp);       f_fen_diff[11] = &(fsd_d4[1]);
- fd4[2]    = &(alx_noeud_fenetre_sdl_opengl::Couleur_masque_bord);       f_fen[12]      = &(fd4[2]);
- fsd_d4[2] = &(alx_noeud_fenetre_sdl_opengl::Couleur_masque_bord);       f_fen_diff[12] = &(fsd_d4[2]);
- fd4[3]    = &(alx_noeud_fenetre_sdl_opengl::Couleur_corps);             f_fen[14]      = &(fd4[3]);
- fsd_d4[3] = &(alx_noeud_fenetre_sdl_opengl::Couleur_corps);             f_fen_diff[14] = &(fsd_d4[3]);
- fd4[4]    = &(alx_noeud_fenetre_sdl_opengl::Couleur_bordure_ext_angle); f_fen[15]      = &(fd4[4]);
- fsd_d4[4] = &(alx_noeud_fenetre_sdl_opengl::Couleur_bordure_ext_angle); f_fen_diff[15] = &(fsd_d4[4]);
- fd4[5]    = &(alx_noeud_fenetre_sdl_opengl::Couleur_bordure_ext);       f_fen[16]      = &(fd4[5]);
- fsd_d4[5] = &(alx_noeud_fenetre_sdl_opengl::Couleur_bordure_ext);       f_fen_diff[16] = &(fsd_d4[5]);
- fd4[6]    = &(alx_noeud_fenetre_sdl_opengl::Couleur_bordure_int_angle); f_fen[17]      = &(fd4[6]);
- fsd_d4[6] = &(alx_noeud_fenetre_sdl_opengl::Couleur_bordure_int_angle); f_fen_diff[17] = &(fsd_d4[6]);
- fd4[7]    = &(alx_noeud_fenetre_sdl_opengl::Couleur_bordure_int);       f_fen[18]      = &(fd4[7]);
- fsd_d4[7] = &(alx_noeud_fenetre_sdl_opengl::Couleur_bordure_int);       f_fen_diff[18] = &(fsd_d4[7]);
+ fd4[0]    = &alx_noeud_fenetre_sdl_opengl::Couleur_fond;              f_fen[0]       = &(fd4[0]);
+ fsd_d4[0] = &alx_noeud_fenetre_sdl_opengl::Couleur_fond;              f_fen_diff[0]  = &(fsd_d4[0]);
+ fd4[1]    = &alx_noeud_fenetre_sdl_opengl::Couleur_masque_corp;       f_fen[11]      = &(fd4[1]);
+ fsd_d4[1] = &alx_noeud_fenetre_sdl_opengl::Couleur_masque_corp;       f_fen_diff[11] = &(fsd_d4[1]);
+ fd4[2]    = &alx_noeud_fenetre_sdl_opengl::Couleur_masque_bord;       f_fen[12]      = &(fd4[2]);
+ fsd_d4[2] = &alx_noeud_fenetre_sdl_opengl::Couleur_masque_bord;       f_fen_diff[12] = &(fsd_d4[2]);
+ fd4[3]    = &alx_noeud_fenetre_sdl_opengl::Couleur_corps;             f_fen[14]      = &(fd4[3]);
+ fsd_d4[3] = &alx_noeud_fenetre_sdl_opengl::Couleur_corps;             f_fen_diff[14] = &(fsd_d4[3]);
+ fd4[4]    = &alx_noeud_fenetre_sdl_opengl::Couleur_bordure_ext_angle; f_fen[15]      = &(fd4[4]);
+ fsd_d4[4] = &alx_noeud_fenetre_sdl_opengl::Couleur_bordure_ext_angle; f_fen_diff[15] = &(fsd_d4[4]);
+ fd4[5]    = &alx_noeud_fenetre_sdl_opengl::Couleur_bordure_ext;       f_fen[16]      = &(fd4[5]);
+ fsd_d4[5] = &alx_noeud_fenetre_sdl_opengl::Couleur_bordure_ext;       f_fen_diff[16] = &(fsd_d4[5]);
+ fd4[6]    = &alx_noeud_fenetre_sdl_opengl::Couleur_bordure_int_angle; f_fen[17]      = &(fd4[6]);
+ fsd_d4[6] = &alx_noeud_fenetre_sdl_opengl::Couleur_bordure_int_angle; f_fen_diff[17] = &(fsd_d4[6]);
+ fd4[7]    = &alx_noeud_fenetre_sdl_opengl::Couleur_bordure_int;       f_fen[18]      = &(fd4[7]);
+ fsd_d4[7] = &alx_noeud_fenetre_sdl_opengl::Couleur_bordure_int;       f_fen_diff[18] = &(fsd_d4[7]);
 
- frep[0]   = &(alx_noeud_fenetre_sdl_opengl::Repere_des_fils_pour_modif); f_fen[19]      = &(frep[0]);
- fsd_rep[0]= &(alx_noeud_fenetre_sdl_opengl::Repere_des_fils);            f_fen_diff[19] = &(fsd_rep[0]);
+ frep[0]   = &alx_noeud_fenetre_sdl_opengl::Repere_des_fils_pour_modif; f_fen[19]      = &(frep[0]);
+ fsd_rep[0]= &alx_noeud_fenetre_sdl_opengl::Repere_des_fils;            f_fen_diff[19] = &(fsd_rep[0]);
 
- fd4_i[0]    = &(alx_noeud_fenetre_sdl_opengl::Couleur_entete);           f_fen[20]      = &(fd4_i[0]);
- fsd_d4_i[0] = &(alx_noeud_fenetre_sdl_opengl::Couleur_entete);           f_fen_diff[20] = &(fsd_d4_i[0]);
+ fd4_i[0]    = &alx_noeud_fenetre_sdl_opengl::Couleur_entete;           f_fen[20]      = &(fd4_i[0]);
+ fsd_d4_i[0] = &alx_noeud_fenetre_sdl_opengl::Couleur_entete;           f_fen_diff[20] = &(fsd_d4_i[0]);
 }
 
 //______________________________________________________________________________

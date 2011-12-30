@@ -248,7 +248,7 @@ void alx_interface_sdl_opengl_1::Ajouter_membre(unsigned int argc, char **argv)
  // Un autre ordinateur demande à faire parti d'un groupe, voir si on appartient à ce groupe
  //, si oui va falloir penser à emettre une description des noeuds locaux.
  unsigned int g, pos_g=0;
- sscanf(argv[1], "%i", &g); // le numéro de groupe
+ sscanf_s(argv[1], "%i", &g); // le numéro de groupe
 
  // Fait on parti du même groupe?
  while( (pos_g < nb_gb)
@@ -274,7 +274,7 @@ void alx_interface_sdl_opengl_1::Retirer_membre(unsigned int argc, char **argv)
  Demande_acces();
  //printf("Retirer membre\n");
  unsigned int g, pos_g=0;
- sscanf(argv[1], "%i", &g); // le numéro de groupe
+ sscanf_s(argv[1], "%i", &g); // le numéro de groupe
 
  // Fait on parti du même groupe?
  while( (pos_g < nb_gb)
@@ -310,8 +310,8 @@ void alx_interface_sdl_opengl_1::Maj_membre(unsigned int argc, char **argv)
  //printf("MAJ MEMBRE :\n 0) %s\n 1) %s\n 2) %s\n", argv[0], argv[1], argv[2]);
  unsigned int pos_g = 0
             , g, size_msg;
- sscanf(argv[3], "%i", &g);
- sscanf(argv[0], "%i", &size_msg);
+ sscanf_s(argv[3], "%i", &g);
+ sscanf_s(argv[0], "%i", &size_msg);
  while( (pos_g < nb_gb)
       &&(Tgb[pos_g].Numero() != g) ) pos_g++;
  if( pos_g == nb_gb )
@@ -412,7 +412,7 @@ if(cc_type_tmp == "alx_noeud_scene")
  if(cc_type_tmp == "alx_noeud_image_sdl_opengl")
   {alx_noeud_image_sdl_opengl *img = new alx_noeud_image_sdl_opengl();
    img->Deserialiser_type(cc_maj, pos_finale);
-   img->alx_image_opengl::maj( img->Lg(), img->Ht()
+   img->alx_image_opengl::maj( (int)(img->Lg()), (int)(img->Ht())
                              , img->Ordonnancement_couleurs()
                              , img->Nb_octets_par_pixel()
                              , NULL);
@@ -717,7 +717,7 @@ void alx_interface_sdl_opengl_1::Maj_horloge(unsigned int argc, char **argv) // 
 {Demande_acces();
  //printf("MAJ horloge\n");
  unsigned int g, pos_g=0;
- sscanf(argv[1], "%i", &g); // le numéro de groupe
+ sscanf_s(argv[1], "%i", &g); // le numéro de groupe
 
  // Fait on parti du même groupe?
  while( (pos_g < nb_gb)
@@ -1167,7 +1167,7 @@ void alx_interface_sdl_opengl_1::Emettre_interface(const alx_chaine_char &m)
 //______________________________________________________________________________
 // Une petite structure bien utile
 void alx_interface_sdl_opengl_1::Emettre_changements(const bool b)
-{const alx_noeud_scene *noeud;
+{//const alx_noeud_scene *noeud;
  // Traitement des messages en attentes:
  //DEBUG_2008 Traitement_messages_en_cours(true);
  //DEBUG_2008 if( !Ne_pas_traiter_messages() )
@@ -1334,7 +1334,7 @@ void alx_interface_sdl_opengl_1::Afficher()
   // glPopMatrix();
  glPopMatrix(); // Pour le camera_pour_ecran.
 
- int nbcecrit;
+// int nbcecrit;
 }
 
 //______________________________________________________________________________
@@ -1471,7 +1471,7 @@ const bool alx_interface_sdl_opengl_1::Fermer_flux(FSOUND_STREAM *flux)
  while( !FSOUND_Stream_Stop(flux) )
   {printf("waiting for fmod stream to stop");}
  printf("Close flux");
- return FSOUND_Stream_Close(flux);
+ return FSOUND_Stream_Close(flux) != 0;
 }
 
 //______________________________________________________________________________

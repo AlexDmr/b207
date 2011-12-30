@@ -16,7 +16,7 @@ alx_liant_ptr_contact::alx_liant_ptr_contact( alx_simulateur_pointeurs      *sp
 void alx_liant_ptr_contact::rationnaliser(int num)
 {alx_element_liste<alx_evennement_pointeur> *it_evt     = sim_pointeurs->L_evt.Premier()
                                           , *it_fin_evt = sim_pointeurs->L_evt.Fin()
-                                          , *it_tmp_evt;
+                                          /*, *it_tmp_evt*/;
  alx_element_liste<alx_ensemble_contact*> *it_contact
                                         , *it_contact_fin = sim_contact->L_ENS_CONTACT().Fin();
                                         //ATTENTION, *it_contact_fin = sim_contact->L_ENS_CONTACT_ACTIFS().Fin();

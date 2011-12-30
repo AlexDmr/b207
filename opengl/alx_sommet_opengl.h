@@ -4,7 +4,7 @@
 #include "../physique/alx_geometrie2D.h"
 #include "..\utilitaires\alx_liste.h"
 
-#include <extgl.h>
+#include <glew.h>
 
 
 class alx_sommet_opengl;

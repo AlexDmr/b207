@@ -1,19 +1,22 @@
 #include "alx_noeud_pointeur.h"
 #include "alx_simulateur_pointeurs.h"
-#include <extgl.h>
+#include <glew.h>
 
 //______________________________________________________________________________
 void Pointeur_classique(const double x, const double y, void *param_sup)
 {glPushMatrix();
-   glTranslatef(x, y, 0);
-   glBegin(GL_TRIANGLE_STRIP);
+   glTranslated(x, y, 0);
+   
    for(int i=2;i>=0;i-=2)
-    {glColor3f(2-i,2-i,2-i);
-     glVertex2i(  i+6, -i-16);
+    {glColor3f(i/2.0,i/2.0,i/2.0);
+     glBegin(GL_TRIANGLE_STRIP);
+	 glVertex2i(  i+6, -i-16);
      glVertex2i(   -i,     i);
      glVertex2i(  i+3,  -i-3);
-     glVertex2i( i+16,  -i-6);}
-   glEnd();
+     glVertex2i( i+16,  -i-6);
+     glEnd();
+    }
+   
  glPopMatrix();
 }
 

@@ -156,9 +156,9 @@ olfa_comet::olfa_comet( const char *nom
 
  this->nom_usage = nom;
  this->nom_usage+= "_";
- this->nom_usage+= itoa(nb_comets, numero, 10);
+ this->nom_usage+= nb_comets; //_itoa_s(nb_comets, numero, 10);
  classe_comet = "c_";
- classe_comet+= itoa(nb_comets, numero, 10);
+ classe_comet+= nb_comets; //_itoa_s(nb_comets, numero, 10);
  //Environnement(e);
  Interpreteur(interp);
  nb_comets++;

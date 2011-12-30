@@ -138,7 +138,7 @@ class alx_zone_texte_opengl : public alx_quemendeur_de_pointeur
   inline void Couleur_fond(const double r, const double v, const double b, const double a)
    {couleur_fond[0]=r; couleur_fond[1]=v; couleur_fond[2]=b; couleur_fond[3]=a; A_changer(true);}
   inline void Couleur_fond(const double *c) {memcpy(couleur_fond, c, sizeof(double)<<2); A_changer(true);}
-  inline const double* Couleur_fond() const {return couleur_fond; A_changer(true);}
+  inline const double* Couleur_fond() const {return couleur_fond;}
 
   inline void Ligne_de_depart(const int l) {ligne_de_depart = l; A_changer(true);}
   inline const int Ligne_de_depart() const {return ligne_de_depart;}

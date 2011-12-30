@@ -25,6 +25,6 @@ void alx_noeud_entete_sdl_opengl::Afficher()
     glTranslated(0, etirement_texte*fenetre_gl->Fonte_entete()->HAUTEUR()/3, 0);
    glScaled(etirement_texte, etirement_texte, 0);
    int pos;
-   fenetre_gl->Fonte_entete()->ecrire(pos, l/etirement_texte, fenetre->Nom());
+   fenetre_gl->Fonte_entete()->ecrire(pos, (float)(l/etirement_texte), (char*) fenetre->Nom());
  glPopMatrix();
 }

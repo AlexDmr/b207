@@ -43,8 +43,8 @@ Route66::Route66(const char *ip, const int port) : SlimThread(true)
 
     mcast_socket = new SlimMulticastSocket(ip, port);
     mcast_socket->setRecipientAddress(ip, port);
-    strcpy(ip_txt, ip);
-    strcpy(port_txt, itoa(port, tmp, 10));
+    strcpy_s(ip_txt, ip);
+    _itoa_s(port, tmp, 10); strcpy_s(port_txt, tmp);
 
     init();
 }
@@ -68,8 +68,8 @@ int Route66::getRoad(const char *roadFilename)
 	const char *ip   = road->getAttributeValueByName(R66_MULTICASTGROUP);
 	const char *port = road->getAttributeValueByName(R66_PORT);
 
-	strcpy(ip_txt, ip);
-        strcpy(port_txt, port);
+	strcpy_s(ip_txt, ip);
+    strcpy_s(port_txt, port);
 
         if(ip   == NULL) return R66_ROAD_BAD_DEFINITON;
 	if(port == NULL) return R66_ROAD_BAD_DEFINITON;
@@ -89,7 +89,7 @@ void Route66::Manage_callbacks()
   {char *c_tmp = &(tempon_msg[indexs_msg[index]]);
    if((this->answer_regexp != NULL) && regexec(this->answer_regexp, c_tmp))
     {answer_regexp = NULL;
-     answer = new char[strlen(c_tmp)+1]; strcpy(answer, c_tmp);
+     answer = new char[strlen(c_tmp)+1]; strcpy_s (answer, strlen(c_tmp)+1, c_tmp);
      waiter_answer->notify();
      // DEBUG 2008 mutex_message_a_traiter.unlock();
      continue;
@@ -245,7 +245,7 @@ void Route66::sendMessageAndWaitAnAnswer(const char *message, const char *answer
     }
     else
     {
-	   *answer = new char[strlen(this->answer)+1]; strcpy(*answer, this->answer);
+	   *answer = new char[strlen(this->answer)+1]; strcpy_s(*answer, strlen(this->answer)+1, this->answer);
     }
 
     mutex_sendMessageAndWaitAnAnswer.unlock();
