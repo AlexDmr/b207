@@ -66,6 +66,7 @@ method Panel toggle_extension {} {
 method Panel Stretch_to {e} {
  set ex_prcdt [$this(panel) Ex]; set ey_prcdt [$this(panel) Ey]
  set panel_box [$this(panel) Boite_noeud_et_fils_glob]
+ puts "set panel_box \[$this(panel) Boite_noeud_et_fils_glob\]\n\t$panel_box"
  if {$this(side) == "left" || $this(side) == "right"} {
    set    cmd "$this(panel) Etirement \[expr \$v*$e + (1-\$v)*$ex_prcdt\] 1\n"
    append cmd "$this(panel) Calculer_boites\n"

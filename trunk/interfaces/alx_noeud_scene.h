@@ -211,7 +211,8 @@ class boite_englobante : public Couleur_RVBA<float>
                                                          Calculer_boite(p1, p2, p_tmp_1, p_tmp_2);
                                                          A_change(true);}
   // Fonctions d'appartenance
-   inline const bool Contient(const alx_point2D &pt) const {return ( (pt.X() >= X1())&&(pt.X()<=X2())
+   inline const bool Contient(const alx_point2D &pt) const {return !Est_vide() 
+																&& ( (pt.X() >= X1())&&(pt.X()<=X2())
                                                                    &&(pt.Y() >= Y1())&&(pt.Y()<=Y2()) );}
 };
 

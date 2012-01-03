@@ -114,7 +114,7 @@ class alx_zone_texte_opengl : public alx_quemendeur_de_pointeur
   inline void Afficher_fond(const bool b) {afficher_fond = b; A_changer(true);}
   inline const bool Afficher_fond() const {return afficher_fond;}
 
-  inline void A_changer(const bool b) {a_changer = b;}
+  inline void A_changer(const bool b) {a_changer = b; if(repere) repere->A_changer(b);}
   inline const bool A_changer() const {return a_changer;}
 
   inline void Editable(const bool e) {editable = e; A_changer(true);}

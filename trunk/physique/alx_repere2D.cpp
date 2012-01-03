@@ -5,6 +5,7 @@
 
 alx_vecteur2D alx_repere2D::etirement_courant;
 
+
 void alx_repere2D::Deserialiser_contenu(const alx_chaine_char &txt, unsigned int &pos)
 {pos++; //on passe la (
  origine.Deserialiser_contenu(txt, pos);
