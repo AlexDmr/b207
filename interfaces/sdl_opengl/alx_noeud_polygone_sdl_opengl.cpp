@@ -1072,9 +1072,11 @@ void alx_noeud_polygone_sdl_opengl::Calculer_boite_noeud()
  if(!boite_noeud_deja_calculees)
   {gpc_vertex_list *VL;
     bool attribue = false;
+	boite_noeud.Est_vide(true);
     for(unsigned int i=0; i<(unsigned int)poly_ok->num_contours; i++)
      {if(poly_ok->hole[i]) continue;
-      VL = &(poly_ok->contour[i]);
+      boite_noeud.Est_vide(false);  
+	  VL = &(poly_ok->contour[i]);
       if(!attribue) {pt_min[0] = pt_max[0] = VL->vertex[0].x;
                      pt_min[1] = pt_max[1] = VL->vertex[0].y;
                      attribue = true;}
@@ -1086,7 +1088,9 @@ void alx_noeud_polygone_sdl_opengl::Calculer_boite_noeud()
        }
      }
    boite_noeud_deja_calculees = true;
-   boite_noeud.maj(pt_min[0], pt_min[1], pt_max[0], pt_max[1]);
+   if(boite_noeud.Est_vide())
+	   boite_noeud.maj(0, 0, 0, 0);
+	else boite_noeud.maj(pt_min[0], pt_min[1], pt_max[0], pt_max[1]);
   }
 
  //printf("Boite noeud (%f, %f, %f, %f)\n", boite_noeud.X1(), boite_noeud.Y1(), boite_noeud.X2(), boite_noeud.Y2() );

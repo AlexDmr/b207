@@ -44,7 +44,7 @@ class alx_noeud_zone_texte_sdl_opengl : public alx_noeud_scene
    const bool Seri_diff_Texte_a_ete_change(const alx_chaine_char **) const;
 
   //____________________________________________________________________________
-   inline virtual void A_changer(const bool b) {zone_gl->A_changer(b); alx_noeud_scene::A_changer(b);}
+   inline virtual void A_changer(const bool b) {/*zone_gl->A_changer(b); */alx_noeud_scene::A_changer(b);}
    inline virtual const bool A_changer()       {
 												alx_noeud_scene::A_changer( zone_gl->A_changer() );
                                                 return alx_noeud_scene::A_changer();
