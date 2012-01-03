@@ -1157,8 +1157,9 @@ const bool alx_noeud_scene::Maj_texture()
 
 //______________________________________________________________________________
 void alx_noeud_scene::PreRendre()
-{if( Ne_pas_pre_rendre()
-   ||(Nb_pre_rendu() > Nb_max_pre_rendu())) return;
+{if( !Pre_rendu_exeptionnel() 
+   && (Ne_pas_pre_rendre()
+       ||(Nb_pre_rendu() > Nb_max_pre_rendu())) ) return;
 
  if( !LR_Avant_pre_rendu.Vide() ) {LR_Avant_pre_rendu.Rappeler( this );}
 
@@ -1218,6 +1219,9 @@ void alx_noeud_scene::PreRendre_fils()
  //boite_fils.Est_vide(true);
  for(; it!=it_deb; it=it->prcdt)
   {noeud = (it->E())->e;
+   if (!noeud->Pre_rendu_exeptionnel()) {
+	     noeud->Pre_rendu_exeptionnel( this->Pre_rendu_exeptionnel() );
+		}
 
 //   while(noeud->Est_verouille());
    if( noeud==Limite() )
@@ -1227,7 +1231,7 @@ void alx_noeud_scene::PreRendre_fils()
        {Avorter(true);
         break;}
     }
-   if( ( noeud->Ne_pas_pre_rendre()
+   if(  ( noeud->Ne_pas_pre_rendre()
        ||(noeud->Nb_pre_rendu() > noeud->Nb_max_pre_rendu()))
      &&(!noeud->Pre_rendu_exeptionnel()) ) continue;
    if( noeud->Compter_pre_rendu() )
