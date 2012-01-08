@@ -23,6 +23,7 @@ void alx_image_32::init()
     mode_traitement_image_transparent = 0;
     R_TRANSPARENT = V_TRANSPARENT = B_TRANSPARENT = 0; SEUIL_TRANSPARENT = 64;
     Pixels_transparents_mtd_2(1, 1, 1, 0.2, 128, 128, 128);
+	l = h = bpp = bpp_r = bpp_v = bpp_b = bpp_a = 0;
     Inverser_x( false );
     Inverser_y( false );
     tempon_a_effacer = false;

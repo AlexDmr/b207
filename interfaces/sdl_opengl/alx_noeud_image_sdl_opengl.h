@@ -37,6 +37,7 @@ class alx_noeud_image_sdl_opengl : public alx_noeud_scene, public alx_image_open
    inline const int Ordre_couleur_texture()        const {return alx_image_opengl::Ordre_couleur_texture();}
    inline void Ordre_couleur_texture       (const int v) {alx_image_opengl::Ordre_couleur_texture(v);}
 
+   
    virtual const char* Real_class_cmd() {return "Void_vers_image";}
    inline void maj(const int tx, const int ty, const int ordre_couleur, const int nb_octet_par_pix, const char *buffer) {alx_image_opengl::maj(tx, ty, ordre_couleur, nb_octet_par_pix, buffer); L_rap_fin_maj_data_texture.Rappeler(this);}
    inline void maj_raw(const int tx, const int ty, const int ordre_couleur, const int nb_octet_par_pix, void *ad)       {maj(tx, ty, ordre_couleur, nb_octet_par_pix, (char*)ad)               ; L_rap_fin_maj_data_texture.Rappeler(this);}

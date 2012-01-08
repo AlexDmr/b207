@@ -41,7 +41,6 @@ char *slimGetLocalIp(void)
     struct hostent *phe;
     char localname[SLIMSOCKET_LOCAL_NAME_LENGTH];
     char *ip;
-
     #if defined(WIN32) || defined(_WIN32_WCE)
     if(!winsock_initialised)
     {
@@ -57,15 +56,13 @@ char *slimGetLocalIp(void)
     #if defined(WIN32) || defined(_WIN32_WCE)
     if(gethostname(localname, sizeof(localname)) == SOCKET_ERROR) return NULL;
     #endif
-
     #if defined(unix) || defined(__APPLE__)
     if(gethostname(localname, sizeof(localname)) < 0) return NULL;
     #endif
 
     if((phe = gethostbyname(localname)) == NULL) return NULL;
-
-    sprintf_s(ip, strlen(ip)+1, "%d.%d.%d.%d", (unsigned char)phe->h_addr[0], (unsigned char)phe->h_addr[1], (unsigned char)phe->h_addr[2], (unsigned char)phe->h_addr[3]);
-
+	printf(" %d octets : %d.%d.%d.%d\n", SLIMSOCKET_IP_LENGTH, (unsigned char)phe->h_addr[0], (unsigned char)phe->h_addr[1], (unsigned char)phe->h_addr[2], (unsigned char)phe->h_addr[3]);
+	sprintf_s(ip, SLIMSOCKET_IP_LENGTH, "%d.%d.%d.%d", (unsigned char)phe->h_addr[0], (unsigned char)phe->h_addr[1], (unsigned char)phe->h_addr[2], (unsigned char)phe->h_addr[3]);
     return ip;
 }
 
