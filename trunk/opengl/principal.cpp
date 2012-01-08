@@ -44,12 +44,20 @@ principal::principal(const char *nom_exec)
 void principal::Initialisation()
 {
  int error_code;
- alx_chaine_char IP_tmp = slimGetLocalIp();
+ printf("Getting IP ... ");
+ char *str_IP = slimGetLocalIp();
+ alx_chaine_char IP_tmp;
+ if(str_IP) {
+	 IP_tmp += str_IP;
+	} else {IP_tmp += "127.0.0.1";}
  IP_tmp += "_";
  IP_tmp += (unsigned long int)time(NULL);
+ printf("%s\n", IP_tmp.Texte());
 
  IP_locale( IP_tmp );
+ printf("Starting Route66...");
  route66 = new Route66("224.0.0.80", 1500);
+ printf("done\n");
  error_code = route66->getLastError();
  if(error_code != 0)
    printf("route66 error nb: %d\n", error_code);

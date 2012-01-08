@@ -124,13 +124,14 @@ proc B_evt_ptr           args {return [eval new_alx_evennement_pointeur      $ar
 proc B_evt_ptr_info_comp args {return [eval new_info_comp_evennement         $args]}
 proc B_MetaData 		 args {return [eval new_MetaData         			 $args]}
 
-proc Visu_Cam {} {
+proc Visu_Cam {{num_cam 0}} {
  global visu_cam
    if {![info exists visu_cam]} {
      set pre_rendeur [N_i_mere Prerendeur]
-     set visu_cam [B_camera]
+     set visu_cam [B_camera $num_cam]
      $visu_cam Afficher_noeud 0
      $visu_cam Gerer_contacts 0
+	 $visu_cam Vider_peres
      [N_i_mere Noeud_scene] Ajouter_fils $visu_cam
     }
  return $visu_cam

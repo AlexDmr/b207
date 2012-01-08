@@ -3,16 +3,6 @@ source commandes_bigre.tcl
 set ecran_x [$n_i_mere Largeur]
 set ecran_y [$n_i_mere Hauteur]
 
-proc Visu_Cam {} {
- global visu_cam
-   if {![info exists visu_cam]} {
-     set visu_cam [B_camera]
-     $visu_cam Afficher_noeud 0
-     $visu_cam Gerer_contacts 0
-     [N_i_mere Noeud_scene] Ajouter_fils $visu_cam
-    }
- return $visu_cam
-}
 
 if {[info exists visu_cam]} {} else {set pre_rendeur [$n_i_mere Prerendeur]
                                      set visu_cam [$visu_cam_bigre 320 240 $pre_rendeur]
