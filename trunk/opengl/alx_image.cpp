@@ -332,6 +332,9 @@ bool alx_image_32::Charger_par_sdl(const char *nf)
      mutex_tempon->unlock();
      return false;
     }
+
+   ilConvertImage(IL_BGRA, IL_UNSIGNED_BYTE);
+
    nb_octets_par_pixel = ilGetInteger(IL_IMAGE_BYTES_PER_PIXEL);
    switch(ilGetInteger(IL_IMAGE_FORMAT))
     {case IL_RGB       : ordonnancement_couleurs = GL_RGB;       break;
@@ -349,6 +352,7 @@ bool alx_image_32::Charger_par_sdl(const char *nf)
 
    l = ilGetInteger(IL_IMAGE_WIDTH);
    h = ilGetInteger(IL_IMAGE_HEIGHT);
+   
    unsigned int t = nb_octets_par_pixel * l * h;
    if (t>taille_tempon) {
      if(tempon) delete[] tempon;
