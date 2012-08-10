@@ -13,7 +13,7 @@ void alx_noeud_image_sdl_opengl::init()
  boite_noeud_et_fils_glob.Est_vide( false );
  Etirement_x(0); Etirement_y(0);
 
-// Nom de la texture affichée par l'image...
+ // Nom de la texture affichée par l'image...
  cc_tmp  = "Image_de_";
  cc_tmp += Nom();
  Info_texture().Nom_CC( cc_tmp );
@@ -79,9 +79,9 @@ alx_noeud_image_sdl_opengl::~alx_noeud_image_sdl_opengl()
 //______________________________________________________________________________
 //______________________________________________________________________________
 void alx_noeud_image_sdl_opengl::PreRendre()
-{if(image_processed_by_thread) {
+{if(image_processed_by_thread || force_update_after_threaded_maj) {
    // Load the texture in OpenGL
-   image_processed_by_thread = false;
+   image_processed_by_thread = force_update_after_threaded_maj = false;
    maj_tempon();
   }
   alx_noeud_scene::PreRendre();

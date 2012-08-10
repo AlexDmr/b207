@@ -16,6 +16,7 @@ void Route66::init(void)
  nb_msg            = 0;
  indexs_msg = new unsigned int[nb_max_msgs];
  tempon_msg = new char[taille_tempon_msg];
+ this->answer_regexp = NULL;
 // XXX
  resume();}
 
@@ -80,23 +81,43 @@ int Route66::getRoad(const char *roadFilename)
 	return R66_NOERROR;
 }
 
-
+//#define __TRACE_ON 1
 void Route66::Manage_callbacks()
 {unsigned int len, k, nb_argc;
-
+	#ifdef __TRACE_ON
+         printf("\nR66::Manage_callbacks()\n");
+    #endif
  mutex_message_a_traiter.lock();
+	#ifdef __TRACE_ON
+         printf(" lock nb_msg=%d", nb_msg);
+    #endif
  for(unsigned int index = 0; index<nb_msg; index++)
   {char *c_tmp = &(tempon_msg[indexs_msg[index]]);
+   #ifdef __TRACE_ON 
+		if(this->answer_regexp) {printf(" regexp");} else {printf(" no regexp");}
+   #endif
    if((this->answer_regexp != NULL) && regexec(this->answer_regexp, c_tmp))
     {answer_regexp = NULL;
+	 #ifdef __TRACE_ON
+         printf(" got answer");
+       #endif
      answer = new char[strlen(c_tmp)+1]; strcpy_s (answer, strlen(c_tmp)+1, c_tmp);
+	 #ifdef __TRACE_ON
+         printf("\nR66::waiter_answer->notify();\n");
+       #endif
      waiter_answer->notify();
      // DEBUG 2008 mutex_message_a_traiter.unlock();
      continue;
     }
 
+	#ifdef __TRACE_ON
+         printf(" m_callbacks.beginSequentialReading");
+    #endif
    Message_callback_struct *cb;
    m_callbacks.beginSequentialReading();
+	#ifdef __TRACE_ON
+         printf(" while");
+    #endif
    while(((cb = m_callbacks.readItemPointer()) != NULL))
     {
      if(regexec(cb->regexp, c_tmp))
@@ -110,7 +131,7 @@ void Route66::Manage_callbacks()
 
        // At this point, argc contains the real number of arguments plus one.
        #ifdef __TRACE_ON
-         printf("Match found: argc =%d\n", argc);
+         printf("Match found: argc =%d\n", nb_argc);
        #endif
 
        if(nb_argc == 1)
@@ -136,10 +157,10 @@ void Route66::Manage_callbacks()
            #ifdef __TRACE_ON
              printf("Calling callback\n");
            #endif
-
-           //printf("Calling callback\n");
            cb->callback->OnMessage(nb_argc-1, tab_argv);
-           //printf("End of calling callback\n");
+           #ifdef __TRACE_ON
+             printf("End of Calling callback\n");
+           #endif
          }
       }
     }
@@ -216,9 +237,9 @@ void Route66::bindMessageCallback(const char *regexp_str, Route66MessageCallback
 
 int Route66::sendMessage(const char *message)
 {
-    mutex_sendMessage.lock();
+    //mutex_sendMessage.lock();
     lastError = mcast_socket->sendData(message, strlen (message) + 1);
-    mutex_sendMessage.unlock();
+    //mutex_sendMessage.unlock();
     return lastError;
 }
 

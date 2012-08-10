@@ -41,6 +41,52 @@ principal::principal(const char *nom_exec)
  cc_nom_exec = nom_exec;
 }
 
+//______________________________________________________________________________
+//______________________________________________________________________________
+//______________________________________________________________________________
+// TCL commands
+int B207_to_TCL_byte_array	( ClientData clientData
+							, Tcl_Interp *interp
+							, int objc
+							, Tcl_Obj *const objv[]) {
+	// Two parameters, the array start and the array length
+	Tcl_Obj *tcl_res;
+	int rep;
+	int array_addr, array_length;
+	if (objc == 3) {
+		 Tcl_GetIntFromObj(interp, objv[1], &array_addr);
+		 Tcl_GetIntFromObj(interp, objv[2], &array_length);
+		 tcl_res = Tcl_NewByteArrayObj((const unsigned char*)array_addr, array_length);
+		 rep = TCL_OK;
+		} else	{tcl_res = Tcl_NewStringObj("There should be 2 arguments : adress of the array and length of the array.", -1);
+				 rep = TCL_ERROR;
+				}
+	Tcl_SetObjResult(interp, tcl_res);
+	return rep;
+}
+
+//______________________________________________________________________________
+int TCL_byte_array_to_int_adress( ClientData clientData
+							, Tcl_Interp *interp
+							, int objc
+							, Tcl_Obj *const objv[]) {
+	// Two parameters, the array start and the array length
+	Tcl_Obj *tcl_res;
+	int rep;
+	if (objc == 2) {
+		 tcl_res = Tcl_NewIntObj((int)objv[1]->bytes);
+		 rep = TCL_OK;
+		} else	{tcl_res = Tcl_NewStringObj("There should be 1 arguments : a TCL byte array.", -1);
+				 rep = TCL_ERROR;
+				}
+	Tcl_SetObjResult(interp, tcl_res);
+	return rep;
+}
+
+
+//______________________________________________________________________________
+//______________________________________________________________________________
+//______________________________________________________________________________
 void principal::Initialisation()
 {
  int error_code;
@@ -71,6 +117,9 @@ void principal::Initialisation()
  interface_1 = new alx_interface_sdl_opengl_1( ecran_x, ecran_y, angle_camera
                                              , route66
                                              , environnement_tcl );
+ Tcl_CreateObjCommand(environnement_tcl->Interpreteur_tcl(), "B207_to_TCL_byte_array"      , B207_to_TCL_byte_array      , NULL, NULL);
+ Tcl_CreateObjCommand(environnement_tcl->Interpreteur_tcl(), "TCL_byte_array_to_int_adress", TCL_byte_array_to_int_adress, NULL, NULL);
+ 
  Interface_mere(interface_1);
 }
 
@@ -208,7 +257,7 @@ int principal::demarrer( Uint32 propriete
  while(!fin)
   {//etat_clavier = SDL_GetKeyState(NULL);
    #ifdef ALX_DEBUG_PRINCIPAL
-     printf("R66..");
+     printf("R66");
    #endif
    interface_1->Demande_acces();
      route66->Manage_callbacks();

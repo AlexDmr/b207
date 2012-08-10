@@ -61,13 +61,14 @@ class alx_image_32
            img->maj_transfo(tx, ty, source_ordre_couleur, source_nb_octet_par_pix, target_ordre_couleur, target_nb_octet_par_pix, buffer);
            img->image_processed_by_thread = true; img->thread_is_processing_image = false;
            has_terminated = true;
+		   img->force_update_after_threaded_maj = true;;
           }
      };
 
    Thread_maj *thread_maj;
 
  public:
-  bool image_processed_by_thread, thread_is_processing_image;
+  bool image_processed_by_thread, thread_is_processing_image, force_update_after_threaded_maj;
 
   alx_image_32()
    {init();}
@@ -145,6 +146,8 @@ class alx_image_32
   void maj(const int tx, const int ty, const int ordre_couleur, const int nb_octet_par_pix, const char *buffer);
   void maj(const char *n);
   void maj(const alx_image_32 &img);
+  virtual void maj_tempon() {}
+
   bool charger_bmp(const char *n);
   bool Charger_par_sdl(const char *nf);
   /*********************************************************************************/

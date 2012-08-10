@@ -46,6 +46,7 @@ void alx_image_32::init()
 
     image_processed_by_thread = thread_is_processing_image = false;
     thread_maj = NULL;
+	force_update_after_threaded_maj = false;
 
     taille_canal_couleurs_pour_Table = 5;
     taille_Table_couleurs = 1<<(3*taille_canal_couleurs_pour_Table);

@@ -40,10 +40,10 @@ class alx_noeud_image_sdl_opengl : public alx_noeud_scene, public alx_image_open
    
    virtual const char* Real_class_cmd() {return "Void_vers_image";}
    inline void maj(const int tx, const int ty, const int ordre_couleur, const int nb_octet_par_pix, const char *buffer) {alx_image_opengl::maj(tx, ty, ordre_couleur, nb_octet_par_pix, buffer); L_rap_fin_maj_data_texture.Rappeler(this);}
-   inline void maj_raw(const int tx, const int ty, const int ordre_couleur, const int nb_octet_par_pix, void *ad)       {maj(tx, ty, ordre_couleur, nb_octet_par_pix, (char*)ad)               ; L_rap_fin_maj_data_texture.Rappeler(this);}
+   inline void maj_raw(const int tx, const int ty, const int ordre_couleur, const int nb_octet_par_pix, void *ad)       {maj(tx, ty, ordre_couleur, nb_octet_par_pix, (char*)ad)               ;}
    inline const bool Threaded_maj_raw_with_transfo( const int tx, const int ty
                                    , const int ordre_couleur_src, const int nb_octet_par_pix_src
-                                   , const int ordre_couleur_tgt, const int nb_octet_par_pix_tgt, void *ad)          {return Threaded_maj(tx, ty, ordre_couleur_src, nb_octet_par_pix_src, ordre_couleur_tgt, nb_octet_par_pix_tgt, (char*)ad); L_rap_fin_maj_data_texture.Rappeler(this);}
+                                   , const int ordre_couleur_tgt, const int nb_octet_par_pix_tgt, void *ad)          {return Threaded_maj(tx, ty, ordre_couleur_src, nb_octet_par_pix_src, ordre_couleur_tgt, nb_octet_par_pix_tgt, (char*)ad);}
 
    inline void maj_raw_with_transfo( const int tx, const int ty
                                    , const int ordre_couleur_src, const int nb_octet_par_pix_src
@@ -52,6 +52,7 @@ class alx_noeud_image_sdl_opengl : public alx_noeud_scene, public alx_image_open
    inline void maj(const INFOS_TEXTURE &info)                                                                           {alx_image_opengl::maj(info);                                          ; L_rap_fin_maj_data_texture.Rappeler(this);}
    inline void maj(const alx_image_opengl &img)                                                                         {alx_image_opengl::maj(img);                                           ; L_rap_fin_maj_data_texture.Rappeler(this);}
    inline void maj(const alx_image_32 *img_32)                                                                          {alx_image_opengl::maj(img_32);                                        ; L_rap_fin_maj_data_texture.Rappeler(this);}
+   inline void maj_tempon()																								{alx_image_opengl::maj_tempon()										   ; L_rap_fin_maj_data_texture.Rappeler(this);}
 
    inline void Copier(const alx_noeud_image_sdl_opengl &i) {alx_image_opengl::maj(i);}
 
@@ -89,7 +90,10 @@ class alx_noeud_image_sdl_opengl : public alx_noeud_scene, public alx_image_open
    inline const INFOS_TEXTURE& Info_texture_const() const {return alx_image_opengl::Info_texture_const();}
    inline const void* Tempon_const() const {return TEMPON_const();}
    inline void* Tempon() {return TEMPON();}
+   
+   inline int Adresse_Tempon() {return (int)Tempon();}
    inline const unsigned int Taille_Tempon() {return alx_image_opengl::Taille_Tempon();}
+
    inline void Nb_octets_par_pixel(const int n)     {alx_image_opengl::Nb_octets_par_pixel( (unsigned int)n);}
    inline const int Nb_octets_par_pixel()     const {return (int)alx_image_opengl::Nb_octets_par_pixel();}
    inline const int Ordonnancement_couleurs() const {return alx_image_opengl::Ordonnancement_couleurs();}
@@ -124,5 +128,7 @@ class alx_noeud_image_sdl_opengl : public alx_noeud_scene, public alx_image_open
 
 typedef alx_noeud_image_sdl_opengl* P_alx_noeud_image_sdl_opengl;
 inline alx_noeud_image_sdl_opengl* Void_vers_image(void *p) {return (alx_noeud_image_sdl_opengl*)p;}
+
+inline void* Int_vers_Void(int ad) {return (void*)ad;}
 
 #endif

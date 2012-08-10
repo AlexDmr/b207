@@ -73,7 +73,7 @@ inline const unsigned int FSOUND_8b      () {return FSOUND_8BITS;}
 inline const unsigned int FSOUND_unsigned() {return FSOUND_UNSIGNED;}
 inline const unsigned int FSOUND_signed  () {return FSOUND_SIGNED;}
 
-class Info_for_sound_CB;
+struct Info_for_sound_CB;
 class B207_info_sound_TCL {
   private:
     Info_for_sound_CB    *ifscb;
@@ -130,7 +130,8 @@ class alx_interface_sdl_opengl_1 : public olfa_comet
    unsigned int nb_milliseconds_ellapsed;
   // Liste de rappel pour ajout de simulateurs
    Liste_de_rappel L_rap_simulateur_sup, L_rap_post_simulation
-                 , L_rap_creation_noeud_replique;
+                 , L_rap_creation_noeud_replique
+				 , L_rap_info_tcp_port;
 
   // Horloge logique vectorielle
    alx_horloge_vectorielle *horloge_tmp;
@@ -198,6 +199,7 @@ class alx_interface_sdl_opengl_1 : public olfa_comet
    //void Info_groupes(unsigned int argc, char **argv);
    void Maj_horloge(unsigned int argc, char **argv);
    void Maj_membre(unsigned int argc, char **argv);
+   void Ajouter_port_binaire_distant(unsigned int argc, char **argv);
 
   // Analyse et mise à jour du groupe à partir d'un message
    alx_noeud_scene* Creer_noeud( const alx_chaine_char &T
@@ -224,6 +226,8 @@ class alx_interface_sdl_opengl_1 : public olfa_comet
    const bool Ne_pas_traiter_messages() const {return ne_pas_traiter_messages;}
    void Traitement_messages_en_cours(const bool b) {traitement_messages_en_cours = b;}
    const bool Traitement_messages_en_cours() const {return traitement_messages_en_cours;}
+
+   int tcp_port_binary_trasfert;
 
    class zic {public:
                 FSOUND_STREAM *strm;
@@ -259,6 +263,17 @@ class alx_interface_sdl_opengl_1 : public olfa_comet
    alx_noeud_scene* Adresse_noeud   (const unsigned int groupe, const char *nom);
    alx_noeud_scene* Adresse_noeud_CC(const unsigned int groupe, const alx_chaine_char &nom);
 
+  /* TCP port pour transfert de données binaires (géré en TCL)
+   const int get_tcp_port_binary_trasfert() const {return tcp_port_binary_trasfert;}
+   void set_tcp_port_binary_trasfert(const int v)  {tcp_port_binary_trasfert = v;
+													alx_chaine_char tmp = "BIGre IP=";
+													tmp += IP();
+													tmp += "; TCP_BINARY_PORT=";
+													tmp += v;
+													route66->sendMessage(tmp.Texte());
+												   }
+ */
+
   // Les simulateurs supplémentaires peuvent être branchés par là:
    alx_simulateur_pointeurs_souris* Sim_ptr_souris() {return sim_ptr_souris;}
    inline void abonner_a_fin_simulation    (alx_methode_rappel *m) {L_rap_post_simulation.Ajouter_methode_a_la_fin(m);}
@@ -288,6 +303,10 @@ class alx_interface_sdl_opengl_1 : public olfa_comet
   // Abonnements relatifs à la réplication des noeuds du groupe
    inline void abonner_a_creation_noeud_replique    (alx_methode_rappel *m) {L_rap_creation_noeud_replique.Ajouter_methode_a_la_fin(m);}
    inline void desabonner_de_creation_noeud_replique(alx_methode_rappel *m) {L_rap_creation_noeud_replique.Retirer_methode(m);}
+
+  // Abonnements relatifs à la réplication des noeuds du groupe
+   inline void abonner_a_nouvelle_info_tcp_port    (alx_methode_rappel *m) {L_rap_info_tcp_port.Ajouter_methode_a_la_fin(m);}
+   inline void desabonner_de_nouvelle_info_tcp_port(alx_methode_rappel *m) {L_rap_info_tcp_port.Retirer_methode(m);}
 
   // Gestion de la souris,
    void Afficher_souris();
