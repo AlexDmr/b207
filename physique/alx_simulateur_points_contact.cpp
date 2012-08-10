@@ -429,10 +429,10 @@ bool alx_simulateur_points_contact::Trouver_model( alx_model_simulation_physique
        //possible = true;
        *ens_c = it_ec->E();
        *mc    = it_mc->E();
-       if(L_rep->Contient( repere ))
-        {
+       //if(L_rep->Contient( repere ))
+        //{
          return true;
-        }
+        //}
       }
     }
   }

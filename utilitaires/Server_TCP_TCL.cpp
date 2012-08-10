@@ -64,35 +64,6 @@ void SlimTcpConnectionHandler_TCL::Vider_Threaded_TCP_client_termines()
   }
 }
 
-/*
-//______________________________________________________________________________
-//______________________________________________________________________________
-//______________________________________________________________________________
-Serveur_TCP_TCL::Serveur_TCP_TCL(unsigned int port) : SlimThread(true)
-{connection_handler_TCL = new SlimTcpConnectionHandler_TCL();
- Serveur_TCP            = new SlimTcpServerSocket(port);
-   Serveur_TCP->setConnectionHandler( connection_handler_TCL );
- this->port             = port;
- init();
-}
-
-//______________________________________________________________________________
-Serveur_TCP_TCL::~Serveur_TCP_TCL()
-{}
-
-//______________________________________________________________________________
-//______________________________________________________________________________
-//______________________________________________________________________________
-void Serveur_TCP_TCL::init()
-{Serveur_TCP->setConnectionHandler( connection_handler_TCL );
- resume();
-}
-
-//______________________________________________________________________________
-void Serveur_TCP_TCL::run(void)
-{Serveur_TCP->start();
-}
-*/
 //______________________________________________________________________________
 //______________________________________________________________________________
 //______________________________________________________________________________
@@ -124,7 +95,7 @@ Image_net_loader::~Image_net_loader()
 //______________________________________________________________________________
 void Image_net_loader::Load_texture(void *p)
 {info_for_loading_image *info_loading = (info_for_loading_image *)p;
- //printf("  Load texture\n");
+ printf("  Load texture\n");
  if(info_loading->tempon)
   {this->img_locale->maj_raw( info_loading->lg
                             , info_loading->ht
@@ -317,7 +288,7 @@ void Texture_Server_TCP::Rappel_end_texture_loading(void *p)
  alx_element_liste<alx_noeud_polygone_sdl_opengl*> *it     = L_polys->Premier()
                                                  , *it_fin = L_polys->Fin();
  for(; it!=it_fin; it=it->svt)
-  {Maj_texture_polygone( it->E() );
+  {Maj_texture_polygone( it->E(), true );
   }
 
  mutex_acces_tables->unlock();
@@ -398,8 +369,8 @@ void Texture_Server_TCP::Rap_Maj_texture_polygone(void *p)
 {Maj_texture_polygone( (alx_noeud_polygone_sdl_opengl*)p );
 }
 
-//______________________________________________________________________________N
-const bool Texture_Server_TCP::Maj_texture_polygone(alx_noeud_polygone_sdl_opengl *poly)
+//______________________________________________________________________________
+const bool Texture_Server_TCP::Maj_texture_polygone(alx_noeud_polygone_sdl_opengl *poly, bool force_update)
 {// Rechercher les textures dépendantes
  bool rep = false;
  INFOS_TEXTURE *info;
@@ -410,14 +381,22 @@ const bool Texture_Server_TCP::Maj_texture_polygone(alx_noeud_polygone_sdl_openg
 
  if( poly->Info_texture() ) {Trouver_Infos_texture_correspondant_a(poly->Info_texture()->Nom(), &info, &img_originale);} else {img_originale = NULL;}
  Trouver_Infos_texture_correspondant_a(poly->Texture_1_desiree(), &info, &new_image);
-   if(img_originale != new_image) {poly->Info_texture ( info );
-                                   rep = true;}
+   if( force_update
+	 ||(  img_originale != new_image
+	   && poly->Est_une_replique()
+	   ))  {poly->Info_texture ( info );
+			rep = true;
+		   }
    if(img_originale && img_originale != new_image && Table_dependances_img_polys.find(img_originale) != Table_dependances_img_polys.end() ) {Table_dependances_img_polys[img_originale]->Retirer(poly);}
    if(new_image     && img_originale != new_image && Table_dependances_img_polys.find(new_image)     != Table_dependances_img_polys.end() ) {Table_dependances_img_polys[new_image    ]->Ajouter_a_la_fin(poly);}
  if( poly->Info_texture2() ) {Trouver_Infos_texture_correspondant_a(poly->Info_texture2()->Nom(), &info, &img_originale);} else {img_originale = NULL;}
  Trouver_Infos_texture_correspondant_a(poly->Texture_2_desiree(), &info, &new_image);
-   if(img_originale != new_image) {poly->Info_texture ( info );
-                                   rep = true;}
+   if( force_update
+	 ||(  img_originale != new_image
+	   && poly->Est_une_replique()
+	   ))  {poly->Info_texture2( info );
+			rep = true;
+		   }
    if(img_originale && img_originale != new_image && Table_dependances_img_polys.find(img_originale) != Table_dependances_img_polys.end()) {Table_dependances_img_polys[img_originale]->Retirer(poly);}
    if(new_image     && img_originale != new_image && Table_dependances_img_polys.find(new_image)     != Table_dependances_img_polys.end()) {Table_dependances_img_polys[new_image    ]->Ajouter_a_la_fin(poly);}
 
@@ -484,7 +463,7 @@ void Texture_Server_TCP::Ajouter_reference_noeud(void *p)
     {alx_noeud_image_sdl_opengl *img_locale = (alx_noeud_image_sdl_opengl *) noeud;
      img_locale->abonner_a_maj_Info_texture( FONCTION_DE_RAPPEL(Texture_Server_TCP, &Texture_Server_TCP::Rappel_Get_datas_for) );
      mutex_acces_tables->lock();
-       Table_dependances_img_polys[img_locale] = new alx_liste<alx_noeud_polygone_sdl_opengl *>;
+       Table_dependances_img_polys[img_locale] = new alx_liste<alx_noeud_polygone_sdl_opengl *>; // XXX Add dependencies based on existing polygons...
      mutex_acces_tables->unlock();
     } else {if( noeud->Nom_classe() == "polygon" )
              {alx_noeud_polygone_sdl_opengl *poly = (alx_noeud_polygone_sdl_opengl*)noeud;
@@ -557,7 +536,7 @@ void Texture_Server_TCP::Interp_msg(void *p)
        if(noeud_demande)
         {Table_local_nodes[ cc_nom_noeud ] = noeud_demande;
         } else {Client_TCP->sendData_fromChar("0           ", 10);
-                printf("Impossible de trouver le noeud demander (%s)\n", cc_nom_noeud.Texte());
+                printf("Impossible de trouver le noeud demandé (%s)\n", cc_nom_noeud.Texte());
                 mutex_acces_tables->unlock();
                 Interface_mere_of_image->Liberer_acces();
                 return;}

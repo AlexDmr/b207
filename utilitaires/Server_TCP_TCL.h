@@ -203,7 +203,7 @@ class Texture_Server_TCP : public SlimThread
 
    alx_liste<alx_noeud_scene*> L_maj_dependences;
    void Rap_Maj_texture_polygone(void *p);
-   const bool Maj_texture_polygone(alx_noeud_polygone_sdl_opengl *poly);
+   const bool Maj_texture_polygone(alx_noeud_polygone_sdl_opengl *poly, bool force_update = false);
    const bool Trouver_Infos_texture_correspondant_a(const alx_chaine_char &cc, INFOS_TEXTURE **ptr_info, alx_noeud_image_sdl_opengl **ptr_img );
    alx_noeud_scene* Noeud_repliqer_nomme( const alx_chaine_char &cc_nom );
 

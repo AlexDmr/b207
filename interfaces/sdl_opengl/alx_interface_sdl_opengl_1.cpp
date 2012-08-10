@@ -418,6 +418,7 @@ if(cc_type_tmp == "alx_noeud_scene")
                              , NULL);
    img->Est_une_replique(true);
    img->Nom( nom );
+   //img->abonner_a_maj_Info_texture();
    return (alx_noeud_scene*)img;}
 
  printf("TYPE DE NOEUD INCONNU : %s", cc_type_tmp.Texte());
@@ -482,7 +483,7 @@ void alx_interface_sdl_opengl_1::Analyser_maj( const unsigned int g
       if(noeud)
        {Tgb[g].Enregistrer_noeud( noeud );
         L_rap_creation_noeud_replique.Rappeler( noeud );
-       } else {break;}
+       } else {continue;}
      }
   // Gestion des noeuds à problème pour le pré-rendu
    if( !noeud->Ne_pas_pre_rendre() )
@@ -713,6 +714,12 @@ void alx_interface_sdl_opengl_1::Lister_groupes(unsigned int argc, char **argv)
 }
 
 //______________________________________________________________________________
+void alx_interface_sdl_opengl_1::Ajouter_port_binaire_distant(unsigned int argc, char **argv) // ^BIGre IP=(.*); TCP_BINARY_PORT=([0-9]*)$
+{
+
+}
+
+//______________________________________________________________________________
 void alx_interface_sdl_opengl_1::Maj_horloge(unsigned int argc, char **argv) // ^BIGre IP=(.*); INFO GROUPE ([0-9]*) HORLOGE_IP=(.*)$
 {Demande_acces();
  //printf("MAJ horloge\n");
@@ -794,8 +801,9 @@ void alx_interface_sdl_opengl_1::Infos_noeuds_groupe(const unsigned int g)
 //______________________________________________________________________________
 //____________________________ Création de groupe ______________________________
 //______________________________________________________________________________
+#include "iostream"
 void alx_interface_sdl_opengl_1::Creer_groupe(const unsigned int nb, const char *nom, alx_noeud_scene *racine, const bool emettre_pointeurs = true, const bool visualiser_pointeurs = true)
-{//printf("Créer groupe\n");
+{std::cout << "Créer groupe " << nb_gb+1 << std::endl;
  alx_groupe_bigre *nTgb = new alx_groupe_bigre[nb_gb+1];
  for(unsigned int i=0; i< nb_gb; i++)
    nTgb[i] = Tgb[i];
@@ -807,32 +815,37 @@ void alx_interface_sdl_opengl_1::Creer_groupe(const unsigned int nb, const char 
  nTgb[nb_gb].Groupe_coherent(false);
  nTgb[nb_gb].Emettre_pointeurs(emettre_pointeurs);
  nTgb[nb_gb].Visualiser_pointeurs(visualiser_pointeurs);
-
+ 
  //printf("Mise à jour des attributs\n");
-
+ std::cout << "Tgb" << std::endl;
  Ne_pas_emettre_changement(true);
  while( Emission_changement_en_cours() );
    if(Tgb)
      delete[] Tgb;
    Tgb = nTgb;
-   nb_gb++;
+   nb_gb++; 
 
   //printf("Emission du sous graphe\n");
    //unsigned int m = 0;
+   std::cout << "L_repere" << std::endl;
    L_repere.Vider();
    racine->Donner_liste_repere(L_repere, (alx_noeud_scene*)(A_scene));
    alx_liste<alx_repere2D*> *L_rep = (alx_liste<alx_repere2D*>*)NULL;
    if( !L_repere.Vide() )
      L_rep = &L_repere;
 
+   std::cout << "Sérialisation de la racine avec L_repere contenant " << L_repere.Taille() << " éléments" << std::endl;
    //printf("  Sérialisation de la racine\n");
    const alx_chaine_char &cc = Serialiser_type(racine, 0, L_rep);
-   //printf("  Emission de la racine\n");
+   std::cout << "Message route66" << std::endl;
    route66->sendMessage( cc.Texte() );
+
+   std::cout << "Emission de la racine effectuée" << std::endl;
    //printf("  Emission de la racine effectuée\n");
    nTgb[nb_gb-1].Groupe_coherent(true);
- Ne_pas_emettre_changement(false);
- //printf("FIN de créer groupe\n");
+   Ne_pas_emettre_changement(false);
+ printf("FIN de créer groupe\n");
+
 }
 
 //______________________________________________________________________________
@@ -893,6 +906,8 @@ alx_interface_sdl_opengl_1::alx_interface_sdl_opengl_1( int ex, int ey, double a
                       , new Route66MessageCallbackOf<alx_interface_sdl_opengl_1>(this, &alx_interface_sdl_opengl_1::Ajouter_membre) );
  route66->bindMessageCallback( "^BIGre IP=(.*); QUITTER GROUPE ([0-9]*)$"
                       , new Route66MessageCallbackOf<alx_interface_sdl_opengl_1>(this, &alx_interface_sdl_opengl_1::Retirer_membre) );
+ route66->bindMessageCallback( "^BIGre IP=(.*); TCP_BINARY_PORT=([0-9]*)$"
+                      , new Route66MessageCallbackOf<alx_interface_sdl_opengl_1>(this, &alx_interface_sdl_opengl_1::Ajouter_port_binaire_distant) );
 
  route66->bindMessageCallback( "^<interface SIZE=([0-9]*) IP=(.*) Racine=(.*) G=([0-9]*) P=(.*); H=([0-9|;|(|)]*)>(.*)$"
                       , new Route66MessageCallbackOf<alx_interface_sdl_opengl_1>(this, &alx_interface_sdl_opengl_1::Maj_membre) );
