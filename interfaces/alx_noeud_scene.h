@@ -111,7 +111,7 @@ class info_du_contenant
 
    void Point_au_contact(const alx_point2D &pt)          {pt_au_contact.maj(pt);   point_au_contact_definit=true;}
    void Point_au_contact(const double x, const double y) {pt_au_contact.maj(x, y); point_au_contact_definit=true;}
-   alx_point2D& Point_au_contact() {return pt_au_contact;}
+   alx_point2D& Point_au_contact(alx_repere2D *rep_reference = NULL); 
    const double X_au_contact() const {return pt_au_contact.X();}
    const double Y_au_contact() const {return pt_au_contact.Y();}
 };
