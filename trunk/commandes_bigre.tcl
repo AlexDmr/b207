@@ -226,7 +226,7 @@ proc Redirect_key_events_from_to {prim dest_prim} {
 #______________________________________________________________________________
 proc B_transfo_rap {t txt_rap_pdt {txt_rap_before {}} {txt_rap_after {}}} {
  set transfo [B_transfo $t]
-   set rap [B_rappel [Interp_TCL]]; $rap Texte "set v \[$transfo V_courant\]; $txt_rap_pdt"; $transfo abonner_a_rappel_pendant [$rap Rappel]
+   set rap [B_rappel [Interp_TCL]]; $rap Texte "set t \[$transfo T_courant\]; set v \[$transfo V_courant\]; $txt_rap_pdt"; $transfo abonner_a_rappel_pendant [$rap Rappel]
    if {$txt_rap_before != ""} {set rap [B_rappel [Interp_TCL]]; $rap Texte $txt_rap_before; $transfo abonner_a_rappel_fin_amorce [$rap Rappel]}
    if {$txt_rap_after  != ""} {set rap [B_rappel [Interp_TCL]]; $rap Texte $txt_rap_after ; $transfo abonner_a_rappel_fin        [$rap Rappel]}
  $transfo Demarrer

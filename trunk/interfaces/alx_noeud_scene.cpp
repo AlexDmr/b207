@@ -13,6 +13,25 @@ extern "C" {
 //#include <glut.h>
 }
 
+//______________________________________________________________________________
+//______________________________________________________________________________
+//______________________________________________________________________________
+alx_point2D& info_du_contenant::Point_au_contact(alx_repere2D *rep_reference) {
+		 if (rep_reference == NULL) return pt_au_contact;
+		 alx_point2D *pt_rep = new alx_point2D(pt_au_contact);
+		 this->noeud->Changer_coordonnees_inverse(*pt_rep);
+		 alx_element_liste<alx_repere2D*> *it     = L_reperes.Dernier()
+										, *it_deb = L_reperes.Debut();
+		 while( it != it_deb
+			  &&it->Const_E() != rep_reference
+			  ) {it->E()->Changer_coordonnees_inverse(*pt_rep);
+				 it = it->prcdt;
+				}
+		 return *pt_rep;
+		}
+
+
+//______________________________________________________________________________
 const alx_pointeur* info_du_contenant::Ptr() const
  {return evt_ptr->Ptr();}
 
