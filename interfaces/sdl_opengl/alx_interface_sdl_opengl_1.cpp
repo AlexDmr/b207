@@ -1483,8 +1483,7 @@ alx_noeud_scene * alx_interface_sdl_opengl_1::Trouver_noeud_nomme(const alx_chai
 //______________________________________________________________________________
 const bool alx_interface_sdl_opengl_1::Fermer_flux(FSOUND_STREAM *flux)
 {printf("Stop flux");
- while( !FSOUND_Stream_Stop(flux) )
-  {printf("waiting for fmod stream to stop");}
+ FSOUND_Stream_Stop(flux);
  printf("Close flux");
  return FSOUND_Stream_Close(flux) != 0;
 }
