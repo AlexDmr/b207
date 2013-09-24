@@ -79,7 +79,8 @@ alx_noeud_image_sdl_opengl::~alx_noeud_image_sdl_opengl()
 //______________________________________________________________________________
 //______________________________________________________________________________
 void alx_noeud_image_sdl_opengl::PreRendre()
-{if(image_processed_by_thread || force_update_after_threaded_maj) {
+{//if(force_update_after_threaded_maj) {printf("PreRender-");}
+ if(image_processed_by_thread || force_update_after_threaded_maj) {
    // Load the texture in OpenGL
    image_processed_by_thread = force_update_after_threaded_maj = false;
    maj_tempon();

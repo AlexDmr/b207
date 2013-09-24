@@ -95,7 +95,7 @@ class alx_image_opengl : public alx_image_32
    void maj_transfo( const int tx, const int ty
         , const int source_ordre_couleur, const int source_nb_octet_par_pix
         , const int target_ordre_couleur, const int target_nb_octet_par_pix
-        , const char *buffer);
+        , const char *buffer, const bool update_openGL_texture = true);
 
    void maj(const char *n);
    void maj(const INFOS_TEXTURE &info);

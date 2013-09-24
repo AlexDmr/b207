@@ -173,7 +173,8 @@ const bool alx_image_32::Threaded_maj( const int tx, const int ty
         , const char *buffer) {
    if(thread_maj != NULL) {
      if(!thread_maj->Has_terminated()) {
-        return false;
+         printf("Skip-");
+		 return false;
        }
      delete thread_maj;
     }
@@ -443,7 +444,7 @@ void alx_image_32::maj(const int tx, const int ty, const int ordre_couleur, cons
 void alx_image_32::maj_transfo( const int tx, const int ty
                       , const int source_ordre_couleur, const int source_nb_octet_par_pix
                       , const int target_ordre_couleur, const int target_nb_octet_par_pix
-                      , const char *buffer)
+                      , const char *buffer, const bool update_openGL_texture)
 {if(target_nb_octet_par_pix == 0 || target_nb_octet_par_pix < source_nb_octet_par_pix) {printf("ERROR : trying to copy an image with too much byte per pixel (%d compared to %d)\n", source_nb_octet_par_pix, target_nb_octet_par_pix);}
  unsigned int t = tx*ty*target_nb_octet_par_pix/*nb_octet_par_pix*/;
  mutex_tempon->lock();

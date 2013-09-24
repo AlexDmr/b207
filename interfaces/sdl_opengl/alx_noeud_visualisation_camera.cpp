@@ -72,7 +72,7 @@ void alx_noeud_visualisation_camera::Resize_camera_image_buffer()
 //------------------------------------ Les méthodes -------------------------------------------------------------------------------
 //---------------------------------------------------------------------------------------------------------------------------------
 void alx_noeud_visualisation_camera::PreRendre()
-{if(VI.isFrameNew(device_index) && VI.isReadyToCapture(device_index) && VI.isDeviceSetup(device_index))
+{if(VI.isFrameNew(device_index) /* VI.isReadyToCapture(device_index)*/ && VI.isDeviceSetup(device_index))
   {if( !this->has_been_init ) {printf("Camera resized to %dx%d ...", VI.getWidth(device_index), VI.getHeight(device_index)); Resize_camera_image_buffer(); printf("done\n"); this->has_been_init = true; }
    if(threaded_mode) {
     alx_noeud_image_sdl_opengl::Threaded_maj( (int)Lg()

@@ -3,6 +3,7 @@
 
 #include "config_opengl.h"
 #include <slimthread.h>
+#include <stdio.h>
 
 class Mutex;
 class alx_image_32
@@ -54,14 +55,14 @@ class alx_image_32
            this->target_ordre_couleur    = target_ordre_couleur;
            this->target_nb_octet_par_pix = target_nb_octet_par_pix;
            this->buffer = buffer;
-           has_terminated = false;
+           has_terminated = false; //printf("Deb(%d)-", img->force_update_after_threaded_maj);
           }
         const bool Has_terminated() const {return has_terminated;}
         virtual void run(void) {
-           img->maj_transfo(tx, ty, source_ordre_couleur, source_nb_octet_par_pix, target_ordre_couleur, target_nb_octet_par_pix, buffer);
+           img->maj_transfo(tx, ty, source_ordre_couleur, source_nb_octet_par_pix, target_ordre_couleur, target_nb_octet_par_pix, buffer, false);
            img->image_processed_by_thread = true; img->thread_is_processing_image = false;
            has_terminated = true;
-		   img->force_update_after_threaded_maj = true;;
+		   img->force_update_after_threaded_maj = true; //printf("Fin(%d)-", img->force_update_after_threaded_maj);
           }
      };
 
@@ -142,7 +143,7 @@ class alx_image_32
   void maj_transfo( const int tx, const int ty
           , const int source_ordre_couleur, const int source_nb_octet_par_pix
           , const int target_ordre_couleur, const int target_nb_octet_par_pix
-          , const char *buffer);
+          , const char *buffer, const bool update_openGL_texture = true);
   void maj(const int tx, const int ty, const int ordre_couleur, const int nb_octet_par_pix, const char *buffer);
   void maj(const char *n);
   void maj(const alx_image_32 &img);
